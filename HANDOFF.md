@@ -138,3 +138,10 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Alerta: Pushover. Risco = prioridade 2 (emergência, repete até confirmar); demais fichas = prioridade 0. Só nome + WhatsApp vão no alerta.
 - Menu mobile (`nav.js`) e link "Privacidade" no rodapé em todas as páginas.
 - **Deploy mudou:** funções não sobem por drag-and-drop. É preciso deploy via Git (GitHub → Netlify) ou `netlify deploy`. Variáveis: `PUSHOVER_TOKEN`, `PUSHOVER_USER`.
+
+**Set/2026 — redesign visual**
+- **Decisão revista:** o site agora usa fotos da Renata (antes: "sem fotografia de rosto"). Pedido do cliente. A diferenciação da marca "De Volta a Nós" continua pela paleta, tipografia e pelo motivo do arco.
+- Motivo de identidade: **o arco** (porta, "dentro"). Fotos em moldura de arco com contorno dourado deslocado, arcos decorativos no fundo, favicon provisório de arco. Não é o monograma final (continua pendente).
+- CSS compartilhado em `css/intus.css` (tokens, header, footer, botões, fotos, vídeo, animações). JS comum em `js/site.js` (menu, revelação no scroll, vídeo).
+- Fotos: salvar em `img/` com os nomes de `img/LEIA-ME.txt`. Sem o arquivo, aparece moldura com legenda.
+- Vídeo: YouTube "Não listado", ID em `js/site.js` → `VIDEO_APRESENTACAO`. Carrega só no clique (youtube-nocookie).

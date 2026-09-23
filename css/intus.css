@@ -1,0 +1,196 @@
+/* Intus — base compartilhada por todas as páginas.
+   Cada página mantém no próprio <style> só o que é específico dela. */
+
+:root {
+  --creme: #E7E0D6; --bege: #CCBFB1; --mark: #645646;
+  --mark-dark: #423F35; --escuro: #2B2923; --ouro: #9C8158;
+  --texto: #2C2620; --muted: #7A6F60;
+  --linha: rgba(100,86,70,0.18);
+  --linha-clara: rgba(231,224,214,0.14);
+  --max: 1240px;
+  --gutter: 32px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif; background: var(--creme); color: var(--texto);
+  line-height: 1.7; -webkit-font-smoothing: antialiased;
+}
+/* Textura de papel sobre o site inteiro */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 200; pointer-events: none;
+  opacity: 0.08; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.26 0 0 0 0 0.22 0 0 0 0 0.17 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--ouro); color: var(--creme); }
+.serif { font-family: 'Fraunces', serif; }
+.container { max-width: var(--max); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+
+/* ---------- Cabeçalho ---------- */
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(231,224,214,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(100,86,70,0.12);
+}
+.nav-wrap { max-width: var(--max); margin: 0 auto; padding: 20px var(--gutter); display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Fraunces', serif; font-size: 23px; font-weight: 500; letter-spacing: 0.5px; color: var(--escuro); display: inline-flex; align-items: center; gap: 10px; }
+.logo-arco { width: 14px; height: 20px; border: 1px solid var(--ouro); border-bottom: none; border-radius: 999px 999px 0 0; }
+nav ul { list-style: none; display: flex; gap: 38px; align-items: center; }
+nav a { font-size: 14px; color: var(--mark-dark); position: relative; padding-bottom: 4px; transition: color 0.2s; }
+nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--ouro);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease);
+}
+nav a:hover { color: var(--escuro); }
+nav a:hover::after, nav a.active::after { transform: scaleX(1); }
+nav a.active { color: var(--escuro); }
+nav a.nav-cta { border: 1px solid var(--mark); padding: 8px 18px; border-radius: 999px; transition: all 0.2s; }
+nav a.nav-cta::after { display: none; }
+nav a.nav-cta:hover, nav a.nav-cta.active { background: var(--mark); color: var(--creme); }
+.nav-toggle { display: none; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--mark-dark); cursor: pointer; padding: 6px 0; }
+
+/* ---------- Tipografia de seção ---------- */
+.eyebrow {
+  font-family: 'Fraunces', serif; font-style: italic; color: var(--mark); font-size: 16px;
+  margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+}
+.eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--ouro); flex-shrink: 0; }
+.eyebrow.claro { color: var(--bege); }
+.titulo { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.12; color: var(--escuro); letter-spacing: -0.5px; }
+.titulo em { font-style: italic; color: var(--mark); }
+.claro .titulo, .titulo.claro { color: var(--creme); }
+.claro .titulo em, .titulo.claro em { color: var(--bege); }
+
+/* ---------- Botões ---------- */
+.btn, .btn-outline {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500;
+  padding: 16px 30px; border-radius: 2px; cursor: pointer; transition: all 0.25s var(--ease);
+}
+.btn { background: var(--mark); color: var(--creme); border: 1px solid var(--mark); }
+.btn:hover { background: var(--mark-dark); border-color: var(--mark-dark); }
+.btn-outline { border: 1px solid var(--mark); color: var(--mark-dark); background: transparent; }
+.btn-outline:hover { background: var(--mark); color: var(--creme); }
+.btn-claro { background: var(--bege); color: var(--escuro); border-color: var(--bege); }
+.btn-claro:hover { background: var(--creme); border-color: var(--creme); }
+.seta::after { content: "→"; transition: transform 0.25s var(--ease); }
+.seta:hover::after { transform: translateX(4px); }
+.link-seta { font-size: 14px; color: var(--mark-dark); border-bottom: 1px solid var(--ouro); padding-bottom: 3px; display: inline-flex; gap: 10px; }
+.link-seta::after { content: "→"; transition: transform 0.25s var(--ease); }
+.link-seta:hover::after { transform: translateX(4px); }
+.claro .link-seta { color: var(--creme); }
+
+/* ---------- Fotos ----------
+   Uso: <figure class="foto foto--arco" style="--ratio: 4/5">
+          <img src="img/arquivo.jpg" alt="..." onerror="this.remove()">
+          <figcaption class="foto-vazia">Retrato da Renata</figcaption>
+        </figure>
+   Enquanto o arquivo não existir, aparece a moldura com a legenda. */
+.foto { position: relative; overflow: hidden; background: var(--bege); aspect-ratio: var(--ratio, 4/5); border-radius: 2px; }
+.foto::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 80% at 30% 0%, rgba(231,224,214,0.55), transparent 60%),
+    repeating-linear-gradient(135deg, transparent 0 14px, rgba(100,86,70,0.06) 14px 15px);
+}
+.foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 1.2s var(--ease); }
+.foto:hover img { transform: scale(1.03); }
+.foto-vazia {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mark); text-align: center; padding: 24px;
+}
+.foto-vazia::before { content: ""; width: 22px; height: 30px; border: 1px solid var(--ouro); border-bottom: none; border-radius: 999px 999px 0 0; }
+.foto--arco { border-radius: 999px 999px 2px 2px; }
+.foto-escura { background: var(--mark-dark); }
+.foto-escura .foto-vazia { color: var(--bege); }
+
+/* Arco com contorno dourado deslocado atrás da foto */
+.moldura { position: relative; }
+.moldura::before {
+  content: ""; position: absolute; inset: 0; transform: translate(18px, -18px);
+  border: 1px solid var(--ouro); border-radius: 999px 999px 2px 2px; pointer-events: none;
+}
+.moldura > .foto { position: relative; }
+
+/* ---------- Vídeo ----------
+   O ID do YouTube fica em js/site.js (VIDEO_APRESENTACAO). Capa: img/video-capa.jpg */
+.video { position: relative; aspect-ratio: 16/9; background: var(--mark-dark); overflow: hidden; border-radius: 2px; }
+.video::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 14px, rgba(231,224,214,0.035) 14px 15px);
+}
+.video .capa { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+.video-play {
+  position: absolute; inset: 0; z-index: 1; width: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+  background: linear-gradient(to top, rgba(43,41,35,0.65), rgba(43,41,35,0.1) 70%);
+  border: none; color: var(--creme); cursor: pointer; font-family: 'Inter', sans-serif; font-size: 14px;
+}
+.video-play .icone {
+  width: 88px; height: 88px; border-radius: 50%; border: 1px solid rgba(231,224,214,0.6);
+  display: grid; place-items: center; transition: all 0.35s var(--ease);
+}
+.video-play .icone::after { content: ""; border-left: 16px solid var(--creme); border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 5px; }
+.video-play:hover .icone { background: var(--creme); transform: scale(1.06); }
+.video-play:hover .icone::after { border-left-color: var(--escuro); }
+.video-play[disabled] { cursor: default; }
+.video-play[disabled] .icone { opacity: 0.45; }
+.video-play[disabled]:hover .icone { background: none; transform: none; }
+.video-play[disabled]:hover .icone::after { border-left-color: var(--creme); }
+.video-play .rotulo { font-family: 'Fraunces', serif; font-style: italic; font-size: 18px; }
+.video-play .sub { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.7; margin-top: -10px; }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; }
+
+/* ---------- Revelação no scroll (só com JS; sem JS tudo aparece) ---------- */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.js .reveal.is-in { opacity: 1; transform: none; }
+.js .reveal[data-delay="1"] { transition-delay: 0.12s; }
+.js .reveal[data-delay="2"] { transition-delay: 0.24s; }
+.js .reveal[data-delay="3"] { transition-delay: 0.36s; }
+
+@keyframes subir { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes arco { from { opacity: 0; clip-path: inset(100% 0 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+.entra { animation: subir 1s var(--ease) both; }
+.entra-arco { animation: arco 1.4s var(--ease) both; }
+.d1 { animation-delay: 0.1s; } .d2 { animation-delay: 0.25s; } .d3 { animation-delay: 0.4s; } .d4 { animation-delay: 0.55s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal, .entra, .entra-arco { opacity: 1; transform: none; animation: none; transition: none; clip-path: none; }
+  .foto:hover img { transform: none; }
+}
+
+/* ---------- Rodapé ---------- */
+footer { background: var(--escuro); color: var(--bege); overflow: hidden; }
+.footer-topo { max-width: var(--max); margin: 0 auto; padding: 80px var(--gutter) 48px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 48px; border-bottom: 1px solid var(--linha-clara); }
+.footer-topo .lema { font-family: 'Fraunces', serif; font-style: italic; font-size: 20px; color: var(--creme); max-width: 300px; line-height: 1.4; }
+.footer-topo .lema small { display: block; font-family: 'Inter', sans-serif; font-style: normal; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ouro); margin-top: 14px; }
+.footer-col h4 { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ouro); font-weight: 500; margin-bottom: 16px; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col a { font-size: 14px; color: var(--bege); opacity: 0.85; transition: opacity 0.2s; }
+.footer-col a:hover { opacity: 1; color: var(--creme); }
+.footer-marca {
+  font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(96px, 22vw, 300px); line-height: 0.8;
+  color: var(--creme); opacity: 0.07; letter-spacing: -4px; text-align: center; margin: 32px 0 -0.12em; user-select: none;
+}
+.footer-meta { max-width: var(--max); margin: 0 auto; padding: 24px var(--gutter) 32px; font-size: 12px; color: var(--bege); opacity: 0.6; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.footer-meta a { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 820px) {
+  :root { --gutter: 24px; }
+  .nav-toggle { display: block; }
+  .nav-wrap { padding: 18px var(--gutter); }
+  .nav-wrap nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--creme); border-bottom: 1px solid rgba(100,86,70,0.12); }
+  .nav-wrap nav.open { display: block; }
+  nav ul { flex-direction: column; align-items: stretch; gap: 0; padding: 4px var(--gutter) 20px; }
+  nav li a { display: block; padding: 12px 0; font-size: 16px; }
+  nav a::after { display: none; }
+  nav a.active { color: var(--ouro); }
+  nav a.nav-cta { text-align: center; margin-top: 10px; padding: 12px; }
+  .moldura::before { transform: translate(10px, -10px); }
+  .footer-topo { grid-template-columns: 1fr 1fr; padding-top: 56px; }
+  .footer-topo > :first-child { grid-column: 1 / -1; }
+}
