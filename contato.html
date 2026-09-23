@@ -23,19 +23,23 @@ nav ul { list-style: none; display: flex; gap: 40px; }
 nav a { font-size: 14px; color: var(--mark-dark); }
 nav a.active { color: var(--escuro); border-bottom: 1px solid var(--ouro); padding-bottom: 4px; }
 
-.wrap { max-width: 1100px; margin: 0 auto; padding: 100px 32px 120px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 80px; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 100px 32px 120px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 80px; align-items: start; }
 .eyebrow { font-family: 'Fraunces', serif; font-style: italic; color: var(--mark); font-size: 16px; margin-bottom: 20px; }
 .wrap h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 48px); line-height: 1.15; color: var(--escuro); margin-bottom: 24px; }
 .left p { font-size: 16px; color: var(--muted); margin-bottom: 32px; max-width: 400px; }
+.left { position: sticky; top: 110px; }
 
 .info-item { padding: 20px 0; border-top: 1px solid rgba(100,86,70,0.18); }
 .info-item:last-child { border-bottom: 1px solid rgba(100,86,70,0.18); }
 .info-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--ouro); margin-bottom: 6px; }
 .info-item .val { font-family: 'Fraunces', serif; font-size: 19px; color: var(--escuro); }
 
-form { display: flex; flex-direction: column; gap: 22px; }
-label { font-size: 13px; color: var(--mark-dark); margin-bottom: 8px; display: block; }
-input, textarea, select {
+form { display: flex; flex-direction: column; gap: 26px; }
+.grupo-titulo { font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; color: var(--ouro); padding-top: 18px; border-top: 1px solid rgba(100,86,70,0.18); }
+label, legend { font-size: 13px; color: var(--mark-dark); margin-bottom: 8px; display: block; }
+.pergunta { font-size: 15px; color: var(--escuro); line-height: 1.55; }
+fieldset { border: none; }
+input[type="text"], input[type="email"], input[type="tel"], textarea, select {
   width: 100%; padding: 14px 16px;
   border: 1px solid rgba(100,86,70,0.3);
   background: rgba(255,255,255,0.4);
@@ -44,26 +48,74 @@ input, textarea, select {
 }
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--mark); }
 textarea { resize: vertical; min-height: 120px; }
+textarea.curto { min-height: 80px; }
+
+.opcoes { display: flex; gap: 12px; flex-wrap: wrap; }
+.opcao { position: relative; }
+.opcao input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.opcao span {
+  display: inline-block; padding: 10px 22px; font-size: 14px; color: var(--mark-dark);
+  border: 1px solid rgba(100,86,70,0.3); border-radius: 2px; background: rgba(255,255,255,0.4);
+  transition: all 0.15s;
+}
+.opcao input:checked + span { background: var(--mark); border-color: var(--mark); color: var(--creme); }
+.opcao input:focus-visible + span { outline: 2px solid var(--ouro); outline-offset: 2px; }
+
+.condicional { display: none; margin-top: 14px; }
+.condicional.visivel { display: block; }
+
+.apoio {
+  display: none; margin-top: 16px; padding: 20px 22px;
+  background: var(--bege); border-left: 2px solid var(--ouro); border-radius: 2px;
+  font-size: 14px; color: var(--mark-dark);
+}
+.apoio.visivel { display: block; }
+.apoio strong { color: var(--escuro); }
+
+.consentimento { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.consentimento input { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--mark); flex-shrink: 0; }
+.consentimento a { text-decoration: underline; color: var(--mark-dark); }
+
 .btn {
   align-self: flex-start;
   background: var(--mark); color: var(--creme);
-  font-size: 14px; font-weight: 500; padding: 16px 36px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; padding: 16px 36px;
   border: none; border-radius: 2px; cursor: pointer;
   transition: background 0.2s;
 }
 .btn:hover { background: var(--mark-dark); }
-.aviso { font-size: 13px; color: var(--muted); margin-top: -6px; }
+.btn:disabled { opacity: 0.6; cursor: wait; }
+.erro-envio { display: none; font-size: 14px; color: #8A3B2E; }
+.erro-envio.visivel { display: block; }
+
+/* Telas pós-envio */
+.resposta { display: none; }
+.resposta.visivel { display: block; }
+.resposta h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(28px, 3.5vw, 36px); line-height: 1.2; color: var(--escuro); margin-bottom: 20px; }
+.resposta p { font-size: 16px; color: var(--muted); margin-bottom: 18px; }
+.contatos-apoio { margin: 28px 0; }
+.contatos-apoio .info-item .val a { text-decoration: underline; text-decoration-color: var(--ouro); text-underline-offset: 4px; }
+.contatos-apoio .info-item p:last-child { font-size: 14px; color: var(--muted); margin: 4px 0 0; }
 
 footer { background: var(--escuro); color: var(--bege); }
 .footer-wrap { max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; }
 .footer-wrap .logo { color: var(--creme); }
-.footer-nav ul { list-style: none; display: flex; gap: 28px; }
+.footer-nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 28px; }
 .footer-nav a { font-size: 13px; color: var(--bege); opacity: 0.85; }
 .footer-meta { max-width: 1240px; margin: 0 auto; padding: 0 32px 32px; font-size: 12px; color: var(--bege); opacity: 0.55; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
 
+.nav-toggle { display: none; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--mark-dark); cursor: pointer; padding: 6px 0; }
+
 @media (max-width: 820px) {
-  .nav-wrap nav { display: none; }
+  .nav-toggle { display: block; }
+  .nav-wrap nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--creme); border-bottom: 1px solid rgba(100,86,70,0.12); }
+  .nav-wrap nav.open { display: block; }
+  nav ul { flex-direction: column; gap: 0; padding: 4px 24px 16px; }
+  nav li a { display: block; padding: 12px 0; font-size: 16px; }
+  nav a.active { border-bottom: none; color: var(--ouro); }
+  .nav-wrap { padding: 18px 24px; }
   .wrap { grid-template-columns: 1fr; gap: 48px; padding: 70px 24px 80px; }
+  .left { position: static; }
 }
 </style>
 </head>
@@ -72,7 +124,8 @@ footer { background: var(--escuro); color: var(--bege); }
 <header>
   <div class="nav-wrap">
     <a href="index.html" class="logo">Intus</a>
-    <nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
       <ul>
         <li><a href="sobre.html">Sobre</a></li>
         <li><a href="como-funciona.html">Como funciona</a></li>
@@ -87,7 +140,7 @@ footer { background: var(--escuro); color: var(--bege); }
   <div class="left">
     <p class="eyebrow">Fale com o Intus</p>
     <h1>Vamos entender juntas se este é o momento certo.</h1>
-    <p>Preencha o formulário ao lado com um pouco do que te trouxe até aqui. É o primeiro passo do processo — não um compromisso.</p>
+    <p>Esta é a ficha de triagem: algumas perguntas curtas sobre o que te trouxe até aqui. A Renata lê cada ficha pessoalmente antes do próximo passo. Preencher não gera compromisso nenhum.</p>
 
     <div class="info-item">
       <p class="label">WhatsApp</p>
@@ -104,23 +157,36 @@ footer { background: var(--escuro); color: var(--bege); }
   </div>
 
   <div class="right">
-    <form name="contato-intus" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="contato-intus" />
+    <!-- Sem JavaScript, o envio cai em obrigado.html. Com JavaScript, o envio é feito via fetch
+         e a tela seguinte depende da resposta da pergunta 3 (ver script no fim da página). -->
+    <form id="triagem" name="triagem" method="POST" action="/obrigado.html" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="triagem" />
       <p style="display:none"><label>Não preencha: <input name="bot-field" /></label></p>
+
+      <p class="grupo-titulo">Seus dados</p>
 
       <div>
         <label for="nome">Nome</label>
-        <input type="text" id="nome" name="nome" required>
+        <input type="text" id="nome" name="nome" autocomplete="name" required>
       </div>
 
       <div>
         <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" autocomplete="email" required>
       </div>
 
       <div>
         <label for="whatsapp">WhatsApp</label>
-        <input type="tel" id="whatsapp" name="whatsapp" required>
+        <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" placeholder="(21) 99999-9999" required>
+      </div>
+
+      <div>
+        <label for="modalidade">O acompanhamento é para</label>
+        <select id="modalidade" name="modalidade" required>
+          <option value="individual">Mim (terapia individual)</option>
+          <option value="casal">Nós dois (terapia de casal)</option>
+          <option value="familia">Minha família</option>
+        </select>
       </div>
 
       <div>
@@ -132,15 +198,85 @@ footer { background: var(--escuro); color: var(--bege); }
         </select>
       </div>
 
+      <p class="grupo-titulo">Sobre você</p>
+
       <div>
-        <label for="mensagem">O que te trouxe a buscar acompanhamento agora?</label>
-        <textarea id="mensagem" name="mensagem" required></textarea>
+        <label for="motivo" class="pergunta">O que te trouxe a buscar terapia agora? O que você gostaria de trabalhar?</label>
+        <textarea id="motivo" name="motivo" required></textarea>
       </div>
 
-      <p class="aviso">Ao enviar, você concorda com o uso das suas informações apenas para retorno do Intus, conforme nossa política de privacidade.</p>
+      <fieldset>
+        <legend class="pergunta">Você já fez terapia antes?</legend>
+        <div class="opcoes">
+          <label class="opcao"><input type="radio" name="terapia_anterior" value="sim" required><span>Sim</span></label>
+          <label class="opcao"><input type="radio" name="terapia_anterior" value="nao"><span>Não</span></label>
+        </div>
+      </fieldset>
 
-      <button type="submit" class="btn">Enviar</button>
+      <fieldset>
+        <legend class="pergunta">Está em acompanhamento psiquiátrico ou usa alguma medicação para saúde mental atualmente?</legend>
+        <div class="opcoes">
+          <label class="opcao"><input type="radio" name="acompanhamento_psiquiatrico" value="sim" required><span>Sim</span></label>
+          <label class="opcao"><input type="radio" name="acompanhamento_psiquiatrico" value="nao"><span>Não</span></label>
+        </div>
+        <div class="condicional" id="psiq-detalhe">
+          <label for="psiquiatrico_detalhe">Se quiser, conte um pouco mais (opcional)</label>
+          <textarea class="curto" id="psiquiatrico_detalhe" name="psiquiatrico_detalhe"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="pergunta">Nas últimas semanas, você teve pensamentos de se machucar ou de que não vale a pena continuar vivendo?</legend>
+        <div class="opcoes">
+          <label class="opcao"><input type="radio" name="risco" value="sim" required><span>Sim</span></label>
+          <label class="opcao"><input type="radio" name="risco" value="nao"><span>Não</span></label>
+        </div>
+        <div class="apoio" id="apoio-risco" role="status">
+          <p><strong>Obrigada por contar.</strong> Sua ficha vai chegar à Renata como prioridade, e ela vai falar com você diretamente.</p>
+          <p style="margin-top:10px;">Se você estiver em perigo agora, não espere: ligue <strong>188</strong> (CVV, gratuito, 24h) ou <strong>192</strong> (SAMU).</p>
+        </div>
+      </fieldset>
+
+      <label class="consentimento">
+        <input type="checkbox" name="consentimento" value="sim" required>
+        <span>Autorizo o Instituto Intus a usar as informações desta ficha, inclusive as de saúde, apenas para avaliar meu pedido e entrar em contato comigo, conforme a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.</span>
+      </label>
+
+      <p class="erro-envio" id="erro-envio" role="alert">Não conseguimos enviar sua ficha agora. Tente de novo em instantes, ou fale com o Intus pelo <a href="https://wa.me/5521995053169" target="_blank" style="text-decoration:underline;">WhatsApp</a>.</p>
+
+      <button type="submit" class="btn">Enviar ficha</button>
     </form>
+
+    <!-- Resposta padrão -->
+    <div class="resposta" id="resposta-padrao" tabindex="-1">
+      <p class="eyebrow">Ficha recebida</p>
+      <h2>Obrigada por dar esse primeiro passo.</h2>
+      <p>A Renata vai ler sua ficha com atenção e retornar pelo WhatsApp com a proposta de acompanhamento: formato, valor e frequência recomendada.</p>
+      <p>Enquanto isso, se quiser entender o que vem depois, o <a href="como-funciona.html" style="text-decoration:underline;">passo a passo</a> está aqui.</p>
+    </div>
+
+    <!-- Resposta de acolhimento (pergunta 3 = sim). Não mostra nenhum passo comercial. -->
+    <div class="resposta" id="resposta-acolhimento" tabindex="-1">
+      <p class="eyebrow">Ficha recebida</p>
+      <h2>Você não precisa passar por isso sem apoio.</h2>
+      <p>A Renata foi avisada agora e vai entrar em contato com você diretamente, pelo WhatsApp que você informou, o quanto antes.</p>
+      <p>Se em algum momento você sentir que pode se machucar, procure ajuda imediatamente:</p>
+
+      <div class="contatos-apoio">
+        <div class="info-item">
+          <p class="label">CVV — Centro de Valorização da Vida</p>
+          <p class="val"><a href="tel:188">Ligue 188</a></p>
+          <p>Gratuito, 24 horas, todos os dias. Também atende por chat em <a href="https://cvv.org.br" target="_blank" style="text-decoration:underline;">cvv.org.br</a>.</p>
+        </div>
+        <div class="info-item">
+          <p class="label">SAMU</p>
+          <p class="val"><a href="tel:192">Ligue 192</a></p>
+          <p>Em situação de emergência, ou vá ao pronto-socorro ou UPA mais próximo.</p>
+        </div>
+      </div>
+
+      <p>Se puder, avise alguém de confiança que está perto de você.</p>
+    </div>
   </div>
 </section>
 
@@ -157,10 +293,58 @@ footer { background: var(--escuro); color: var(--bege); }
     </div>
   </div>
   <div class="footer-meta">
-    <span>Instituto Intus · Psicologia</span>
+    <span>Instituto Intus · Psicologia · <a href="privacidade.html">Privacidade</a></span>
     <span>Renata Soares · CRP 05/87188</span>
   </div>
 </footer>
 
+<script>
+(function () {
+  var form = document.getElementById('triagem');
+  var apoio = document.getElementById('apoio-risco');
+  var psiqDetalhe = document.getElementById('psiq-detalhe');
+  var erro = document.getElementById('erro-envio');
+
+  form.addEventListener('change', function (e) {
+    if (e.target.name === 'risco') {
+      apoio.classList.toggle('visivel', e.target.value === 'sim');
+    }
+    if (e.target.name === 'acompanhamento_psiquiatrico') {
+      psiqDetalhe.classList.toggle('visivel', e.target.value === 'sim');
+    }
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var botao = form.querySelector('button[type="submit"]');
+    var emRisco = form.elements['risco'].value === 'sim';
+
+    botao.disabled = true;
+    botao.textContent = 'Enviando…';
+    erro.classList.remove('visivel');
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        form.style.display = 'none';
+        var tela = document.getElementById(emRisco ? 'resposta-acolhimento' : 'resposta-padrao');
+        tela.classList.add('visivel');
+        tela.focus();
+        tela.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+      .catch(function () {
+        erro.classList.add('visivel');
+        botao.disabled = false;
+        botao.textContent = 'Enviar ficha';
+      });
+  });
+})();
+</script>
+
+<script src="nav.js"></script>
 </body>
 </html>

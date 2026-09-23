@@ -54,11 +54,11 @@ O objetivo é construir um funil completo: descoberta (Instagram) → site insti
 Ordem acordada com o cliente:
 
 1. **Site institucional** ✅ pronto (ver seção 2)
-2. **Ficha de triagem com lógica condicional** — pendente
+2. **Ficha de triagem com lógica condicional** — ✅ implementada em `contato.html` (Netlify Forms `triagem`) + alerta via Pushover em `netlify/functions/submission-created.mjs`
 3. **Cobrança recorrente via InfinityPay** — pendente
 4. **Integração com Google Calendar** (geração automática de link do Meet por sessão) — pendente
 5. **Lembrete de sessão automático** — pendente
-6. **Política de Privacidade / consentimento LGPD** — pendente (texto + implementação)
+6. **Política de Privacidade / consentimento LGPD** — rascunho em `privacidade.html` + checkbox de consentimento na triagem; **falta revisão jurídica** e os TODOs no HTML
 7. **Camada de agendamento com 3 botões** (Cancelar / Reagendar / Contestar cancelamento), regra de 24h, **construída direto no nosso site** (não em ferramenta de terceiro) — pendente
 8. **Fluxo de contestação** (formulário + fila de decisão manual da Renata) — pendente
 9. Regra de reembolso de 75% na 1ª semana — decidido, mas implementação **adiada** ("depois vamos ver isso")
@@ -126,3 +126,15 @@ Este fluxo **não teve nenhum detalhamento técnico ainda** — só a lógica co
 ## 7. Outros ativos do mesmo cliente (contexto adicional, não obrigatório para este projeto)
 
 Para quem for continuar: a Renata também tem um produto de curso digital chamado **"De Volta a Nós"** (curso sobre reconexão conjugal, Hotmart, funil de vendas próprio, identidade visual diferente — tons terrosos com foto dela). É uma marca separada do Instituto Intus e não deve ser confundida visualmente nem estruturalmente, embora compartilhem a mesma pessoa fundadora.
+
+---
+
+## 8. Log de continuidade
+
+**Set/2026**
+- Repositório git iniciado na pasta.
+- `contato.html` virou a ficha de triagem (form `triagem`). Pergunta 2 foi dividida em duas (terapia anterior / acompanhamento psiquiátrico). Pergunta 3 = "sim" → tela de acolhimento (CVV 188, SAMU 192), sem passo comercial.
+- `obrigado.html`: fallback sem JavaScript (inclui CVV para todos).
+- Alerta: Pushover. Risco = prioridade 2 (emergência, repete até confirmar); demais fichas = prioridade 0. Só nome + WhatsApp vão no alerta.
+- Menu mobile (`nav.js`) e link "Privacidade" no rodapé em todas as páginas.
+- **Deploy mudou:** funções não sobem por drag-and-drop. É preciso deploy via Git (GitHub → Netlify) ou `netlify deploy`. Variáveis: `PUSHOVER_TOKEN`, `PUSHOVER_USER`.

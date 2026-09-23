@@ -50,7 +50,6 @@ header {
 nav ul { list-style: none; display: flex; gap: 40px; }
 nav a { font-size: 14px; color: var(--mark-dark); transition: color 0.2s; }
 nav a:hover { color: var(--escuro); }
-.nav-toggle { display: none; }
 
 /* HERO */
 .hero {
@@ -206,7 +205,7 @@ footer {
   gap: 32px;
 }
 .footer-wrap .logo { color: var(--creme); }
-.footer-nav ul { list-style: none; display: flex; gap: 28px; }
+.footer-nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 28px; }
 .footer-nav a { font-size: 13px; color: var(--bege); opacity: 0.85; }
 .footer-meta {
   max-width: 1240px; margin: 0 auto;
@@ -215,8 +214,16 @@ footer {
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
 }
 
+.nav-toggle { display: none; background: none; border: none; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--mark-dark); cursor: pointer; padding: 6px 0; }
+
 @media (max-width: 820px) {
-  .nav-wrap nav { display: none; }
+  .nav-toggle { display: block; }
+  .nav-wrap nav { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--creme); border-bottom: 1px solid rgba(100,86,70,0.12); }
+  .nav-wrap nav.open { display: block; }
+  nav ul { flex-direction: column; gap: 0; padding: 4px 24px 16px; }
+  nav li a { display: block; padding: 12px 0; font-size: 16px; }
+  nav a.active { border-bottom: none; color: var(--ouro); }
+  .nav-wrap { padding: 18px 24px; }
   .hero { grid-template-columns: 1fr; padding-top: 80px; }
   .pilares-wrap { grid-template-columns: 1fr; }
   .pilar { border-left: none; border-top: 1px solid rgba(100,86,70,0.15); padding-left: 0; }
@@ -234,7 +241,8 @@ footer {
 <header>
   <div class="nav-wrap">
     <a href="index.html" class="logo">Intus</a>
-    <nav>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
       <ul>
         <li><a href="sobre.html">Sobre</a></li>
         <li><a href="como-funciona.html">Como funciona</a></li>
@@ -311,10 +319,11 @@ footer {
     </div>
   </div>
   <div class="footer-meta">
-    <span>Instituto Intus · Psicologia</span>
+    <span>Instituto Intus · Psicologia · <a href="privacidade.html">Privacidade</a></span>
     <span>Renata Soares · CRP 05/87188</span>
   </div>
 </footer>
 
+<script src="nav.js"></script>
 </body>
 </html>
