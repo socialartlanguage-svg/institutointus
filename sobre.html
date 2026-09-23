@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre — Intus Instituto de Psicologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --creme: #E7E0D6; --bege: #CCBFB1; --mark: #645646;
+  --mark-dark: #423F35; --escuro: #2B2923; --ouro: #9C8158;
+  --texto: #2C2620; --muted: #7A6F60;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--creme); color: var(--texto); line-height: 1.7; }
+.serif { font-family: 'Fraunces', serif; }
+a { color: inherit; text-decoration: none; }
+
+header { position: sticky; top: 0; z-index: 50; background: rgba(231,224,214,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(100,86,70,0.12); }
+.nav-wrap { max-width: 1240px; margin: 0 auto; padding: 22px 32px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--escuro); }
+nav ul { list-style: none; display: flex; gap: 40px; }
+nav a { font-size: 14px; color: var(--mark-dark); }
+nav a.active { color: var(--escuro); border-bottom: 1px solid var(--ouro); padding-bottom: 4px; }
+
+.page-head { max-width: 900px; margin: 0 auto; padding: 100px 32px 60px; }
+.page-head .eyebrow { font-family: 'Fraunces', serif; font-style: italic; color: var(--mark); font-size: 16px; margin-bottom: 20px; }
+.page-head h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(36px, 5vw, 56px); line-height: 1.15; color: var(--escuro); }
+
+.content { max-width: 780px; margin: 0 auto; padding: 0 32px 60px; }
+.content p { font-size: 18px; color: var(--texto); margin-bottom: 26px; }
+.content p.lead { font-family: 'Fraunces', serif; font-size: 24px; color: var(--mark-dark); font-weight: 400; line-height: 1.5; margin-bottom: 40px; }
+
+.divider { max-width: 780px; margin: 60px auto; padding: 0 32px; }
+.divider hr { border: none; border-top: 1px solid rgba(100,86,70,0.2); }
+
+.principios { max-width: 1000px; margin: 0 auto; padding: 20px 32px 100px; display: grid; grid-template-columns: repeat(3,1fr); gap: 48px; }
+.principio .n { font-family: 'Fraunces', serif; font-style: italic; color: var(--ouro); font-size: 15px; margin-bottom: 14px; display: block; }
+.principio h3 { font-family: 'Fraunces', serif; font-size: 21px; font-weight: 500; color: var(--escuro); margin-bottom: 10px; }
+.principio p { font-size: 14.5px; color: var(--muted); }
+
+.cred { background: var(--bege); }
+.cred-wrap { max-width: 780px; margin: 0 auto; padding: 60px 32px; }
+.cred-wrap p { font-size: 15px; color: var(--mark-dark); }
+.cred-wrap .nome { font-family: 'Fraunces', serif; font-size: 20px; color: var(--escuro); margin-bottom: 6px; }
+
+footer { background: var(--escuro); color: var(--bege); }
+.footer-wrap { max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; }
+.footer-wrap .logo { color: var(--creme); }
+.footer-nav ul { list-style: none; display: flex; gap: 28px; }
+.footer-nav a { font-size: 13px; color: var(--bege); opacity: 0.85; }
+.footer-meta { max-width: 1240px; margin: 0 auto; padding: 0 32px 32px; font-size: 12px; color: var(--bege); opacity: 0.55; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 820px) {
+  .nav-wrap nav { display: none; }
+  .principios { grid-template-columns: 1fr; gap: 32px; }
+  .page-head { padding: 70px 24px 40px; }
+  .content { padding: 0 24px 40px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">Intus</a>
+    <nav>
+      <ul>
+        <li><a href="sobre.html" class="active">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-head">
+  <p class="eyebrow">Sobre o Intus</p>
+  <h1>Um jeito de olhar para as pessoas, não só para os sintomas.</h1>
+</section>
+
+<section class="content">
+  <p class="lead">O Intus nasceu de uma pergunta que se repete há anos no consultório: por que, mesmo quando queremos mudar, continuamos repetindo os mesmos padrões?</p>
+
+  <p>A resposta raramente está isolada em quem pergunta. Está na história que essa pessoa carrega — a família em que cresceu, os vínculos que aprendeu a construir, o que foi ensinado sobre amor, conflito e pertencimento muito antes de haver escolha consciente sobre isso.</p>
+
+  <p>É por isso que o trabalho aqui parte da psicologia sistêmica: a ideia de que ninguém existe isolado. Somos formados dentro de sistemas — a família de origem, o casamento, os vínculos que construímos — e é dentro desses sistemas que os padrões que nos machucam, e os que nos sustentam, se formam.</p>
+
+  <p>Isso não significa procurar um culpado. Significa entender a lógica por trás do que parece não fazer sentido, e a partir daí, encontrar espaço real para mudar.</p>
+</section>
+
+<div class="divider"><hr></div>
+
+<section class="content">
+  <p class="lead">Fé e ciência, lado a lado.</p>
+  <p>Para muitas das pessoas que chegam até o Intus, a fé é parte importante de como enxergam a própria vida. Isso nunca é tratado como algo a ser deixado na porta do consultório.</p>
+  <p>A psicologia não substitui o cuidado espiritual — ela caminha ao lado dele. Enquanto um cuida da alma, a outra ajuda a entender padrões, comunicação e história familiar. Nenhuma das duas precisa recuar para que a outra exista.</p>
+</section>
+
+<section class="principios">
+  <div class="principio">
+    <span class="n">Um</span>
+    <h3>Ninguém é o problema sozinho</h3>
+    <p>Um comportamento difícil é quase sempre resposta a um padrão maior do que a própria pessoa.</p>
+  </div>
+  <div class="principio">
+    <span class="n">Dois</span>
+    <h3>A origem importa</h3>
+    <p>Padrões de comunicação e vínculo quase sempre vêm de antes da relação atual, e podem ser compreendidos com clareza.</p>
+  </div>
+  <div class="principio">
+    <span class="n">Três</span>
+    <h3>A mudança começa com uma pessoa</h3>
+    <p>Não é preciso esperar o outro mudar primeiro. Quando uma pessoa muda, o sistema inteiro se reorganiza.</p>
+  </div>
+</section>
+
+<section class="cred">
+  <div class="cred-wrap">
+    <p class="nome">Renata Soares</p>
+    <p>Psicóloga sistêmica, responsável técnica pelo Intus. Atua há 6 anos entre consultório presencial e atendimento online, com foco em terapia individual, de casal e família.</p>
+    <p style="margin-top: 14px; font-size: 13px; opacity: 0.75;">CRP 05/87188</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-wrap">
+    <div><a href="index.html" class="logo">Intus</a></div>
+    <div class="footer-nav">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Instituto Intus · Psicologia</span>
+    <span>Renata Soares · CRP 05/87188</span>
+  </div>
+</footer>
+
+</body>
+</html>

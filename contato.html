@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contato — Intus Instituto de Psicologia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --creme: #E7E0D6; --bege: #CCBFB1; --mark: #645646;
+  --mark-dark: #423F35; --escuro: #2B2923; --ouro: #9C8158;
+  --texto: #2C2620; --muted: #7A6F60;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--creme); color: var(--texto); line-height: 1.7; }
+a { color: inherit; text-decoration: none; }
+
+header { position: sticky; top: 0; z-index: 50; background: rgba(231,224,214,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(100,86,70,0.12); }
+.nav-wrap { max-width: 1240px; margin: 0 auto; padding: 22px 32px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--escuro); }
+nav ul { list-style: none; display: flex; gap: 40px; }
+nav a { font-size: 14px; color: var(--mark-dark); }
+nav a.active { color: var(--escuro); border-bottom: 1px solid var(--ouro); padding-bottom: 4px; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 100px 32px 120px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 80px; }
+.eyebrow { font-family: 'Fraunces', serif; font-style: italic; color: var(--mark); font-size: 16px; margin-bottom: 20px; }
+.wrap h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 48px); line-height: 1.15; color: var(--escuro); margin-bottom: 24px; }
+.left p { font-size: 16px; color: var(--muted); margin-bottom: 32px; max-width: 400px; }
+
+.info-item { padding: 20px 0; border-top: 1px solid rgba(100,86,70,0.18); }
+.info-item:last-child { border-bottom: 1px solid rgba(100,86,70,0.18); }
+.info-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--ouro); margin-bottom: 6px; }
+.info-item .val { font-family: 'Fraunces', serif; font-size: 19px; color: var(--escuro); }
+
+form { display: flex; flex-direction: column; gap: 22px; }
+label { font-size: 13px; color: var(--mark-dark); margin-bottom: 8px; display: block; }
+input, textarea, select {
+  width: 100%; padding: 14px 16px;
+  border: 1px solid rgba(100,86,70,0.3);
+  background: rgba(255,255,255,0.4);
+  font-family: 'Inter', sans-serif; font-size: 15px; color: var(--texto);
+  border-radius: 2px;
+}
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--mark); }
+textarea { resize: vertical; min-height: 120px; }
+.btn {
+  align-self: flex-start;
+  background: var(--mark); color: var(--creme);
+  font-size: 14px; font-weight: 500; padding: 16px 36px;
+  border: none; border-radius: 2px; cursor: pointer;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--mark-dark); }
+.aviso { font-size: 13px; color: var(--muted); margin-top: -6px; }
+
+footer { background: var(--escuro); color: var(--bege); }
+.footer-wrap { max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px; }
+.footer-wrap .logo { color: var(--creme); }
+.footer-nav ul { list-style: none; display: flex; gap: 28px; }
+.footer-nav a { font-size: 13px; color: var(--bege); opacity: 0.85; }
+.footer-meta { max-width: 1240px; margin: 0 auto; padding: 0 32px 32px; font-size: 12px; color: var(--bege); opacity: 0.55; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 820px) {
+  .nav-wrap nav { display: none; }
+  .wrap { grid-template-columns: 1fr; gap: 48px; padding: 70px 24px 80px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo">Intus</a>
+    <nav>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="contato.html" class="active">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="left">
+    <p class="eyebrow">Fale com o Intus</p>
+    <h1>Vamos entender juntas se este é o momento certo.</h1>
+    <p>Preencha o formulário ao lado com um pouco do que te trouxe até aqui. É o primeiro passo do processo — não um compromisso.</p>
+
+    <div class="info-item">
+      <p class="label">WhatsApp</p>
+      <p class="val"><a href="https://wa.me/5521995053169" target="_blank">(21) 99505-3169</a></p>
+    </div>
+    <div class="info-item">
+      <p class="label">Instagram do Intus</p>
+      <p class="val"><a href="https://www.instagram.com/institutointus/" target="_blank">@institutointus</a></p>
+    </div>
+    <div class="info-item">
+      <p class="label">Instagram da Renata</p>
+      <p class="val"><a href="https://www.instagram.com/renatasoares.ts/" target="_blank">@renatasoares.ts</a></p>
+    </div>
+  </div>
+
+  <div class="right">
+    <form name="contato-intus" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contato-intus" />
+      <p style="display:none"><label>Não preencha: <input name="bot-field" /></label></p>
+
+      <div>
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
+      </div>
+
+      <div>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div>
+        <label for="whatsapp">WhatsApp</label>
+        <input type="tel" id="whatsapp" name="whatsapp" required>
+      </div>
+
+      <div>
+        <label for="formato">Prefere atendimento presencial ou online?</label>
+        <select id="formato" name="formato">
+          <option value="online">Online</option>
+          <option value="presencial">Presencial</option>
+          <option value="indiferente">Tanto faz</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="mensagem">O que te trouxe a buscar acompanhamento agora?</label>
+        <textarea id="mensagem" name="mensagem" required></textarea>
+      </div>
+
+      <p class="aviso">Ao enviar, você concorda com o uso das suas informações apenas para retorno do Intus, conforme nossa política de privacidade.</p>
+
+      <button type="submit" class="btn">Enviar</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-wrap">
+    <div><a href="index.html" class="logo">Intus</a></div>
+    <div class="footer-nav">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Instituto Intus · Psicologia</span>
+    <span>Renata Soares · CRP 05/87188</span>
+  </div>
+</footer>
+
+</body>
+</html>
