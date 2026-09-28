@@ -1,4 +1,4 @@
-Fotos do site — basta salvar os arquivos aqui com estes nomes exatos (JPG).
+Fotos do site — salve os arquivos em site/img/ com estes nomes exatos (JPG).
 Enquanto um arquivo não existir, o site mostra uma moldura com legenda no lugar.
 
 Tamanho sugerido: lado maior com ~1600px, qualidade 80% (cada arquivo com menos de 400 KB).

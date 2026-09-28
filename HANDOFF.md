@@ -25,6 +25,8 @@ Instituto de psicologia fundado por **Renata Soares**, psicóloga sistêmica (CR
 
 ## 2. O que já está pronto: site institucional (frontend estático)
 
+**Estrutura de pastas (a partir de set/2026):** o site publicável fica em `site/` (HTML + `css/` + `js/` + `img/`). `netlify.toml` aponta `publish = "site"` e `functions = "netlify/functions"`. Isso existe para permitir deploy via Git: o Netlify publica só `site/`, e o resto do repositório (HANDOFF, função, config) fica fora do ar.
+
 5 páginas HTML/CSS autocontidas (sem framework, sem build step), na pasta anexa:
 
 | Arquivo | Conteúdo |
