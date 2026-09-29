@@ -94,7 +94,7 @@ Foi identificado durante o planejamento que a plataforma de Artifacts do Claude 
 - Frontend: o que já existe (HTML/CSS estático) ou migração para um framework se o Claude Code achar melhor
 - Backend: **Netlify Functions** (o próprio Netlify já hospeda o frontend, e suporta funções serverless nativamente — evita ter que gerenciar um servidor separado)
 - Banco de dados: **Supabase** sugerido (gratuito para começar, fácil de configurar, dá autenticação pronta se precisar)
-- Calendário: **Google Calendar API**, via OAuth server-side (precisa criar projeto no Google Cloud Console, autorizar a conta da Renata, guardar refresh token com segurança)
+- Calendário: **Google Calendar API**, via OAuth server-side. **Decisão (set/2026): a conta técnica é `socialartlanguage@gmail.com` (conta da agência, Gmail comum, sem Workspace)** — ela autoriza a API e cria os eventos/links do Meet; a Renata recebe os eventos como convidada/compartilhados na agenda dela (pode continuar sendo o Gmail dela atual, `renata.institutointus@gmail.com`, sem precisar de Workspace). Falta: criar o projeto no Google Cloud Console, ativar a Calendar API, configurar a tela de consentimento OAuth e gerar o refresh token, guardado com segurança nas variáveis de ambiente do Netlify.
 - Pagamento: **InfinityPay**, cobrança recorrente + webhook para confirmar pagamento e liberar agendamento
 - Lembretes de sessão: pode ser via cron job na própria função serverless, ou automação simples
 
