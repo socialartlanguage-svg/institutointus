@@ -14,5 +14,4 @@ video-capa.jpg           ✅ usada — foto de palco (temporária, até ter o v�
 Vídeo: suba no YouTube como "Não listado" e cole o ID em js/site.js (VIDEO_APRESENTACAO).
 
 
-Ainda faltam (não havia fotos de ambiente na pasta "Renata Fotos"):
-consultorio-1.jpg, consultorio-2.jpg, consultorio-3.jpg — fotos do espaço físico do consultório (ambiente, poltrona, mesa/livros)
+consultorio-1.jpg, consultorio-2.jpg, consultorio-3.jpg  ✅ usadas — geradas por IA (consultório fictício, sem pessoas), tom quente combinando com o resto do site
