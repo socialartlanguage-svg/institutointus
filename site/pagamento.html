@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Confirmar pacote — Intus Instituto de Psicologia</title>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/intus.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+.wrap { max-width: 720px; margin: 0 auto; padding: 120px 32px 140px; }
+.icon-line { width: 46px; height: 66px; border: 1px solid var(--ouro); border-bottom: none; border-radius: 999px 999px 0 0; margin: 0 0 32px; }
+.wrap h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(32px, 4.4vw, 50px); line-height: 1.15; letter-spacing: -0.5px; color: var(--escuro); margin-bottom: 20px; }
+.wrap h1 em { font-style: italic; font-weight: 400; color: var(--mark); }
+.wrap > p.lead { font-size: 17px; color: var(--muted); max-width: 520px; margin-bottom: 48px; }
+
+.aviso-pessoal {
+  background: var(--bege); border-left: 2px solid var(--ouro); border-radius: 2px;
+  padding: 18px 22px; font-size: 14px; color: var(--mark-dark); margin-bottom: 48px; max-width: 560px;
+}
+
+.pacote-box { background: var(--escuro); color: var(--creme); padding: 56px 48px; border-radius: 2px; position: relative; overflow: hidden; margin-bottom: 40px; }
+.pacote-box::after { content: ""; position: absolute; right: -40px; bottom: -2px; width: 200px; height: 290px; border: 1px solid rgba(156,129,88,0.35); border-bottom: none; border-radius: 999px 999px 0 0; pointer-events: none; }
+.pacote-box > * { position: relative; z-index: 1; }
+.pacote-box h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 28px; margin-bottom: 18px; }
+.pacote-box ul { margin: 20px 0 0; padding-left: 20px; }
+.pacote-box li { font-size: 15px; color: var(--bege); margin-bottom: 10px; }
+
+.pagar {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
+  background: rgba(255,255,255,0.4); border: 1px solid var(--linha); padding: 36px 40px; border-radius: 2px;
+}
+.pagar p { font-size: 14px; color: var(--muted); max-width: 480px; }
+.pagar .valorinfo { font-family: 'Fraunces', serif; font-size: 15px; color: var(--mark); }
+
+.depois { margin-top: 48px; font-size: 14px; color: var(--muted); max-width: 560px; }
+.depois strong { color: var(--mark-dark); }
+
+@media (max-width: 820px) {
+  .wrap { padding: 90px 24px 100px; }
+  .pacote-box { padding: 40px 28px; }
+  .pagar { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo"><span class="logo-arco" aria-hidden="true"></span>Intus</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+        <li><a href="contato.html" class="nav-cta">Fale com o Intus</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="icon-line entra-arco" aria-hidden="true"></div>
+  <p class="eyebrow entra">Confirmação do pacote</p>
+  <h1 class="entra d1">Vamos <em>começar</em>.</h1>
+  <p class="lead entra d2">Você recebeu este link diretamente da Renata, depois da avaliação da sua ficha. Ele confirma o seu pacote mensal de acompanhamento.</p>
+
+  <div class="aviso-pessoal reveal">
+    Este link é pessoal, enviado a você pela Renata após a conversa sobre sua proposta de acompanhamento. Se você chegou aqui sem ter passado por essa etapa, <a href="contato.html" style="text-decoration: underline;">comece pela ficha de triagem</a>.
+  </div>
+
+  <div class="pacote-box reveal">
+    <h2>Pacote mensal Intus</h2>
+    <ul>
+      <li>4 sessões por mês, com frequência semanal</li>
+      <li>Pagamento recorrente, cobrado automaticamente a cada ciclo</li>
+      <li>Cancelamento no primeiro ciclo: devolução de 75% do valor</li>
+      <li>Agendamento dentro dos horários disponíveis na semana, combinado com a Renata</li>
+    </ul>
+  </div>
+
+  <div class="pagar reveal">
+    <p>O pagamento é processado pelo <strong>InfinitePay</strong>, fora do site do Intus — seus dados de cartão não passam por nós em nenhum momento.</p>
+    <a href="https://invoice.infinitepay.io/plans/mentoria-mauriciosoares/oOCIco9V3V" target="_blank" rel="noopener" class="btn seta">Confirmar pacote e pagar</a>
+    <p class="valorinfo">O valor e a forma de pagamento (Pix ou cartão) aparecem na próxima tela, junto com o InfinitePay.</p>
+  </div>
+
+  <p class="depois reveal">
+    <strong>Depois de pagar:</strong> a confirmação chega para a Renata, e ela mesma libera seu acesso e combina o primeiro horário com você — hoje esse passo ainda é feito diretamente pelo <a href="https://wa.me/5521995053169" target="_blank" style="text-decoration: underline;">WhatsApp</a>, enquanto o agendamento automático pelo site está em construção.
+  </p>
+</section>
+
+<footer>
+  <div class="footer-topo">
+    <div>
+      <p class="lema">Um espaço para olhar para dentro.<small>Intus · do latim, "dentro"</small></p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegar</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Conversar</h4>
+      <ul>
+        <li><a href="https://wa.me/5521995053169" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/institutointus/" target="_blank" rel="noopener">@institutointus</a></li>
+        <li><a href="https://www.instagram.com/renatasoares.ts/" target="_blank" rel="noopener">@renatasoares.ts</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Instituto Intus · Psicologia · <a href="privacidade.html">Privacidade</a></span>
+    <span>Renata Soares · Psicóloga · CRP 05/87188</span>
+  </div>
+  <div class="footer-marca" aria-hidden="true">Intus</div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>
