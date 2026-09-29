@@ -3,12 +3,16 @@ Enquanto um arquivo não existir, o site mostra uma moldura com legenda no lugar
 
 Tamanho sugerido: lado maior com ~1600px, qualidade 80% (cada arquivo com menos de 400 KB).
 
-renata-hero.jpg          Home, topo — retrato vertical da Renata (proporção 4:5), olhar acolhedor
-renata-sobre.jpg         Home e Sobre — Renata em outro momento (vertical, 4:5), ex.: sentada no consultório
-renata-trabalho.jpg      Sobre — Renata escrevendo/lendo, ou de perfil (vertical, 3:4)
+renata-hero.jpg          ✅ usada — retrato sorrindo, estante de livros
+renata-sobre.jpg         ✅ usada — retrato sorrindo, variação
+renata-trabalho.jpg      ✅ usada — perfil, falando
 consultorio-1.jpg        Home, "O espaço" — ambiente amplo do consultório (horizontal, 5:4)
 consultorio-2.jpg        Home, "O espaço" — detalhe (vertical, 3:4): poltrona, luz, planta
 consultorio-3.jpg        Home, "O espaço" — detalhe (vertical, 3:4): livros, mesa, xícara
-video-capa.jpg           Capa do vídeo de apresentação (horizontal, 16:9)
+video-capa.jpg           ✅ usada — foto de palco (temporária, até ter o vídeo/frame real)
 
 Vídeo: suba no YouTube como "Não listado" e cole o ID em js/site.js (VIDEO_APRESENTACAO).
+
+
+Ainda faltam (não havia fotos de ambiente na pasta "Renata Fotos"):
+consultorio-1.jpg, consultorio-2.jpg, consultorio-3.jpg — fotos do espaço físico do consultório (ambiente, poltrona, mesa/livros)
