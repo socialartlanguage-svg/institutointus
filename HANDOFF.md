@@ -53,7 +53,9 @@ O objetivo é construir um funil completo: descoberta (Instagram) → site insti
 
 ## 4. O fluxo de paciente definido (novo paciente)
 
-Ordem acordada com o cliente:
+**Atualizado em set/2026 — decisão do cliente:** o pagamento deixou de depender da aprovação da Renata. Assim que a ficha é enviada (e a resposta de risco é "não"), o site já redireciona automaticamente para `pagamento.html`, que leva ao checkout do InfinitePay. A Renata lê a ficha e entra em contato **depois** do pagamento, não antes. Isso muda a ordem originalmente combinada (abaixo, mantida como registro histórico) e cria uma implicação de negócio: é possível que alguém pague antes da Renata avaliar se o caso está dentro do escopo dela — se isso acontecer, a política é ela contatar a pessoa e avaliar reembolso caso a caso. **A regra de segurança do item de risco continua absoluta e não foi alterada**: risco = "sim" nunca é redirecionado para pagamento, sempre fica na tela de acolhimento (CVV 188 / SAMU 192).
+
+Ordem originalmente acordada com o cliente (histórico, parcialmente superada pela mudança acima):
 
 1. **Site institucional** ✅ pronto (ver seção 2)
 2. **Ficha de triagem com lógica condicional** — ✅ implementada em `contato.html` (Netlify Forms `triagem`) + alerta via Pushover em `netlify/functions/submission-created.mjs`

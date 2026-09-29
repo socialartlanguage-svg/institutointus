@@ -117,7 +117,7 @@ textarea.curto { min-height: 80px; }
   <div class="left">
     <p class="eyebrow">Fale com o Intus</p>
     <h1>Vamos entender juntas se este é o momento certo.</h1>
-    <p>Esta é a ficha de triagem: algumas perguntas curtas sobre o que te trouxe até aqui. A Renata lê cada ficha pessoalmente antes do próximo passo. Preencher não gera compromisso nenhum.</p>
+    <p>Esta é a ficha de triagem: algumas perguntas curtas sobre o que te trouxe até aqui. Assim que você envia, já pode confirmar seu pacote mensal — a Renata lê sua ficha com atenção antes da sua primeira sessão.</p>
 
     <div class="quem-le">
       <figure class="foto foto--arco" style="--ratio: 3/4">
@@ -232,12 +232,12 @@ textarea.curto { min-height: 80px; }
       <button type="submit" class="btn">Enviar ficha</button>
     </form>
 
-    <!-- Resposta padrão -->
+    <!-- Resposta padrão: redireciona automaticamente para o pagamento (ver script). -->
     <div class="resposta" id="resposta-padrao" tabindex="-1">
       <p class="eyebrow">Ficha recebida</p>
       <h2>Obrigada por dar esse primeiro passo.</h2>
-      <p>A Renata vai ler sua ficha com atenção e retornar pelo WhatsApp com a proposta de acompanhamento: formato, valor e frequência recomendada.</p>
-      <p>Enquanto isso, se quiser entender o que vem depois, o <a href="como-funciona.html" style="text-decoration:underline;">passo a passo</a> está aqui.</p>
+      <p>Já estamos te levando para confirmar seu pacote mensal.</p>
+      <p><a href="pagamento.html" id="link-pagamento-manual" style="text-decoration:underline;">Clique aqui se a página não mudar sozinha</a>.</p>
     </div>
 
     <!-- Resposta de acolhimento (pergunta 3 = sim). Não mostra nenhum passo comercial. -->
@@ -332,6 +332,11 @@ textarea.curto { min-height: 80px; }
         tela.classList.add('visivel');
         tela.focus();
         tela.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Sinal de risco: NUNCA redireciona para pagamento — fica na tela de acolhimento.
+        // Sem risco: segue automaticamente para a confirmação do pacote.
+        if (!emRisco) {
+          setTimeout(function () { window.location.href = 'pagamento.html'; }, 1800);
+        }
       })
       .catch(function () {
         erro.classList.add('visivel');
