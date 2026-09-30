@@ -152,3 +152,11 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - CSS compartilhado em `css/intus.css` (tokens, header, footer, botões, fotos, vídeo, animações). JS comum em `js/site.js` (menu, revelação no scroll, vídeo).
 - Fotos: salvar em `img/` com os nomes de `img/LEIA-ME.txt`. Sem o arquivo, aparece moldura com legenda.
 - Vídeo: YouTube "Não listado", ID em `js/site.js` → `VIDEO_APRESENTACAO`. Carrega só no clique (youtube-nocookie).
+
+
+**Set/2026 — incidente de deploy resolvido**
+- Descoberto: deploys via Git estavam falhando silenciosamente desde o commit `2e533a2` (página de pagamento) até `d4e97cf` (schema Supabase) — bloqueados pelo Netlify com erro "Unrecognized Git contributor". Causa: commits enviados pela conta GitHub `fernandosalgueiro29-gif` (autenticada via `gh auth login` nesta sessão), não reconhecida pelo Netlify no plano gratuito, que só permite 1 colaborador de Git reconhecido em repositório **privado**.
+- Impacto real: o site publicado ficou desatualizado por um período — sem `pagamento.html`, sem `termos.html`, sem o redirecionamento automático da ficha. Quem preencheu a ficha nesse intervalo viu a mensagem antiga (prometendo retorno da Renata com proposta), sem ser levado ao checkout.
+- Correção aplicada: **repositório tornado público** (`gh repo edit --visibility public`), o que remove a exigência de colaborador reconhecido do Netlify. Confirmado sem segredos no histórico antes de tornar público (checado via `git log --all -p` por padrões de chave/token — nada encontrado; `secrets/` nunca foi commitado).
+- **Consequência aceita:** o código do site e as notas internas deste HANDOFF.md agora são publicamente visíveis no GitHub para qualquer pessoa. Nenhum segredo/token está no repositório.
+- Deploy `2caf659` confirmado publicado (`termos.html` e `pagamento.html` retornando 200, redirecionamento automático presente em `contato.html`).
