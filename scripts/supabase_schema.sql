@@ -61,3 +61,11 @@ alter table sessoes enable row level security;
 -- Nenhuma policy criada ainda = acesso público bloqueado por padrão.
 -- Quando o login da paciente (Fase 3) estiver pronto, criamos policies
 -- do tipo "uma paciente só vê os próprios dados" usando auth.uid().
+
+-- ---------- Permissões do backend ----------
+-- O projeto foi criado com "Automatically expose new tables" DESLIGADO
+-- (mais seguro). Então nenhuma role da API enxerga as tabelas até liberarmos.
+-- Liberamos só a service_role (usada pelas Netlify Functions, nunca pelo
+-- navegador). anon e authenticated continuam sem acesso.
+grant usage on schema public to service_role;
+grant all on table public.pacientes, public.pacotes, public.sessoes to service_role;
