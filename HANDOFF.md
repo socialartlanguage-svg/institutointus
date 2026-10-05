@@ -160,3 +160,10 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Correção aplicada: **repositório tornado público** (`gh repo edit --visibility public`), o que remove a exigência de colaborador reconhecido do Netlify. Confirmado sem segredos no histórico antes de tornar público (checado via `git log --all -p` por padrões de chave/token — nada encontrado; `secrets/` nunca foi commitado).
 - **Consequência aceita:** o código do site e as notas internas deste HANDOFF.md agora são publicamente visíveis no GitHub para qualquer pessoa. Nenhum segredo/token está no repositório.
 - Deploy `2caf659` confirmado publicado (`termos.html` e `pagamento.html` retornando 200, redirecionamento automático presente em `contato.html`).
+
+
+**Out/2026 — painel de liberação de pacote funcionando**
+- `site/admin.html` + `netlify/functions/criar-paciente-pacote.mjs`: a Renata (ou a agência) confirma no painel do InfinitePay que o pagamento caiu e registra o paciente + pacote ativo no Supabase. Protegido por `ADMIN_SECRET` (env var no Netlify). **Testado de ponta a ponta em produção** (criação e reaproveitamento por e-mail funcionando). URL do painel: `/admin.html` (não linkado em nenhum menu, `noindex`). Trocar a `ADMIN_SECRET` inicial (gerada na sessão e passada pelo chat) por uma senha própria antes de a Renata usar.
+- **Lição:** projeto Supabase no plano gratuito **pausa por inatividade** — o endereço some do DNS (NXDOMAIN) e a função falha com "fetch failed". Se acontecer, reativar em supabase.com/dashboard ("Resume project"). Vale um ping periódico ou o plano Pro quando houver pacientes reais.
+- **Lição:** com "Automatically expose new tables" desligado, é preciso dar `grant ... to service_role` nas tabelas (já no `scripts/supabase_schema.sql`).
+- Próximo: login da paciente (Supabase Auth, link mágico) e tela de horários com criação do evento + Meet.
