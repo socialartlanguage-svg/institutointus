@@ -1,0 +1,8 @@
+{
+  "name": "instituto-intus",
+  "private": true,
+  "description": "Backend (Netlify Functions) do site do Instituto Intus. O site em si é HTML/CSS/JS estático em site/.",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}
