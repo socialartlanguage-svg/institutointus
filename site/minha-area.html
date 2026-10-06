@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Minha área — Intus Instituto de Psicologia</title>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/intus.css">
+<style>
+.area { max-width: 860px; margin: 0 auto; padding: 80px 32px 120px; }
+.area h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(34px, 5vw, 52px); line-height: 1.1; letter-spacing: -1px; color: var(--escuro); margin-bottom: 36px; }
+.area h1 em { font-style: italic; font-weight: 400; color: var(--mark); }
+.secao { margin-top: 56px; }
+.secao > h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; color: var(--escuro); margin-bottom: 18px; }
+.nota { font-size: 14px; color: var(--muted); margin-bottom: 18px; max-width: 620px; }
+
+.aviso { display: none; padding: 14px 18px; border-radius: 2px; font-size: 14px; margin-bottom: 28px; }
+.aviso.ok { display: block; background: var(--bege); color: var(--mark-dark); border-left: 2px solid var(--ouro); }
+.aviso.ruim { display: block; background: #f3dcd6; color: #8A3B2E; }
+
+.cartao { background: rgba(255,255,255,0.4); border: 1px solid var(--linha); border-radius: 2px; padding: 24px 28px; }
+.pacote { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.pacote strong { font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px; color: var(--escuro); }
+.pacote span { font-size: 14px; color: var(--muted); }
+.barra { display: flex; gap: 6px; }
+.barra i { width: 38px; height: 8px; border-radius: 999px; background: rgba(100,86,70,0.18); }
+.barra i.usada { background: var(--ouro); }
+
+.sessao { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 20px 0; border-top: 1px solid var(--linha); }
+.sessao:last-child { border-bottom: 1px solid var(--linha); }
+.sessao .quando { font-family: 'Fraunces', serif; font-size: 20px; color: var(--escuro); text-transform: capitalize; }
+.sessao .quando small { display: block; font-family: 'Inter', sans-serif; font-size: 13px; color: var(--muted); text-transform: none; margin-top: 2px; }
+.acoes { display: flex; gap: 10px; flex-wrap: wrap; }
+.mini { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 10px 18px; border-radius: 2px; cursor: pointer; border: 1px solid var(--mark); background: transparent; color: var(--mark-dark); transition: all 0.2s; text-decoration: none; display: inline-block; }
+.mini:hover { background: var(--mark); color: var(--creme); }
+.mini.cheio { background: var(--mark); color: var(--creme); }
+.mini.cheio:hover { background: var(--mark-dark); }
+.mini:disabled { opacity: 0.5; cursor: wait; }
+.vazio { font-size: 15px; color: var(--muted); padding: 8px 0; }
+
+.escolha { margin-top: 20px; }
+.semana-nav { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.semana-nav strong { font-family: 'Fraunces', serif; font-weight: 400; font-size: 18px; color: var(--escuro); }
+.dia { padding: 16px 0; border-top: 1px solid var(--linha); display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
+.dia > span { min-width: 170px; font-size: 14px; color: var(--mark-dark); text-transform: capitalize; }
+.horas { display: flex; gap: 8px; flex-wrap: wrap; }
+
+form.campos { display: flex; flex-direction: column; gap: 18px; max-width: 560px; }
+form.campos label { font-size: 13px; color: var(--mark-dark); margin-bottom: 6px; display: block; }
+form.campos input[type="text"], form.campos input[type="password"], form.campos textarea {
+  width: 100%; padding: 13px 16px; border: 1px solid rgba(100,86,70,0.3);
+  background: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 15px;
+  color: var(--texto); border-radius: 2px;
+}
+form.campos textarea { min-height: 90px; resize: vertical; }
+form.campos input:focus, form.campos textarea:focus { outline: none; border-color: var(--mark); }
+.sn { display: flex; gap: 10px; }
+.sn label { display: flex; align-items: center; gap: 8px; font-size: 14px; margin: 0; cursor: pointer; }
+.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.consent input { margin-top: 4px; accent-color: var(--mark); }
+.contestar { margin-top: 14px; width: 100%; }
+.contestar textarea { width: 100%; min-height: 80px; padding: 12px 14px; border: 1px solid rgba(100,86,70,0.3); background: rgba(255,255,255,0.5); font: inherit; font-size: 14px; border-radius: 2px; margin-bottom: 10px; }
+
+@media (max-width: 820px) {
+  .area { padding: 56px 24px 90px; }
+  .dia > span { min-width: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo"><span class="logo-arco" aria-hidden="true"></span>Intus</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="minha-area.html" class="active">Minha área</a></li>
+        <li><a href="#" id="sair" class="nav-cta">Sair</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="area">
+  <p class="eyebrow">Minha área</p>
+  <h1 id="saudacao">Carregando…</h1>
+  <div class="aviso" id="aviso" role="status"></div>
+  <div id="conteudo"></div>
+</main>
+
+<script src="js/site.js"></script>
+<script src="js/paciente.js"></script>
+<script>
+(function () {
+  if (!Intus.logado()) { window.location.replace('area-do-paciente.html'); return; }
+
+  var dados = null;
+  var picker = null; // { modo: 'agendar' | 'reagendar', sessaoId, horarios, semana }
+  var elConteudo = document.getElementById('conteudo');
+  var elAviso = document.getElementById('aviso');
+
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function aviso(msg, ruim) { elAviso.className = 'aviso ' + (ruim ? 'ruim' : 'ok'); elAviso.textContent = msg; window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function limparAviso() { elAviso.className = 'aviso'; elAviso.textContent = ''; }
+  function tratar(err) {
+    if (err && err.sessaoExpirada) { window.location.replace('area-do-paciente.html'); return; }
+    aviso(err.message || 'Algo deu errado.', true);
+  }
+
+  document.getElementById('sair').addEventListener('click', function (e) {
+    e.preventDefault(); Intus.sair(); window.location.replace('area-do-paciente.html');
+  });
+
+  function carregar() {
+    return Intus.api('me').then(function (d) { dados = d; render(); }).catch(tratar);
+  }
+
+  // ---------- render ----------
+  function render() {
+    var nome = dados.paciente.nome.split(' ')[0];
+    document.getElementById('saudacao').innerHTML = 'Olá, <em>' + esc(nome) + '</em>.';
+
+    if (!dados.paciente.trocou_senha) { elConteudo.innerHTML = htmlSenhaObrigatoria(); ligarSenha(); return; }
+
+    var agora = Date.now();
+    var proximas = [], historico = [];
+    dados.sessoes.forEach(function (s) {
+      var fim = new Date(s.horario).getTime() + 3600000;
+      if (s.status === 'agendada' && fim > agora) proximas.push(s); else historico.push(s);
+    });
+    historico.sort(function (a, b) { return b.horario.localeCompare(a.horario); });
+
+    elConteudo.innerHTML =
+      htmlPacote() + htmlProximas(proximas) + htmlAgendar() + htmlHistorico(historico) + htmlObservacoes() + htmlConta();
+    ligar();
+  }
+
+  function htmlSenhaObrigatoria() {
+    return '<div class="secao"><h2>Escolha sua senha</h2>' +
+      '<p class="nota">Esta é a sua primeira vez aqui. Antes de continuar, troque a senha provisória por uma só sua (mínimo de 8 caracteres).</p>' +
+      '<form class="campos" id="form-senha">' +
+      '<div><label for="s1">Nova senha</label><input type="password" id="s1" minlength="8" autocomplete="new-password" required></div>' +
+      '<div><label for="s2">Repita a nova senha</label><input type="password" id="s2" minlength="8" autocomplete="new-password" required></div>' +
+      '<button class="mini cheio" type="submit">Salvar senha</button></form></div>';
+  }
+  function ligarSenha() {
+    var f = document.getElementById('form-senha');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault(); limparAviso();
+      if (f.s1.value !== f.s2.value) return aviso('As duas senhas não são iguais.', true);
+      var b = f.querySelector('button'); b.disabled = true;
+      Intus.trocarSenha(f.s1.value)
+        .then(function () { return Intus.api('trocou_senha'); })
+        .then(function () { aviso('Senha salva. Bem-vinda!'); return carregar(); })
+        .catch(function (err) { b.disabled = false; tratar(err); });
+    });
+  }
+
+  function htmlPacote() {
+    var p = dados.pacote;
+    if (!p) return '<div class="secao"><div class="cartao"><strong>Você ainda não tem um pacote ativo.</strong><p class="nota" style="margin:8px 0 0">Para continuar, fale com a Renata pelo <a href="https://wa.me/5521995053169" target="_blank" style="text-decoration:underline">WhatsApp</a>.</p></div></div>';
+    var barra = '';
+    for (var i = 0; i < p.total; i++) barra += '<i class="' + (i < p.usadas ? 'usada' : '') + '"></i>';
+    var ate = new Date(p.ate).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit' });
+    return '<div class="secao"><div class="cartao pacote"><div><strong>' + p.usadas + ' de ' + p.total + ' sessões usadas</strong><br><span>Para agendar dentro do pacote atual, até ' + ate + '.</span></div><div class="barra">' + barra + '</div></div></div>';
+  }
+
+  function htmlProximas(lista) {
+    var h = '<div class="secao"><h2>Próximas sessões</h2>';
+    if (!lista.length) return h + '<p class="vazio">Nenhuma sessão marcada.</p></div>';
+    lista.forEach(function (s) {
+      var link = s.link_meet
+        ? '<a class="mini cheio" href="' + esc(s.link_meet) + '" target="_blank" rel="noopener">Entrar na videochamada</a>'
+        : '<span class="nota" style="margin:0">Link da videochamada em breve</span>';
+      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · 60 minutos</small></div>' +
+        '<div class="acoes">' + link +
+        '<button class="mini" data-reagendar="' + s.id + '">Reagendar</button>' +
+        '<button class="mini" data-cancelar="' + s.id + '">Cancelar</button></div></div>';
+    });
+    return h + '<p class="nota" style="margin-top:14px">Você pode reagendar ou cancelar sem custo com ' + dados.antecedencia_cancelar_h + 'h ou mais de antecedência. Com menos que isso, a sessão conta como realizada, mas você pode contestar se foi uma situação excepcional.</p></div>';
+  }
+
+  function htmlAgendar() {
+    if (!dados.pacote) return '';
+    var restantes = dados.pacote.restantes;
+    var h = '<div class="secao" id="area-agendar"><h2>' + (picker && picker.modo === 'reagendar' ? 'Escolha o novo horário' : 'Agendar uma sessão') + '</h2>';
+    if (!picker) {
+      if (restantes <= 0) return h + '<p class="vazio">Você já usou todas as sessões deste pacote.</p></div>';
+      return h + '<p class="nota">Você tem ' + restantes + (restantes === 1 ? ' sessão' : ' sessões') + ' para agendar.</p><button class="mini cheio" id="abrir-agenda">Ver horários disponíveis</button></div>';
+    }
+    return h + htmlPicker() + '</div>';
+  }
+
+  function segundaDe(chave) { // 'YYYY-MM-DD' -> segunda-feira da semana
+    var p = chave.split('-').map(Number), d = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
+    return d.toISOString().slice(0, 10);
+  }
+  function htmlPicker() {
+    if (picker.carregando) return '<p class="vazio">Buscando horários…</p>';
+    if (!picker.horarios.length) return '<p class="vazio">Não há horários abertos no momento. A Renata libera novos horários toda semana — volte em breve ou fale com ela pelo WhatsApp.</p><button class="mini" id="fechar-agenda">Fechar</button>';
+    var semanas = {};
+    picker.horarios.forEach(function (iso) {
+      var dia = Intus.chaveDia(iso), sem = segundaDe(dia);
+      (semanas[sem] = semanas[sem] || {})[dia] = (semanas[sem][dia] || []).concat(iso);
+    });
+    var chaves = Object.keys(semanas).sort();
+    picker.semana = Math.min(Math.max(picker.semana || 0, 0), chaves.length - 1);
+    var sem = chaves[picker.semana], dias = semanas[sem];
+    var p = sem.split('-'), rotulo = 'Semana de ' + p[2] + '/' + p[1];
+    var h = '<div class="escolha"><div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
+    Object.keys(dias).sort().forEach(function (dia) {
+      h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0])) + '</span><div class="horas">';
+      dias[dia].forEach(function (iso) { h += '<button class="mini" data-slot="' + iso + '">' + esc(Intus.hora(iso)) + '</button>'; });
+      h += '</div></div>';
+    });
+    return h + '</div><div style="margin-top:20px"><button class="mini" id="fechar-agenda">Fechar</button></div>';
+  }
+
+  function htmlHistorico(lista) {
+    if (!lista.length) return '';
+    var h = '<div class="secao"><h2>Histórico</h2>';
+    lista.forEach(function (s) {
+      var situacao = '', extra = '';
+      if (s.status === 'agendada') situacao = 'Realizada';
+      else if (s.status === 'realizada') situacao = 'Realizada';
+      else if (s.status === 'contestada') situacao = 'Cancelada com menos de 24h · contestação em análise';
+      else if (s.status === 'cancelada' && s.cancelamento_tardio && s.contestacao_resolvida === 'recusada') situacao = 'Cancelada com menos de 24h · conta como sessão realizada';
+      else if (s.status === 'cancelada' && s.cancelamento_tardio) {
+        situacao = 'Cancelada com menos de 24h · conta como sessão realizada';
+        extra = '<div class="acoes"><button class="mini" data-contestar="' + s.id + '">Contestar</button></div>';
+      } else if (s.status === 'cancelada' && s.contestacao_resolvida === 'aceita') situacao = 'Cancelada · contestação aceita, sem custo';
+      else if (s.status === 'cancelada') situacao = 'Cancelada sem custo';
+      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · ' + esc(situacao) + '</small></div>' + extra + '<div class="contestar" id="contestar-' + s.id + '" hidden></div></div>';
+    });
+    return h + '</div>';
+  }
+
+  function htmlObservacoes() {
+    var o = dados.observacoes || {};
+    var jaConsentiu = Boolean(dados.paciente.consentimento_saude_em);
+    function sn(nome, valor) {
+      return '<div class="sn"><label><input type="radio" name="' + nome + '" value="sim"' + (valor === true ? ' checked' : '') + '> Sim</label><label><input type="radio" name="' + nome + '" value="nao"' + (valor === false ? ' checked' : '') + '> Não</label></div>';
+    }
+    return '<div class="secao"><h2>Minhas observações de saúde</h2>' +
+      '<p class="nota">Estas informações ajudam a Renata a te acompanhar melhor. Só você e a Renata têm acesso, e você pode editar quando quiser.</p>' +
+      '<form class="campos" id="form-obs">' +
+      '<div><label>Você toma algum medicamento para saúde mental?</label>' + sn('toma', o.toma_medicacao) + '</div>' +
+      '<div><label for="medicacoes">Quais medicamentos (e doses, se souber)?</label><textarea id="medicacoes">' + esc(o.medicacoes || '') + '</textarea></div>' +
+      '<div><label>Você tem acompanhamento psiquiátrico?</label>' + sn('psiq', o.tem_psiquiatra) + '</div>' +
+      '<div><label for="psiquiatra">Nome e contato do(a) psiquiatra (opcional)</label><input type="text" id="psiquiatra" value="' + esc(o.psiquiatra || '') + '"></div>' +
+      '<div><label for="outras">Outras observações que você queira compartilhar</label><textarea id="outras">' + esc(o.outras_observacoes || '') + '</textarea></div>' +
+      (jaConsentiu ? '' : '<label class="consent"><input type="checkbox" id="consent" required><span>Autorizo o Instituto Intus a guardar essas informações de saúde para o meu acompanhamento, conforme a <a href="privacidade.html" target="_blank" style="text-decoration:underline">Política de Privacidade</a>.</span></label>') +
+      '<button class="mini cheio" type="submit" style="align-self:flex-start">Salvar observações</button></form></div>';
+  }
+
+  function htmlConta() {
+    return '<div class="secao"><h2>Minha conta</h2><p class="nota">' + esc(dados.paciente.email) + '</p>' +
+      '<button class="mini" id="abrir-senha">Trocar senha</button><div id="area-senha" style="margin-top:20px"></div></div>';
+  }
+
+  // ---------- eventos ----------
+  function ligar() {
+    var q = function (s) { return elConteudo.querySelectorAll(s); };
+
+    var abrir = document.getElementById('abrir-agenda');
+    if (abrir) abrir.addEventListener('click', function () { abrirPicker('agendar'); });
+    var fechar = document.getElementById('fechar-agenda');
+    if (fechar) fechar.addEventListener('click', function () { picker = null; render(); });
+    var ant = document.getElementById('sem-ant'), prox = document.getElementById('sem-prox');
+    if (ant) ant.addEventListener('click', function () { picker.semana--; render(); });
+    if (prox) prox.addEventListener('click', function () { picker.semana++; render(); });
+
+    Array.prototype.forEach.call(q('[data-slot]'), function (b) {
+      b.addEventListener('click', function () { escolherHorario(b.getAttribute('data-slot')); });
+    });
+    Array.prototype.forEach.call(q('[data-reagendar]'), function (b) {
+      b.addEventListener('click', function () { abrirPicker('reagendar', b.getAttribute('data-reagendar')); });
+    });
+    Array.prototype.forEach.call(q('[data-cancelar]'), function (b) {
+      b.addEventListener('click', function () { cancelar(b.getAttribute('data-cancelar')); });
+    });
+    Array.prototype.forEach.call(q('[data-contestar]'), function (b) {
+      b.addEventListener('click', function () { abrirContestar(b.getAttribute('data-contestar')); });
+    });
+
+    var fo = document.getElementById('form-obs');
+    if (fo) fo.addEventListener('submit', salvarObservacoes);
+
+    document.getElementById('abrir-senha').addEventListener('click', function () {
+      var el = document.getElementById('area-senha');
+      el.innerHTML = '<form class="campos" id="form-senha2"><div><label for="n1">Nova senha (mínimo de 8 caracteres)</label><input type="password" id="n1" minlength="8" autocomplete="new-password" required></div><button class="mini cheio" type="submit" style="align-self:flex-start">Salvar</button></form>';
+      document.getElementById('form-senha2').addEventListener('submit', function (e) {
+        e.preventDefault();
+        Intus.trocarSenha(document.getElementById('n1').value)
+          .then(function () { el.innerHTML = ''; aviso('Senha alterada.'); })
+          .catch(tratar);
+      });
+    });
+  }
+
+  function abrirPicker(modo, sessaoId) {
+    limparAviso();
+    picker = { modo: modo, sessaoId: sessaoId, horarios: [], semana: 0, carregando: true };
+    render();
+    document.getElementById('area-agendar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    Intus.api('horarios', { reagendar: modo === 'reagendar' })
+      .then(function (r) { picker.horarios = r.horarios; picker.carregando = false; render(); })
+      .catch(function (e) { picker = null; render(); tratar(e); });
+  }
+
+  function escolherHorario(iso) {
+    var quando = Intus.dia(iso) + ' às ' + Intus.hora(iso);
+    var reagendar = picker.modo === 'reagendar';
+    if (!window.confirm((reagendar ? 'Reagendar para ' : 'Confirmar sessão em ') + quando + '?')) return;
+    var req = reagendar ? Intus.api('reagendar', { sessao_id: picker.sessaoId, inicio: iso }) : Intus.api('agendar', { inicio: iso });
+    req.then(function () { picker = null; aviso(reagendar ? 'Sessão reagendada. O convite com o link foi atualizado no seu e-mail.' : 'Sessão agendada! O convite com o link da videochamada chega no seu e-mail.'); return carregar(); })
+      .catch(function (e) { tratar(e); if (/reservado/.test(e.message)) abrirPicker(picker ? picker.modo : 'agendar', picker && picker.sessaoId); });
+  }
+
+  function cancelar(id) {
+    var s = dados.sessoes.filter(function (x) { return String(x.id) === String(id); })[0];
+    var tardio = (new Date(s.horario).getTime() - Date.now()) < dados.antecedencia_cancelar_h * 3600000;
+    var msg = tardio
+      ? 'Faltam menos de ' + dados.antecedencia_cancelar_h + 'h para a sessão. Se cancelar agora, ela conta como realizada (você poderá contestar depois). Cancelar mesmo assim?'
+      : 'Cancelar a sessão de ' + Intus.dia(s.horario) + ' às ' + Intus.hora(s.horario) + '? Sem custo.';
+    if (!window.confirm(msg)) return;
+    Intus.api('cancelar', { sessao_id: id })
+      .then(function (r) { aviso(r.tardio ? 'Sessão cancelada. Como foi com menos de 24h, ela conta como realizada. Se foi uma situação excepcional, use "Contestar" no histórico.' : 'Sessão cancelada sem custo.'); return carregar(); })
+      .catch(tratar);
+  }
+
+  function abrirContestar(id) {
+    var el = document.getElementById('contestar-' + id);
+    el.hidden = false;
+    el.innerHTML = '<textarea placeholder="Conte brevemente o que aconteceu. A Renata vai avaliar com cuidado." id="motivo-' + id + '"></textarea><button class="mini cheio" id="enviar-' + id + '">Enviar contestação</button>';
+    document.getElementById('enviar-' + id).addEventListener('click', function () {
+      Intus.api('contestar', { sessao_id: id, motivo: document.getElementById('motivo-' + id).value })
+        .then(function () { aviso('Contestação enviada. A Renata vai avaliar e você verá a resposta aqui.'); return carregar(); })
+        .catch(tratar);
+    });
+  }
+
+  function salvarObservacoes(e) {
+    e.preventDefault(); limparAviso();
+    var f = e.target, valor = function (nome) { var r = f.querySelector('input[name="' + nome + '"]:checked'); return r ? r.value === 'sim' : null; };
+    var c = document.getElementById('consent');
+    Intus.api('observacoes', {
+      toma_medicacao: valor('toma'), medicacoes: document.getElementById('medicacoes').value,
+      tem_psiquiatra: valor('psiq'), psiquiatra: document.getElementById('psiquiatra').value,
+      outras_observacoes: document.getElementById('outras').value,
+      consentimento: c ? c.checked : true
+    }).then(function () { aviso('Observações salvas.'); return carregar(); }).catch(tratar);
+  }
+
+  carregar();
+})();
+</script>
+</body>
+</html>

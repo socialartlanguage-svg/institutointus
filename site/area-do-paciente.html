@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Área do paciente — Intus Instituto de Psicologia</title>
+<meta name="robots" content="noindex">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -26,6 +27,19 @@
 }
 .box p { font-size: 15px; color: var(--mark-dark); margin: 0 0 12px; }
 .box p:last-child { margin-bottom: 0; }
+
+.login { max-width: 420px; margin: 0 auto 40px; text-align: left; display: flex; flex-direction: column; gap: 18px; }
+.login label { font-size: 13px; color: var(--mark-dark); margin-bottom: 6px; display: block; }
+.login input {
+  width: 100%; padding: 14px 16px; border: 1px solid rgba(100,86,70,0.3);
+  background: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 15px;
+  color: var(--texto); border-radius: 2px;
+}
+.login input:focus { outline: none; border-color: var(--mark); }
+.login .btn { align-self: stretch; justify-content: center; border: none; }
+.login .btn:disabled { opacity: 0.6; cursor: wait; }
+.login-erro { display: none; font-size: 14px; color: #8A3B2E; margin: 0; max-width: none; }
+.login-erro.visivel { display: block; }
 
 @media (max-width: 820px) {
   .wrap { padding: 90px 24px 100px; }
@@ -52,16 +66,47 @@
 <section class="wrap">
   <div class="icon-line entra-arco" aria-hidden="true"></div>
   <p class="eyebrow">Área do paciente</p>
-  <h1>Este espaço está sendo construído.</h1>
-  <p>Em breve, pacientes do Intus vão poder agendar sessões, acompanhar seus pacotes e acessar o link de cada consulta diretamente por aqui.</p>
+  <h1>Entre para ver suas sessões.</h1>
+  <p>Aqui você agenda e remarca sessões, acessa o link de cada consulta e acompanha seu pacote.</p>
+
+  <form class="login" id="form-login">
+    <div>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" autocomplete="username" required>
+    </div>
+    <div>
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" autocomplete="current-password" required>
+    </div>
+    <p class="login-erro" id="login-erro" role="alert"></p>
+    <button type="submit" class="btn">Entrar</button>
+  </form>
 
   <div class="box">
-    <p><strong>Já é paciente e precisa agendar ou remarcar?</strong></p>
-    <p>Por enquanto, isso continua sendo feito diretamente pelo <a href="https://wa.me/5521995053169" target="_blank" style="color: var(--mark-dark); text-decoration: underline;">WhatsApp</a>, com retorno rápido.</p>
+    <p><strong>Ainda não tem acesso, ou esqueceu a senha?</strong></p>
+    <p>Quem confirma o pacote recebe o acesso da Renata pelo <a href="https://wa.me/5521995053169" target="_blank" style="color: var(--mark-dark); text-decoration: underline;">WhatsApp</a>. Se esqueceu a senha, é só pedir por lá que ela gera uma nova.</p>
   </div>
-
-  <a href="contato.html" class="btn seta">Falar com o Intus</a>
 </section>
+
+<script src="js/paciente.js"></script>
+<script>
+(function () {
+  if (Intus.logado()) { window.location.replace('minha-area.html'); return; }
+  var form = document.getElementById('form-login');
+  var erro = document.getElementById('login-erro');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var botao = form.querySelector('button');
+    botao.disabled = true; botao.textContent = 'Entrando…'; erro.classList.remove('visivel');
+    Intus.entrar(form.email.value.trim(), form.senha.value)
+      .then(function () { window.location.href = 'minha-area.html'; })
+      .catch(function (err) {
+        erro.textContent = err.message; erro.classList.add('visivel');
+        botao.disabled = false; botao.textContent = 'Entrar';
+      });
+  });
+})();
+</script>
 
 <footer>
   <div class="footer-topo">
