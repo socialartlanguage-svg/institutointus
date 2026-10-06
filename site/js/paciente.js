@@ -85,7 +85,8 @@ var Intus = (function () {
 
   // ---------- formatação (sempre no horário de Brasília) ----------
   function dia(iso) {
-    return new Date(iso).toLocaleDateString('pt-BR', { timeZone: TZ, weekday: 'long', day: '2-digit', month: 'long' });
+    var t = new Date(iso).toLocaleDateString('pt-BR', { timeZone: TZ, weekday: 'long', day: '2-digit', month: 'long' });
+    return t.charAt(0).toUpperCase() + t.slice(1); // "Sexta-feira, 09 de outubro"
   }
   function hora(iso) {
     return new Date(iso).toLocaleTimeString('pt-BR', { timeZone: TZ, hour: '2-digit', minute: '2-digit' });

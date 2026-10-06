@@ -11,6 +11,9 @@ Netlify, nunca hardcoded no HTML/JS público do site.
 | `SUPABASE_URL` | `https://pqogiaufhosgimsncxap.supabase.co` | Não |
 | `SUPABASE_ANON_KEY` | (chave anon do projeto `intus-agendamento`, ver Supabase → API Keys) | Não, mas mesmo assim só em env var |
 | `SUPABASE_SERVICE_ROLE_KEY` | **cadastrar direto no painel do Netlify — nunca passar pelo chat/Claude** | **Sim, secreta** |
+| `ADMIN_SECRET` | senha do painel `/admin.html` (já cadastrada; trocar por uma própria) | **Sim** |
+| `GOOGLE_OAUTH_JSON` | JSON `{"client_id","client_secret","refresh_token"}` da conta socialartlanguage@gmail.com — liga o Google Meet (pendente) | **Sim** |
+| `RENATA_EMAIL` | opcional; e-mail que recebe os convites (padrão: renata.institutointus@gmail.com) | Não |
 | `PUSHOVER_TOKEN` | pendente (ver HANDOFF §"alerta de risco") | Sim |
 | `PUSHOVER_USER` | pendente | Sim |
 
