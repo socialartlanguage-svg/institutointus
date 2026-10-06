@@ -281,10 +281,19 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       r.pacientes.forEach(function (p) {
         h += '<div class="linha"><div>' + esc(p.nome) + '<small>' + esc(p.email) + ' · ' + esc(p.whatsapp) + '</small></div><div>' +
           '<small style="display:inline;margin-right:12px">' + (p.pacote_ativo ? p.usadas + ' de ' + p.total + ' sessões' : 'sem pacote ativo') + '</small>' +
-          '<button class="mini" data-ver="' + p.id + '">Ver</button> <button class="mini" data-senha="' + p.id + '">Nova senha</button></div></div>';
+          '<button class="mini" data-ver="' + p.id + '">Ver</button> <button class="mini" data-senha="' + p.id + '">Nova senha</button> <button class="mini" data-excluir="' + p.id + '" data-nome="' + esc(p.nome) + '">Excluir</button></div></div>';
       });
       elVista.innerHTML = h + '<div id="detalhe"></div>';
       Array.prototype.forEach.call(elVista.querySelectorAll('[data-ver]'), function (b) { b.onclick = function () { verPaciente(b.getAttribute('data-ver')); }; });
+      Array.prototype.forEach.call(elVista.querySelectorAll('[data-excluir]'), function (b) {
+        b.onclick = function () {
+          var nome = b.getAttribute('data-nome');
+          if (!window.confirm('EXCLUIR DEFINITIVAMENTE ' + nome + '? Apaga o acesso, as observações de saúde e todo o histórico de sessões. Não dá para desfazer.')) return;
+          if (window.prompt('Para confirmar, digite EXCLUIR') !== 'EXCLUIR') return;
+          api('excluir_paciente', { paciente_id: b.getAttribute('data-excluir') })
+            .then(function () { msg('Paciente excluída.'); vistaPacientes(); }).catch(function (e) { msg(e.message, true); });
+        };
+      });
       Array.prototype.forEach.call(elVista.querySelectorAll('[data-senha]'), function (b) {
         b.onclick = function () {
           if (!window.confirm('Gerar uma nova senha provisória para esta paciente? A senha antiga deixa de valer.')) return;

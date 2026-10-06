@@ -167,6 +167,21 @@ const acoes = {
     return json({ ok: true });
   },
 
+  // Exclusão definitiva (direito de eliminação da LGPD): apaga o login, as
+  // observações, os pacotes e as sessões da paciente. Eventos futuros saem da Agenda.
+  async excluir_paciente(c) {
+    const { data: paciente } = await db().from('pacientes').select('*').eq('id', c.paciente_id).maybeSingle();
+    if (!paciente) return erro('Paciente não encontrada.', 404);
+    const { data: futuras } = await db().from('sessoes')
+      .select('google_event_id, pacotes!inner(paciente_id)')
+      .eq('pacotes.paciente_id', paciente.id).eq('status', 'agendada');
+    for (const s of futuras || []) await google.apagarEvento(s.google_event_id);
+    if (paciente.auth_user_id) await db().auth.admin.deleteUser(paciente.auth_user_id);
+    const { error } = await db().from('pacientes').delete().eq('id', paciente.id); // cascade
+    if (error) throw error;
+    return json({ ok: true });
+  },
+
   async cancelar_sessao(c) {
     const { data: s } = await db().from('sessoes').select('*').eq('id', c.sessao_id).eq('status', 'agendada').maybeSingle();
     if (!s) return erro('Sessão não encontrada.', 404);
