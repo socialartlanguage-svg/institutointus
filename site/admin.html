@@ -189,7 +189,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     var agora = Date.now();
 
     var h = '<p class="nota">Clique nos horários para <strong>abrir</strong> (verde) ou fechar. Só horários abertos aparecem para as pacientes. Cada sessão tem 60 minutos.</p>' +
-      (agenda.meet_configurado ? '' : '<div class="msg ruim" style="display:block">O Google Meet ainda não está conectado ao site: as sessões marcadas ficam sem link de videochamada.</div>') +
+      (agenda.meet && agenda.meet.ok ? '' : '<div class="msg ruim" style="display:block">O Google Meet não está conectado: as sessões marcadas ficam sem link de videochamada.' + (agenda.meet && agenda.meet.erro ? ' (' + esc(agenda.meet.erro) + ')' : '') + '</div>') +
       '<div class="semana-nav"><button class="mini" id="ant">‹ Anterior</button><strong>' + p[2] + '/' + p[1] + ' a ' + fim[2] + '/' + fim[1] + '</strong><button class="mini" id="prox">Próxima ›</button><button class="mini" id="hoje">Hoje</button></div>' +
       '<div class="atalhos"><button class="mini" id="abrir-tudo">Abrir semana toda (7h–20h)</button><button class="mini" id="fechar-tudo">Fechar semana toda</button><button class="mini" id="copiar">Copiar da semana anterior</button></div>' +
       '<div class="grade"><div></div>';

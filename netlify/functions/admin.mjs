@@ -95,6 +95,7 @@ const acoes = {
         link_meet: s.link_meet,
       })),
       meet_configurado: Boolean(process.env.GOOGLE_OAUTH_JSON),
+      meet: await google.testarConexao(),
     });
   },
 

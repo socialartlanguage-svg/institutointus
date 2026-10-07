@@ -87,3 +87,15 @@ export async function apagarEvento(eventId) {
     console.error('Falha ao apagar evento:', e.message);
   }
 }
+
+// Diagnóstico para o painel: a conexão com o Google está funcionando?
+export async function testarConexao() {
+  if (!process.env.GOOGLE_OAUTH_JSON) return { configurado: false, ok: false, erro: 'Variável GOOGLE_OAUTH_JSON ausente' };
+  try {
+    cache = null;
+    await accessToken();
+    return { configurado: true, ok: true };
+  } catch (e) {
+    return { configurado: true, ok: false, erro: e.message };
+  }
+}
