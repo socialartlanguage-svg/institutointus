@@ -10,11 +10,20 @@ const RENATA_EMAIL = process.env.RENATA_EMAIL || 'renata.institutointus@gmail.co
 const TZ = 'America/Sao_Paulo';
 let cache = null;
 
+// A variável é um objeto JSON simples (sem chaves aninhadas). Se a colagem no
+// Netlify trouxer lixo antes ou depois, lê só do primeiro "{" até o primeiro "}".
+function lerCredenciais(raw) {
+  const ini = raw.indexOf('{');
+  const fim = raw.indexOf('}', ini);
+  if (ini < 0 || fim < 0) throw new Error('GOOGLE_OAUTH_JSON não contém um JSON');
+  return JSON.parse(raw.slice(ini, fim + 1));
+}
+
 async function accessToken() {
   const raw = process.env.GOOGLE_OAUTH_JSON;
   if (!raw) return null;
   if (cache && cache.exp > Date.now() + 60_000) return cache.token;
-  const c = JSON.parse(raw);
+  const c = lerCredenciais(raw);
   const r = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
