@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /minha-area.html
+Disallow: /area-do-paciente.html
+Disallow: /ficha.html
+Disallow: /pagamento.html
+Disallow: /obrigado.html
+Sitemap: https://institutointus.netlify.app/sitemap.xml
