@@ -195,3 +195,23 @@ footer { background: var(--escuro); color: var(--bege); overflow: hidden; }
   .footer-topo { grid-template-columns: 1fr 1fr; padding-top: 56px; }
   .footer-topo > :first-child { grid-column: 1 / -1; }
 }
+
+/* ---------- Botão flutuante do WhatsApp (criado por js/site.js) ---------- */
+.whats-flutuante {
+  position: fixed; right: 24px; bottom: 24px; z-index: 90;
+  display: flex; align-items: center; height: 56px; border-radius: 999px;
+  background: var(--escuro); color: var(--creme);
+  box-shadow: 0 12px 30px -12px rgba(43,41,35,0.6), 0 0 0 1px rgba(231,224,214,0.12) inset;
+  overflow: hidden; transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.whats-flutuante svg { width: 28px; height: 28px; margin: 0 14px; flex-shrink: 0; fill: currentColor; }
+.whats-flutuante span { max-width: 0; opacity: 0; white-space: nowrap; font-size: 14px; font-weight: 500; transition: max-width 0.3s var(--ease), opacity 0.25s, margin 0.3s var(--ease); }
+.whats-flutuante:hover, .whats-flutuante:focus-visible { background: var(--mark-dark); transform: translateY(-2px); }
+.whats-flutuante:hover span, .whats-flutuante:focus-visible span { max-width: 190px; opacity: 1; margin-right: 20px; }
+.whats-flutuante:focus-visible { outline: 2px solid var(--ouro); outline-offset: 3px; }
+@media (max-width: 820px) {
+  .whats-flutuante { right: 16px; bottom: 16px; height: 52px; }
+  .whats-flutuante svg { margin: 0 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .whats-flutuante, .whats-flutuante span { transition: none; } }
+@media print { .whats-flutuante { display: none; } }

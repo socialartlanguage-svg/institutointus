@@ -210,3 +210,5 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Política de Privacidade passou a identificar a responsável (Renata Soares, CRP 05/87188, CPF informado pelo cliente), com contato por e-mail (renata.institutointus@gmail.com) e WhatsApp. Os Termos remetem à Privacidade para a identificação completa. Endereço NÃO consta (decisão do cliente).
 - Prazo de guarda das fichas de quem não inicia acompanhamento: **3 anos** (texto da Privacidade). **Nada apaga automaticamente** — o Netlify Forms guarda as fichas até alguém excluí-las; é preciso rotina manual (ou automação futura). Prontuário de quem vira paciente segue as regras de guarda do CFP.
 - Observação de privacidade: o CPF fica visível publicamente no site (decisão do cliente). Se houver CNPJ, é preferível usá-lo no lugar.
+
+**Out/2026 — botão flutuante do WhatsApp:** criado por `js/site.js` (estilo em `css/intus.css`, classe `.whats-flutuante`) em todas as páginas, com mensagem pré-escrita para o (21) 99505-3169. Para ocultar numa página: `<body data-sem-whatsapp>` (usado no `admin.html`).
