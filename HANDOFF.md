@@ -225,3 +225,10 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 
 
 **Out/2026 — CORREÇÃO: o consultório da Barra da Tijuca não existe mais.** Só há **Niterói (Itaipu, Rua Juriti, 515)** e o online. As menções anteriores a "dois consultórios"/"Barra" neste arquivo estão superadas. Removido de: home, sobre, contato (e o campo `unidade` da ficha, que deixou de fazer sentido), FAQ, como-funciona, rodapé, termo v3, painel, área da paciente e backend. Modalidades agora: `online` e `itaipu` (constraint do SQL v4 atualizada). Endereço de Itaipu só em variável do Netlify (`ENDERECO_ITAIPU`), nunca no site público.
+
+
+**Out/2026 — revisão da Renata no termo (v4).** Arquivo recebido: `Termo de compromisso ... .docx` (edições feitas direto no texto, sem controle de alterações).
+- Reembolso: **mudou.** Antes: 75% no primeiro ciclo. Agora: a paciente **decide até o término da primeira sessão** (com reembolso); depois disso, em caso de desistência **não há devolução do pacote**. O texto NÃO diz o percentual — pendente confirmar se é integral ou 75%. Atualizado em: termo, FAQ, como-funciona, pagamento e termos.
+- Seção 2: "abordagem sistêmica familiar", modalidades "terapia individual, de casal ou de família".
+- Confirmados pela Renata: atraso não prolonga a sessão; proibição de gravar; encerramento pela psicóloga; casal/família assina só quem contrata e sem sigilo entre participantes; menores de idade com responsável legal (já no termo); ignorar o critério de reembolso quando a ficha não for bom encaixe (parágrafo mantido sem critério).
+- Frequência: o termo diz "frequência recomendada semanal, pode espaçar" (decisão posterior do FAQ).
