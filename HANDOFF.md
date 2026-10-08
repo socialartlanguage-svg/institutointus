@@ -204,3 +204,9 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Dois consultórios: **Niterói (Itaipu)** e **Rio de Janeiro (Barra da Tijuca)**, além do online. Aparecem na home ("O espaço"), em Sobre, em Contato, no rodapé de todas as páginas e na meta description. Endereço completo ainda NÃO está no site (decisão: enviado depois que a sessão é combinada) — falta o endereço de cada unidade.
 - Ficha de triagem (`contato.html`): novo campo `unidade` (itaipu / barra / indiferente), mostrado e enviado só quando o formato não é "online".
 - **Lacuna de produto em aberto:** o sistema de agendamento hoje trata TODA sessão como online (gera link do Meet). Para presencial é preciso decidir: modalidade/unidade por pacote ou por horário, horários da Renata por unidade (ela atende em dois lugares), e não gerar Meet nas sessões presenciais.
+
+
+**Out/2026 — identificação legal e retenção**
+- Política de Privacidade passou a identificar a responsável (Renata Soares, CRP 05/87188, CPF informado pelo cliente), com contato por e-mail (renata.institutointus@gmail.com) e WhatsApp. Os Termos remetem à Privacidade para a identificação completa. Endereço NÃO consta (decisão do cliente).
+- Prazo de guarda das fichas de quem não inicia acompanhamento: **3 anos** (texto da Privacidade). **Nada apaga automaticamente** — o Netlify Forms guarda as fichas até alguém excluí-las; é preciso rotina manual (ou automação futura). Prontuário de quem vira paciente segue as regras de guarda do CFP.
+- Observação de privacidade: o CPF fica visível publicamente no site (decisão do cliente). Se houver CNPJ, é preferível usá-lo no lugar.
