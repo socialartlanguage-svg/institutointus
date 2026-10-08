@@ -262,7 +262,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     if (!picker.horarios.length) return '<p class="vazio">Não há horários abertos no momento. A Renata libera novos horários toda semana — volte em breve ou fale com ela pelo WhatsApp.</p><button class="mini" id="fechar-agenda">Fechar</button>';
     var filtro = picker.filtro || 'todos';
     var lista = picker.horarios.filter(function (x) { return filtro === 'todos' || x.modalidade === filtro; });
-    var rotulos = { todos: 'Todos', online: 'Online', itaipu: 'Itaipu (Niterói)', barra: 'Barra da Tijuca (Rio)' };
+    var rotulos = { todos: 'Todos', online: 'Online', itaipu: 'Presencial · Itaipu (Niterói)' };
     var presentes = { todos: true };
     picker.horarios.forEach(function (x) { presentes[x.modalidade] = true; });
     var filtros = '<div class="filtros">' + Object.keys(rotulos).filter(function (k) { return presentes[k]; }).map(function (k) {
@@ -281,7 +281,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     var h = '<div class="escolha">' + filtros + '<div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
     Object.keys(dias).sort().forEach(function (dia) {
       h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0].inicio)) + '</span><div class="horas">';
-      dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : x.modalidade === 'itaipu' ? 'Itaipu' : 'Barra') + '</small></button>'; });
+      dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : 'Itaipu') + '</small></button>'; });
       h += '</div></div>';
     });
     return h + '</div><div style="margin-top:20px"><button class="mini" id="fechar-agenda">Fechar</button></div>';
@@ -389,7 +389,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
 
   function escolherHorario(iso) {
     var escolhido = picker.horarios.filter(function (x) { return x.inicio === iso; })[0];
-    var tipo = escolhido ? (escolhido.modalidade === 'online' ? 'online' : escolhido.modalidade === 'itaipu' ? 'presencial em Itaipu (Niterói)' : 'presencial na Barra da Tijuca (Rio)') : '';
+    var tipo = escolhido ? (escolhido.modalidade === 'online' ? 'online' : 'presencial em Itaipu (Niterói)') : '';
     var quando = Intus.dia(iso) + ' às ' + Intus.hora(iso) + (tipo ? ' (' + tipo + ')' : '');
     var reagendar = picker.modo === 'reagendar';
     if (!window.confirm((reagendar ? 'Reagendar para ' : 'Confirmar sessão em ') + quando + '?')) return;

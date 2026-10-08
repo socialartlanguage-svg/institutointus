@@ -38,13 +38,11 @@
 .cel:hover { border-color: var(--mark); }
 .cel.aberto { background: #cfdcc4; border-color: #9fb48d; color: #3d5230; }
 .cel.aberto.m-itaipu { background: #cddbea; border-color: #8fa6c4; color: #2f4663; }
-.cel.aberto.m-barra { background: #efd5c2; border-color: #cf9d7d; color: #6b3d22; }
 .modos { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 13px; color: var(--mark-dark); }
 .modo { font: inherit; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 999px; cursor: pointer; border: 1px solid var(--linha); background: transparent; color: var(--mark-dark); }
 .modo.ativo { border-color: transparent; color: var(--escuro); }
 .modo[data-modo="online"].ativo { background: #cfdcc4; }
 .modo[data-modo="itaipu"].ativo { background: #cddbea; }
-.modo[data-modo="barra"].ativo { background: #efd5c2; }
 .cel.ocupado { background: var(--mark-dark); border-color: var(--mark-dark); color: var(--creme); cursor: default; }
 .cel.passado { opacity: 0.4; cursor: default; }
 .legenda { display: flex; gap: 18px; font-size: 12px; color: var(--muted); margin-top: 14px; flex-wrap: wrap; }
@@ -111,7 +109,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
   for (i = 7; i <= 19; i++) HORAS.push(i);
   var DIAS = ['seg', 'ter', 'qua', 'qui', 'sex'];
   var senha = null, aba = 'agenda', semana = null, agenda = null, modo = 'online';
-  var NOME_MODO = { online: 'Online', itaipu: 'Itaipu', barra: 'Barra' };
+  var NOME_MODO = { online: 'Online', itaipu: 'Itaipu' };
   var elVista = document.getElementById('vista'), elMsg = document.getElementById('msg');
 
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -200,7 +198,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     var h = '<p class="nota">Escolha abaixo o tipo de atendimento e clique nos horários para <strong>abrir</strong> com ele (clicar de novo fecha). Só horários abertos aparecem para as pacientes, que podem escolher qualquer um. Cada sessão tem 60 minutos.</p>' +
       (agenda.meet && agenda.meet.ok ? '' : '<div class="msg ruim" style="display:block">O Google Meet não está conectado: as sessões marcadas ficam sem link de videochamada.' + (agenda.meet && agenda.meet.erro ? ' (' + esc(agenda.meet.erro) + ')' : '') + '</div>') +
       '<div class="semana-nav"><button class="mini" id="ant">‹ Anterior</button><strong>' + p[2] + '/' + p[1] + ' a ' + fim[2] + '/' + fim[1] + '</strong><button class="mini" id="prox">Próxima ›</button><button class="mini" id="hoje">Hoje</button></div>' +
-      '<div class="modos"><span>Abrir como:</span>' + ['online', 'itaipu', 'barra'].map(function (m) { return '<button class="modo' + (modo === m ? ' ativo' : '') + '" data-modo="' + m + '">' + (m === 'online' ? 'Online' : m === 'itaipu' ? 'Itaipu (Niterói)' : 'Barra da Tijuca (Rio)') + '</button>'; }).join('') + '</div>' +
+      '<div class="modos"><span>Abrir como:</span>' + ['online', 'itaipu'].map(function (m) { return '<button class="modo' + (modo === m ? ' ativo' : '') + '" data-modo="' + m + '">' + (m === 'online' ? 'Online' : 'Presencial · Itaipu (Niterói)') + '</button>'; }).join('') + '</div>' +
       '<div class="atalhos"><button class="mini" id="abrir-tudo">Abrir semana toda (7h–20h)</button><button class="mini" id="fechar-tudo">Fechar semana toda</button><button class="mini" id="copiar">Copiar da semana anterior</button></div>' +
       '<div class="grade"><div></div>';
     DIAS.forEach(function (nome, d) {
@@ -216,7 +214,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
         h += '<button class="' + cls + '" data-slot="' + iso + '"' + (ocupados[iso] || passado ? ' disabled' : '') + '>' + rotulo + '</button>';
       });
     });
-    h += '</div><div class="legenda"><span><i style="background:rgba(100,86,70,0.15)"></i>fechado</span><span><i style="background:#cfdcc4"></i>online</span><span><i style="background:#cddbea"></i>Itaipu</span><span><i style="background:#efd5c2"></i>Barra</span><span><i style="background:var(--mark-dark)"></i>sessão marcada</span></div>';
+    h += '</div><div class="legenda"><span><i style="background:rgba(100,86,70,0.15)"></i>fechado</span><span><i style="background:#cfdcc4"></i>online</span><span><i style="background:#cddbea"></i>Itaipu</span><span><i style="background:var(--mark-dark)"></i>sessão marcada</span></div>';
 
     h += '<div class="sessoes-semana"><h2 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px">Sessões da semana</h2>';
     if (!agenda.sessoes.length) h += '<p class="nota">Nenhuma sessão marcada nesta semana.</p>';

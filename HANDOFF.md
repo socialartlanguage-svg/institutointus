@@ -222,3 +222,6 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - **Acúmulo de sessões:** ao renovar, as sessões que sobraram do pacote anterior (não perdidas por falta ou cancelamento tardio) somam ao novo (4 + sobra). Liberar de novo em menos de 10 dias pede confirmação (evita clique duplo). Sem limite de acúmulo definido pelo cliente.
 - `site/faq.html`: 25 perguntas com respostas do cliente (acordeão + JSON-LD FAQPage), no menu e no rodapé. Preço NÃO aparece (decisão do cliente).
 - **Pendente:** pacote de 3 meses / 12 sessões com escolha na página de pagamento (precisa dos links do InfinitePay e das regras); endereços das unidades; atendimento de menores com autorização do responsável já está no termo, mas a ficha não pergunta idade.
+
+
+**Out/2026 — CORREÇÃO: o consultório da Barra da Tijuca não existe mais.** Só há **Niterói (Itaipu, Rua Juriti, 515)** e o online. As menções anteriores a "dois consultórios"/"Barra" neste arquivo estão superadas. Removido de: home, sobre, contato (e o campo `unidade` da ficha, que deixou de fazer sentido), FAQ, como-funciona, rodapé, termo v3, painel, área da paciente e backend. Modalidades agora: `online` e `itaipu` (constraint do SQL v4 atualizada). Endereço de Itaipu só em variável do Netlify (`ENDERECO_ITAIPU`), nunca no site público.

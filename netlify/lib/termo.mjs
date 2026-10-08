@@ -49,7 +49,7 @@ export const TERMO = {
     {
       titulo: '5. Atendimento online e presencial',
       paragrafos: [
-        'As sessões podem ser online ou presenciais, conforme os horários que a psicóloga disponibiliza, e você pode alternar entre uma modalidade e outra de uma sessão para a outra. As sessões presenciais acontecem nos consultórios do Intus em Niterói (Itaipu) e no Rio de Janeiro (Barra da Tijuca), e o endereço vai no convite da sessão.',
+        'As sessões podem ser online ou presenciais, conforme os horários que a psicóloga disponibiliza, e você pode alternar entre uma modalidade e outra de uma sessão para a outra. As sessões presenciais acontecem no consultório do Intus em Niterói (Itaipu), e o endereço vai no convite da sessão.',
         'As sessões online acontecem por videochamada (Google Meet), com o link enviado no convite de cada sessão. Você se compromete a participar de um local reservado, em que possa falar com privacidade, e com conexão adequada.',
         'Se a conexão falhar, a psicóloga e você tentarão restabelecê-la e, se não for possível, combinarão como seguir. O atendimento online segue as normas do Conselho Federal de Psicologia.',
         'Não é permitido gravar (áudio, vídeo ou imagem) nem transmitir as sessões, por nenhuma das partes, sem autorização expressa e por escrito.',

@@ -1,12 +1,11 @@
 // Modalidades de atendimento. Cada horário aberto pela Renata tem UMA modalidade.
-// Os endereços NÃO ficam no código (o repositório é público): vêm de variáveis
-// de ambiente do Netlify, e só aparecem no convite do Google e na área da paciente.
-//   ENDERECO_ITAIPU, ENDERECO_BARRA
+// O endereço NÃO fica no código (o repositório é público): vem de variável de
+// ambiente do Netlify e só aparece no convite do Google e na área da paciente.
+//   ENDERECO_ITAIPU
 
 export const MODALIDADES = {
   online: { nome: 'Online', presencial: false },
   itaipu: { nome: 'Itaipu (Niterói)', presencial: true, env: 'ENDERECO_ITAIPU' },
-  barra: { nome: 'Barra da Tijuca (Rio de Janeiro)', presencial: true, env: 'ENDERECO_BARRA' },
 };
 
 export const modalidadeValida = (m) => typeof m === 'string' && Object.prototype.hasOwnProperty.call(MODALIDADES, m);
