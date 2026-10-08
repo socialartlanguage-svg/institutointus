@@ -183,3 +183,9 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - **Lição importante:** o 1º token (30/09) foi emitido com o app ainda em modo "Testando" e **expirou em 7 dias**, mesmo depois de publicar o app. Foi regerado em 07/10 com o app em produção (`scripts/google_authorize.py`) e não expira. Se o painel mostrar "Meet não conectado (Token has been expired or revoked)", rodar o script de novo e atualizar `GOOGLE_OAUTH_JSON`.
 - O painel (aba Agenda) mostra o estado real da conexão com o Google (`meet.ok` / `meet.erro`). `netlify/lib/google.mjs` lê só o primeiro objeto JSON da variável (tolera lixo de colagem).
 - **Lição:** copiar texto do chat sobrescreve o clipboard e já levou texto de conversa para dentro de variáveis secretas do Netlify. Ao colar segredos, sempre conferir o início (`{"client_id"`).
+
+
+**Out/2026 — lembretes de sessão (decisão do cliente: pelo Google Agenda, só para a Renata)**
+- Sem código de lembrete no site. A Renata é lembrada pelas **notificações padrão da própria agenda dela** (renata.institutointus@gmail.com), porque lembrete do Google é por pessoa. Configuração única dela: Agenda Google → Configurações de eventos → "Adicionar convites à minha agenda: Todos" (senão não dispara lembrete) e, em "Configurações das minhas agendas" → Notificações de evento: e-mail 1 dia antes + notificação 30 min antes; app do celular com notificações ligadas.
+- A conta técnica (socialartlanguage@gmail.com) tem os lembretes **desligados** nos eventos (`reminders: { useDefault: false, overrides: [] }` em `netlify/lib/google.mjs`) para não ser avisada de todas as sessões.
+- As pacientes **não** recebem lembrete do sistema (só o convite inicial do Google). Se isso mudar: e-mail automático (Resend + domínio próprio) ou botão "Enviar no WhatsApp" no painel.
