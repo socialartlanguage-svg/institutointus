@@ -80,10 +80,11 @@ export function slotValido(iso) {
   return d;
 }
 
-// O ciclo do pacote vai de `inicio_ciclo_atual` até 1 mês depois, mais 7 dias de folga.
-export function fimDoCiclo(inicioCiclo) {
+// O ciclo do pacote vai de `inicio_ciclo_atual` até `meses` depois (1 no mensal, 3 no
+// pacote completo), mais 7 dias de folga.
+export function fimDoCiclo(inicioCiclo, meses = 1) {
   const d = new Date(`${inicioCiclo}T00:00:00-03:00`);
-  d.setUTCMonth(d.getUTCMonth() + 1);
+  d.setUTCMonth(d.getUTCMonth() + (meses || 1));
   return new Date(d.getTime() + 7 * 86400e3);
 }
 

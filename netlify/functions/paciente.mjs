@@ -53,7 +53,7 @@ async function validarNovoHorario(pacote, iso) {
   if (horasAte(d) < ANTECEDENCIA_AGENDAR_H) {
     return { erro: `É preciso marcar com pelo menos ${ANTECEDENCIA_AGENDAR_H}h de antecedência.` };
   }
-  if (d > fimDoCiclo(pacote.inicio_ciclo_atual)) {
+  if (d > fimDoCiclo(pacote.inicio_ciclo_atual, pacote.duracao_meses)) {
     return { erro: 'Esse horário está fora do período do seu pacote atual.' };
   }
   const { data: aberto } = await db().from('slots_abertos').select('inicio, modalidade').eq('inicio', d.toISOString()).maybeSingle();
@@ -77,7 +77,7 @@ const acoes = {
         nome: paciente.nome, email: paciente.email, whatsapp: paciente.whatsapp,
         trocou_senha: paciente.trocou_senha, consentimento_saude_em: paciente.consentimento_saude_em,
       },
-      pacote: pacote ? { ...(await usoDoPacote(pacote)), ate: fimDoCiclo(pacote.inicio_ciclo_atual).toISOString() } : null,
+      pacote: pacote ? { ...(await usoDoPacote(pacote)), ate: fimDoCiclo(pacote.inicio_ciclo_atual, pacote.duracao_meses).toISOString() } : null,
       sessoes,
       observacoes: observacoes || null,
       termo: { versao: TERMO.versao, titulo: TERMO.titulo, secoes: TERMO.secoes, aceite: await aceiteAtual(paciente) },
@@ -140,7 +140,7 @@ const acoes = {
     }
     const de = new Date(Date.now() + ANTECEDENCIA_AGENDAR_H * 3600e3);
     const limite = new Date(Date.now() + SEMANAS_VISIVEIS * 7 * 86400e3);
-    const ate = new Date(Math.min(limite.getTime(), fimDoCiclo(pacote.inicio_ciclo_atual).getTime()));
+    const ate = new Date(Math.min(limite.getTime(), fimDoCiclo(pacote.inicio_ciclo_atual, pacote.duracao_meses).getTime()));
     return json({ horarios: await horariosLivres(de, ate) });
   },
 

@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="css/intus.css">
 <script>document.documentElement.classList.add('js')</script>
 <style>
-.wrap { max-width: 720px; margin: 0 auto; padding: 120px 32px 140px; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 120px 32px 140px; }
 .icon-line { width: 46px; height: 66px; border: 1px solid var(--ouro); border-bottom: none; border-radius: 999px 999px 0 0; margin: 0 0 32px; }
 .wrap h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(32px, 4.4vw, 50px); line-height: 1.15; letter-spacing: -0.5px; color: var(--escuro); margin-bottom: 20px; }
 .wrap h1 em { font-style: italic; font-weight: 400; color: var(--mark); }
@@ -29,6 +29,18 @@
 .pacote-box ul { margin: 20px 0 0; padding-left: 20px; }
 .pacote-box li { font-size: 15px; color: var(--bege); margin-bottom: 10px; }
 
+.opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+.opcao-card { padding: 44px 36px; border-radius: 2px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.opcao-card h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 26px; margin-bottom: 18px; }
+.opcao-card ul { margin: 0 0 28px; padding-left: 20px; flex: 1; }
+.opcao-card li { font-size: 15px; margin-bottom: 10px; }
+.opcao-card .btn { align-self: flex-start; }
+.opcao-card.escuro { background: var(--escuro); color: var(--creme); }
+.opcao-card.escuro li { color: var(--bege); }
+.opcao-card.claro { background: var(--bege); color: var(--escuro); }
+.opcao-card.claro li { color: var(--mark-dark); }
+.opcao-card .tag { align-self: flex-start; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mark); border: 1px solid var(--ouro); border-radius: 999px; padding: 3px 12px; margin-bottom: 16px; }
+@media (max-width: 820px) { .opcoes { grid-template-columns: 1fr; } .opcao-card { padding: 32px 24px; } }
 .pagar {
   display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
   background: rgba(255,255,255,0.4); border: 1px solid var(--linha); padding: 36px 40px; border-radius: 2px;
@@ -68,27 +80,39 @@
   <div class="icon-line entra-arco" aria-hidden="true"></div>
   <p class="eyebrow entra">Confirmação do pacote</p>
   <h1 class="entra d1">Vamos <em>começar</em>.</h1>
-  <p class="lead entra d2">Sua ficha de triagem foi enviada. Este é o próximo passo: confirmar o seu pacote mensal de acompanhamento.</p>
+  <p class="lead entra d2">Sua ficha de triagem foi enviada. Este é o próximo passo: escolher e confirmar o seu pacote de acompanhamento.</p>
 
   <div class="aviso-pessoal reveal">
     A Renata lê toda ficha com atenção antes da sua primeira sessão. Se, ao ler a sua, ela achar que este não é o formato mais adequado para o seu momento, ela entra em contato diretamente para conversar sobre isso — inclusive sobre reembolso, se for o caso. Se você chegou aqui sem ter conversado com a Renata, <a href="https://wa.me/5521995053169?text=Ol%C3%A1%2C%20Renata%21%20Vi%20o%20site%20do%20Intus%20e%20gostaria%20de%20te%20conhecer%20e%20saber%20mais%20sobre%20o%20acompanhamento." target="_blank" rel="noopener" style="text-decoration: underline;">fale com ela pelo WhatsApp</a>.
   </div>
 
-  <div class="pacote-box reveal">
-    <h2>Pacote mensal Intus</h2>
-    <ul>
-      <li>4 sessões por mês; a frequência semanal é a recomendada, mas você pode espaçar</li>
-      <li>Sessões que sobrarem (e não foram perdidas) acumulam para o mês seguinte</li>
-      <li>Pagamento recorrente, cobrado automaticamente a cada ciclo</li>
-      <li>Reembolso de 75% se você decidir cancelar até o término da primeira sessão; depois disso, em caso de desistência, não há devolução do pacote</li>
-      <li>Agendamento feito por você, na área do paciente, nos horários que a Renata abre a cada semana</li>
-    </ul>
+  <div class="opcoes reveal">
+    <div class="opcao-card escuro">
+      <h2>Pacote mensal</h2>
+      <ul>
+        <li>4 sessões por mês; a frequência semanal é a recomendada, mas você pode espaçar</li>
+        <li>Sessões que sobrarem (e não foram perdidas) acumulam para o mês seguinte</li>
+        <li>Pagamento recorrente, cobrado automaticamente a cada ciclo</li>
+        <li>Reembolso de 75% se você decidir cancelar até o término da primeira sessão; depois disso, em caso de desistência, não há devolução do pacote</li>
+        <li>Agendamento feito por você, na área do paciente, nos horários que a Renata abre a cada semana</li>
+      </ul>
+      <a href="https://invoice.infinitepay.io/plans/instituto-intus/oOCIco9V3V" target="_blank" rel="noopener" class="btn btn-claro seta">Escolher o pacote mensal</a>
+    </div>
+    <div class="opcao-card claro">
+      <span class="tag">Pacote completo</span>
+      <h2>3 meses · 12 sessões</h2>
+      <ul>
+        <li>12 sessões para usar no seu ritmo, dentro dos 3 meses</li>
+        <li>Pagamento único, por Pix ou cartão, com opção de parcelamento</li>
+        <li>Este pacote não tem reembolso</li>
+        <li>Agendamento feito por você, na área do paciente, nos horários que a Renata abre a cada semana</li>
+      </ul>
+      <a href="https://link.infinitepay.io/instituto-intus/VC1D-3d0v1OHns4-2160,00" target="_blank" rel="noopener" class="btn seta">Escolher o pacote completo</a>
+    </div>
   </div>
 
   <div class="pagar reveal">
-    <p>O pagamento é processado pelo <strong>InfinitePay</strong>, fora do site do Intus — seus dados de cartão não passam por nós em nenhum momento.</p>
-    <a href="https://invoice.infinitepay.io/plans/instituto-intus/oOCIco9V3V" target="_blank" rel="noopener" class="btn seta">Confirmar pacote e pagar</a>
-    <p class="valorinfo">O valor e a forma de pagamento (Pix ou cartão) aparecem na próxima tela, junto com o InfinitePay.</p>
+    <p>O pagamento é processado pelo <strong>InfinitePay</strong>, fora do site do Intus — seus dados de cartão não passam por nós em nenhum momento. O valor e a forma de pagamento aparecem na próxima tela.</p>
   </div>
 
   <p class="depois reveal">

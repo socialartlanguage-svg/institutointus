@@ -9,7 +9,7 @@
 import { createHash } from 'node:crypto';
 
 export const TERMO = {
-  versao: '2026-10-v4',
+  versao: '2026-10-v5',
   titulo: 'Termo de compromisso do acompanhamento psicológico',
   secoes: [
     {
@@ -34,6 +34,7 @@ export const TERMO = {
         'O pagamento é antecipado e cobrado de forma recorrente a cada ciclo, por meio do InfinitePay. O valor e a forma de pagamento são informados na tela de pagamento, antes da confirmação. Seus dados de cartão são tratados pelo InfinitePay e não passam pelo Intus.',
         'Você tem até o término da sua primeira sessão para decidir pelo cancelamento do pacote e receber o reembolso de 75% do valor pago.',
         'Em caso de desistência do processo terapêutico, não haverá devolução do pacote.',
+        'Há também o pacote completo de 3 meses, com 12 sessões e pagamento único, que pode ser utilizado ao longo dos 3 meses. O pacote completo não tem reembolso.',
         'Se, depois de ler a sua ficha, a psicóloga entender que este acompanhamento não é adequado ao seu momento, ela entrará em contato com você e tratará com você de eventual reembolso.',
       ],
     },

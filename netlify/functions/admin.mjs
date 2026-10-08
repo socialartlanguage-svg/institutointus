@@ -60,6 +60,10 @@ const acoes = {
     let senha = null;
     if (!paciente.auth_user_id) senha = await definirSenhaProvisoria(paciente);
 
+    // Tipo de pacote: mensal (4 sessões, 1 mês) ou completo (12 sessões, 3 meses, pagamento único).
+    const trimestral = c.tipo === 'trimestral';
+    const base = trimestral ? 12 : 4;
+
     // Renovação: as sessões que sobraram do pacote anterior (e que a paciente não perdeu
     // por falta ou cancelamento tardio) acumulam para o novo pacote.
     const anterior = await pacoteAtivo(paciente.id);
@@ -74,12 +78,12 @@ const acoes = {
 
     const { data: pacote, error: erroPacote } = await db()
       .from('pacotes')
-      .insert({ paciente_id: paciente.id, status: 'ativo', sessoes_por_ciclo: 4 + acumuladas })
+      .insert({ paciente_id: paciente.id, status: 'ativo', sessoes_por_ciclo: base + acumuladas, ...(trimestral ? { duracao_meses: 3 } : {}) })
       .select('id')
       .single();
     if (erroPacote) throw erroPacote;
 
-    return json({ ok: true, paciente_id: paciente.id, pacote_id: pacote.id, email, senha_provisoria: senha, acumuladas, total: 4 + acumuladas });
+    return json({ ok: true, paciente_id: paciente.id, pacote_id: pacote.id, email, senha_provisoria: senha, acumuladas, total: base + acumuladas, tipo: trimestral ? 'trimestral' : 'mensal' });
   },
 
   async redefinir_senha(c) {
