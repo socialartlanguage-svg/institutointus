@@ -7,6 +7,7 @@ import {
   usoDoPacote, horariosLivres, ANTECEDENCIA_AGENDAR_H, ANTECEDENCIA_CANCELAR_H, SEMANAS_VISIVEIS,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
+import { TERMO, textoDoTermo, hashDoTermo } from '../lib/termo.mjs';
 
 const MAX_TEXTO = 2000;
 const texto = (v) => (typeof v === 'string' ? v.trim().slice(0, MAX_TEXTO) : null) || null;
@@ -32,6 +33,15 @@ async function minhaSessao(paciente, id) {
     .maybeSingle();
   return data || null;
 }
+
+// Aceite da versão ATUAL do termo, ou null.
+async function aceiteAtual(paciente) {
+  const { data } = await db().from('aceites_termo')
+    .select('aceito_em, nome_digitado, versao')
+    .eq('paciente_id', paciente.id).eq('versao', TERMO.versao).maybeSingle();
+  return data || null;
+}
+const exigeTermo = () => json({ erro: 'Antes de agendar, leia e aceite o termo de compromisso.', codigo: 'termo' }, 403);
 
 async function validarNovoHorario(pacote, iso) {
   const d = slotValido(iso);
@@ -66,8 +76,30 @@ const acoes = {
       pacote: pacote ? { ...(await usoDoPacote(pacote)), ate: fimDoCiclo(pacote.inicio_ciclo_atual).toISOString() } : null,
       sessoes,
       observacoes: observacoes || null,
+      termo: { versao: TERMO.versao, titulo: TERMO.titulo, secoes: TERMO.secoes, aceite: await aceiteAtual(paciente) },
       antecedencia_cancelar_h: ANTECEDENCIA_CANCELAR_H,
     });
+  },
+
+  async aceitar_termo(paciente, c, req) {
+    if (c.concordo !== true) return erro('Marque "Li e concordo" para continuar.');
+    if (c.versao !== TERMO.versao) return erro('O termo foi atualizado. Recarregue a página para ler a versão nova.', 409);
+    const nome = typeof c.nome === 'string' ? c.nome.trim().replace(/\s+/g, ' ') : '';
+    if (nome.length < 5 || nome.length > 120 || nome.split(' ').length < 2) {
+      return erro('Digite o seu nome completo para assinar.');
+    }
+    const ip = req.headers.get('x-nf-client-connection-ip') || (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || null;
+    const { error } = await db().from('aceites_termo').insert({
+      paciente_id: paciente.id,
+      versao: TERMO.versao,
+      texto: textoDoTermo(),
+      texto_hash: hashDoTermo(),
+      nome_digitado: nome,
+      ip,
+      user_agent: (req.headers.get('user-agent') || '').slice(0, 300) || null,
+    });
+    if (error && error.code !== '23505') throw error; // 23505: já tinha aceitado esta versão
+    return json({ ok: true });
   },
 
   async trocou_senha(paciente) {
@@ -95,6 +127,7 @@ const acoes = {
   },
 
   async horarios(paciente, c) {
+    if (!c.reagendar && !(await aceiteAtual(paciente))) return exigeTermo();
     const pacote = await pacoteAtivo(paciente.id);
     if (!pacote) return json({ horarios: [], motivo: 'sem_pacote' });
     if (!c.reagendar) {
@@ -108,6 +141,7 @@ const acoes = {
   },
 
   async agendar(paciente, c) {
+    if (!(await aceiteAtual(paciente))) return exigeTermo();
     const pacote = await pacoteAtivo(paciente.id);
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
     const uso = await usoDoPacote(pacote);
@@ -185,7 +219,7 @@ export default async (req) => {
     if (!paciente) return erro('Sessão inválida. Entre novamente.', 401);
     const acao = acoes[corpo.acao];
     if (!acao) return erro('Ação desconhecida');
-    return await acao(paciente, corpo);
+    return await acao(paciente, corpo, req);
   } catch (e) {
     console.error('Erro em paciente.mjs:', e);
     return erro('Algo deu errado. Tente de novo em instantes.', 500);

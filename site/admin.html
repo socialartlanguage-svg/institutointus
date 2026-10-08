@@ -280,7 +280,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       if (!r.pacientes.length) h += '<p class="nota">Nenhuma paciente cadastrada ainda. Use "Liberar pacote" depois de confirmar um pagamento.</p>';
       r.pacientes.forEach(function (p) {
         h += '<div class="linha"><div>' + esc(p.nome) + '<small>' + esc(p.email) + ' · ' + esc(p.whatsapp) + '</small></div><div>' +
-          '<small style="display:inline;margin-right:12px">' + (p.pacote_ativo ? p.usadas + ' de ' + p.total + ' sessões' : 'sem pacote ativo') + '</small>' +
+          '<small style="display:inline;margin-right:12px">' + (p.termo_aceito ? 'termo ✓' : 'termo pendente') + ' · ' + (p.pacote_ativo ? p.usadas + ' de ' + p.total + ' sessões' : 'sem pacote ativo') + '</small>' +
           '<button class="mini" data-ver="' + p.id + '">Ver</button> <button class="mini" data-senha="' + p.id + '">Nova senha</button> <button class="mini" data-excluir="' + p.id + '" data-nome="' + esc(p.nome) + '">Excluir</button></div></div>';
       });
       elVista.innerHTML = h + '<div id="detalhe"></div>';
@@ -310,7 +310,12 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     api('paciente', { id: id }).then(function (r) {
       var o = r.observacoes, sn = function (v) { return v === true ? 'Sim' : v === false ? 'Não' : '—'; };
       var h = '<div class="detalhe"><h3>' + esc(r.paciente.nome) + '</h3><p class="rot">' + esc(r.paciente.email) + ' · ' + esc(r.paciente.whatsapp) + '</p>' +
-        '<h3 style="margin-top:18px;font-size:17px">Observações de saúde</h3>';
+        '<h3 style="margin-top:18px;font-size:17px">Termo de compromisso</h3>';
+      if (!r.aceites.length) h += '<p class="rot">Ainda não aceitou nenhuma versão.</p>';
+      r.aceites.forEach(function (a) {
+        h += '<p>Versão ' + esc(a.versao) + (a.versao === r.termo_atual ? ' (atual)' : ' (antiga)') + ' — assinado por <strong>' + esc(a.nome_digitado) + '</strong> em ' + esc(fmt(a.aceito_em, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })) + '<br><span class="rot">IP ' + esc(a.ip || '—') + ' · hash ' + esc((a.texto_hash || '').slice(0, 12)) + '…</span></p>';
+      });
+      h += '<h3 style="margin-top:18px;font-size:17px">Observações de saúde</h3>';
       if (!o) h += '<p class="rot">A paciente ainda não preencheu.</p>';
       else h += '<p><span class="rot">Toma medicação:</span> ' + sn(o.toma_medicacao) + '</p><p><span class="rot">Medicamentos:</span> ' + esc(o.medicacoes || '—') + '</p>' +
         '<p><span class="rot">Acompanhamento psiquiátrico:</span> ' + sn(o.tem_psiquiatra) + '</p><p><span class="rot">Psiquiatra:</span> ' + esc(o.psiquiatra || '—') + '</p>' +

@@ -189,3 +189,12 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Sem código de lembrete no site. A Renata é lembrada pelas **notificações padrão da própria agenda dela** (renata.institutointus@gmail.com), porque lembrete do Google é por pessoa. Configuração única dela: Agenda Google → Configurações de eventos → "Adicionar convites à minha agenda: Todos" (senão não dispara lembrete) e, em "Configurações das minhas agendas" → Notificações de evento: e-mail 1 dia antes + notificação 30 min antes; app do celular com notificações ligadas.
 - A conta técnica (socialartlanguage@gmail.com) tem os lembretes **desligados** nos eventos (`reminders: { useDefault: false, overrides: [] }` em `netlify/lib/google.mjs`) para não ser avisada de todas as sessões.
 - As pacientes **não** recebem lembrete do sistema (só o convite inicial do Google). Se isso mudar: e-mail automático (Resend + domínio próprio) ou botão "Enviar no WhatsApp" no painel.
+
+
+**Out/2026 — termo de compromisso (aceite eletrônico)**
+- Texto em `netlify/lib/termo.mjs` (**RASCUNHO, precisa de revisão da Renata e de advogado(a) antes de pacientes reais**). Versão atual `2026-10-v1`; ao alterar qualquer palavra, mudar a `versao` → todas aceitam de novo no próximo acesso.
+- Fluxo: login → troca de senha → **leitura e aceite do termo** (rolar até o fim, "Li e concordo", digitar nome completo) → só então a paciente vê/agenda horários (`horarios` e `agendar` retornam 403 `codigo: termo` sem aceite; reagendar/cancelar/contestar continuam livres). Cópia imprimível em "Minha conta".
+- Registro (tabela `aceites_termo`, `scripts/supabase_schema_v3.sql`): versão, **retrato do texto aceito + SHA-256**, nome digitado, data/hora, IP, navegador. O painel da Renata mostra "termo ✓/pendente" na lista e os detalhes do aceite na ficha da paciente.
+- Valor jurídico: assinatura eletrônica simples (Lei 14.063/2020). Para prova mais forte no futuro: serviço de assinatura (ZapSign/Clicksign) — dá para migrar sem refazer o resto.
+- Decisão: em terapia de casal/família assina só quem contrata (o termo prevê que responde pelo grupo e que não há sigilo entre participantes em sessões conjuntas). Mudar para um aceite por adulto exigiria um segundo acesso por pacote.
+- Pontos que NÃO estavam definidos pelo cliente e foram incluídos por prática comum (confirmar): atraso não estende a sessão; proibição de gravar as sessões; psicóloga pode encerrar o acompanhamento com aviso/encaminhamento; e o texto sobre reembolso quando a ficha indicar que não é um bom encaixe.

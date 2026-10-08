@@ -61,6 +61,10 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
 .sn label { display: flex; align-items: center; gap: 8px; font-size: 14px; margin: 0; cursor: pointer; }
 .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); line-height: 1.6; }
 .consent input { margin-top: 4px; accent-color: var(--mark); }
+.termo-caixa { max-height: 380px; overflow-y: auto; padding: 22px 26px; background: rgba(255,255,255,0.45); border: 1px solid var(--linha); border-radius: 2px; margin-bottom: 14px; }
+.termo-caixa h3 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 17px; color: var(--escuro); margin: 22px 0 8px; }
+.termo-caixa h3:first-child { margin-top: 0; }
+.termo-caixa p { font-size: 14.5px; color: var(--texto); margin-bottom: 10px; line-height: 1.65; }
 .contestar { margin-top: 14px; width: 100%; }
 .contestar textarea { width: 100%; min-height: 80px; padding: 12px 14px; border: 1px solid rgba(100,86,70,0.3); background: rgba(255,255,255,0.5); font: inherit; font-size: 14px; border-radius: 2px; margin-bottom: 10px; }
 
@@ -127,6 +131,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     document.getElementById('saudacao').innerHTML = 'Olá, <em>' + esc(nome) + '</em>.';
 
     if (!dados.paciente.trocou_senha) { elConteudo.innerHTML = htmlSenhaObrigatoria(); ligarSenha(); return; }
+    if (!dados.termo.aceite) { elConteudo.innerHTML = htmlTermo(); ligarTermo(); return; }
 
     var agora = Date.now();
     var proximas = [], historico = [];
@@ -160,6 +165,48 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
         .then(function () { aviso('Senha salva. Bem-vinda!'); return carregar(); })
         .catch(function (err) { b.disabled = false; tratar(err); });
     });
+  }
+
+  // ---------- termo de compromisso ----------
+  function htmlTermoTexto(t) {
+    return t.secoes.map(function (s) {
+      return '<h3>' + esc(s.titulo) + '</h3>' + s.paragrafos.map(function (p) { return '<p>' + esc(p) + '</p>'; }).join('');
+    }).join('');
+  }
+  function htmlTermo() {
+    var t = dados.termo;
+    return '<div class="secao"><h2>' + esc(t.titulo) + '</h2>' +
+      '<p class="nota">Antes de agendar a sua primeira sessão, leia o termo até o final e aceite. Depois você pode baixar ou imprimir uma cópia.</p>' +
+      '<div class="termo-caixa" id="termo-caixa" tabindex="0">' + htmlTermoTexto(t) + '</div>' +
+      '<p class="nota" id="termo-dica">Role o texto até o final para poder aceitar.</p>' +
+      '<form class="campos" id="form-termo">' +
+      '<label class="consent"><input type="checkbox" id="termo-ok" disabled><span>Li e concordo com o termo de compromisso.</span></label>' +
+      '<div><label for="termo-nome">Digite o seu nome completo para assinar</label><input type="text" id="termo-nome" autocomplete="name" required></div>' +
+      '<button class="mini cheio" type="submit" style="align-self:flex-start">Aceitar e continuar</button></form></div>';
+  }
+  function ligarTermo() {
+    var caixa = document.getElementById('termo-caixa'), ok = document.getElementById('termo-ok'), dica = document.getElementById('termo-dica');
+    function checar() {
+      if (caixa.scrollTop + caixa.clientHeight >= caixa.scrollHeight - 12) { ok.disabled = false; dica.hidden = true; }
+    }
+    caixa.addEventListener('scroll', checar); checar();
+    document.getElementById('form-termo').addEventListener('submit', function (e) {
+      e.preventDefault(); limparAviso();
+      if (!ok.checked) return aviso('Marque "Li e concordo" para continuar.', true);
+      var b = e.target.querySelector('button[type=submit]'); b.disabled = true;
+      Intus.api('aceitar_termo', { versao: dados.termo.versao, nome: document.getElementById('termo-nome').value, concordo: true })
+        .then(function () { aviso('Termo aceito. Agora você já pode agendar suas sessões.'); return carregar(); })
+        .catch(function (err) { b.disabled = false; tratar(err); });
+    });
+  }
+  function imprimirTermo() {
+    var t = dados.termo, a = t.aceite;
+    var w = window.open('', '_blank');
+    if (!w) return aviso('O navegador bloqueou a janela. Libere pop-ups para esta página e tente de novo.', true);
+    var quando = new Date(a.aceito_em).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    w.document.write('<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>' + esc(t.titulo) + '</title><style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 24px;line-height:1.6;color:#222}h1{font-size:22px}h3{font-size:16px;margin:22px 0 6px}p{margin:0 0 10px;font-size:14px}.ass{margin-top:36px;padding-top:14px;border-top:1px solid #999;font-size:13px}</style></head><body><h1>' + esc(t.titulo) + '</h1>' + htmlTermoTexto(t) +
+      '<div class="ass">Aceito eletronicamente por <strong>' + esc(a.nome_digitado) + '</strong> em ' + quando + ' (versão ' + esc(a.versao) + ').</div></body></html>');
+    w.document.close(); w.focus(); w.print();
   }
 
   function htmlPacote() {
@@ -261,7 +308,9 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
   }
 
   function htmlConta() {
-    return '<div class="secao"><h2>Minha conta</h2><p class="nota">' + esc(dados.paciente.email) + '</p>' +
+    var a = dados.termo.aceite;
+    var linhaTermo = a ? '<p class="nota">Termo de compromisso aceito em ' + new Date(a.aceito_em).toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }) + ' · <a href="#" id="ver-termo" style="text-decoration:underline">ver / imprimir</a></p>' : '';
+    return '<div class="secao"><h2>Minha conta</h2><p class="nota">' + esc(dados.paciente.email) + '</p>' + linhaTermo +
       '<button class="mini" id="abrir-senha">Trocar senha</button><div id="area-senha" style="margin-top:20px"></div></div>';
   }
 
@@ -292,6 +341,9 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
 
     var fo = document.getElementById('form-obs');
     if (fo) fo.addEventListener('submit', salvarObservacoes);
+
+    var vt = document.getElementById('ver-termo');
+    if (vt) vt.addEventListener('click', function (e) { e.preventDefault(); imprimirTermo(); });
 
     document.getElementById('abrir-senha').addEventListener('click', function () {
       var el = document.getElementById('area-senha');

@@ -6,6 +6,7 @@ import {
   db, json, erro, senhaAdminOk, slotValido, contaComoUsada,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
+import { TERMO } from '../lib/termo.mjs';
 
 const ALFABETO = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sem 0/O/1/l/I
 const gerarSenha = () => Array.from({ length: 10 }, () => ALFABETO[randomInt(ALFABETO.length)]).join('');
@@ -119,6 +120,8 @@ const acoes = {
     const { data: pacientes } = await db().from('pacientes').select('*').order('nome');
     const { data: pacotes } = await db().from('pacotes').select('*').eq('status', 'ativo');
     const { data: sessoes } = await db().from('sessoes').select('pacote_id, status, cancelamento_tardio');
+    const { data: aceites } = await db().from('aceites_termo').select('paciente_id').eq('versao', TERMO.versao);
+    const aceitaram = new Set((aceites || []).map((x) => x.paciente_id));
     return json({
       pacientes: (pacientes || []).map((p) => {
         const pacote = (pacotes || []).filter((x) => x.paciente_id === p.id)
@@ -127,6 +130,7 @@ const acoes = {
         return {
           id: p.id, nome: p.nome, email: p.email, whatsapp: p.whatsapp,
           pacote_ativo: Boolean(pacote), usadas, total: pacote?.sessoes_por_ciclo ?? 0,
+          termo_aceito: aceitaram.has(p.id),
         };
       }),
     });
@@ -139,8 +143,12 @@ const acoes = {
     const { data: sessoes } = await db().from('sessoes')
       .select('id, horario, status, cancelamento_tardio, contestacao_resolvida, motivo_contestacao, link_meet, pacotes!inner(paciente_id)')
       .eq('pacotes.paciente_id', c.id).order('horario', { ascending: false });
+    const { data: aceites } = await db().from('aceites_termo')
+      .select('versao, nome_digitado, aceito_em, ip, texto_hash').eq('paciente_id', c.id).order('aceito_em', { ascending: false });
     return json({
       paciente: { id: paciente.id, nome: paciente.nome, email: paciente.email, whatsapp: paciente.whatsapp, consentimento_saude_em: paciente.consentimento_saude_em },
+      termo_atual: TERMO.versao,
+      aceites: aceites || [],
       observacoes: observacoes || null,
       sessoes: (sessoes || []).map(({ pacotes, ...s }) => ({ ...s, horario: new Date(s.horario).toISOString() })),
     });
