@@ -168,6 +168,7 @@ footer { background: var(--escuro); color: var(--bege); overflow: hidden; }
 .footer-topo { max-width: var(--max); margin: 0 auto; padding: 80px var(--gutter) 48px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 48px; border-bottom: 1px solid var(--linha-clara); }
 .footer-topo .lema { font-family: 'Fraunces', serif; font-style: italic; font-size: 20px; color: var(--creme); max-width: 300px; line-height: 1.4; }
 .footer-topo .lema small { display: block; font-family: 'Inter', sans-serif; font-style: normal; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ouro); margin-top: 14px; }
+.footer-topo .unidades { font-size: 13px; color: var(--bege); opacity: 0.8; max-width: 300px; margin-top: 18px; line-height: 1.6; }
 .footer-col h4 { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ouro); font-weight: 500; margin-bottom: 16px; }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .footer-col a { font-size: 14px; color: var(--bege); opacity: 0.85; transition: opacity 0.2s; }

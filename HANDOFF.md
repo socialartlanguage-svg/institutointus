@@ -198,3 +198,9 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Valor jurídico: assinatura eletrônica simples (Lei 14.063/2020). Para prova mais forte no futuro: serviço de assinatura (ZapSign/Clicksign) — dá para migrar sem refazer o resto.
 - Decisão: em terapia de casal/família assina só quem contrata (o termo prevê que responde pelo grupo e que não há sigilo entre participantes em sessões conjuntas). Mudar para um aceite por adulto exigiria um segundo acesso por pacote.
 - Pontos que NÃO estavam definidos pelo cliente e foram incluídos por prática comum (confirmar): atraso não estende a sessão; proibição de gravar as sessões; psicóloga pode encerrar o acompanhamento com aviso/encaminhamento; e o texto sobre reembolso quando a ficha indicar que não é um bom encaixe.
+
+
+**Out/2026 — unidades presenciais**
+- Dois consultórios: **Niterói (Itaipu)** e **Rio de Janeiro (Barra da Tijuca)**, além do online. Aparecem na home ("O espaço"), em Sobre, em Contato, no rodapé de todas as páginas e na meta description. Endereço completo ainda NÃO está no site (decisão: enviado depois que a sessão é combinada) — falta o endereço de cada unidade.
+- Ficha de triagem (`contato.html`): novo campo `unidade` (itaipu / barra / indiferente), mostrado e enviado só quando o formato não é "online".
+- **Lacuna de produto em aberto:** o sistema de agendamento hoje trata TODA sessão como online (gera link do Meet). Para presencial é preciso decidir: modalidade/unidade por pacote ou por horário, horários da Renata por unidade (ela atende em dois lugares), e não gerar Meet nas sessões presenciais.

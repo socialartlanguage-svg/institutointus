@@ -128,6 +128,12 @@ textarea.curto { min-height: 80px; }
     </div>
 
     <div class="info-item">
+      <p class="label">Atendimento presencial</p>
+      <p class="val">Niterói · Itaipu</p>
+      <p class="val" style="margin-top:2px">Rio de Janeiro · Barra da Tijuca</p>
+      <p style="font-size:13px;margin:6px 0 0;color:var(--muted)">O endereço completo é enviado depois que a sessão é combinada. Também atendemos online.</p>
+    </div>
+    <div class="info-item">
       <p class="label">WhatsApp</p>
       <p class="val"><a href="https://wa.me/5521995053169" target="_blank">(21) 99505-3169</a></p>
     </div>
@@ -178,8 +184,17 @@ textarea.curto { min-height: 80px; }
         <label for="formato">Prefere atendimento presencial ou online?</label>
         <select id="formato" name="formato">
           <option value="online">Online</option>
-          <option value="presencial">Presencial</option>
+          <option value="presencial">Presencial (Niterói ou Barra da Tijuca)</option>
           <option value="indiferente">Tanto faz</option>
+        </select>
+      </div>
+
+      <div id="unidade-campo" hidden>
+        <label for="unidade">Qual consultório fica melhor para você?</label>
+        <select id="unidade" name="unidade">
+          <option value="indiferente">Tanto faz</option>
+          <option value="itaipu">Niterói — Itaipu</option>
+          <option value="barra">Rio de Janeiro — Barra da Tijuca</option>
         </select>
       </div>
 
@@ -269,6 +284,7 @@ textarea.curto { min-height: 80px; }
   <div class="footer-topo">
     <div>
       <p class="lema">Um espaço para olhar para dentro.<small>Intus · do latim, "dentro"</small></p>
+      <p class="unidades">Atendimento presencial em Niterói (Itaipu) e no Rio de Janeiro (Barra da Tijuca), e online.</p>
     </div>
     <div class="footer-col">
       <h4>Navegar</h4>
@@ -302,7 +318,16 @@ textarea.curto { min-height: 80px; }
   var psiqDetalhe = document.getElementById('psiq-detalhe');
   var erro = document.getElementById('erro-envio');
 
+  var unidade = document.getElementById('unidade-campo');
+  function mostrarUnidade() {
+    var online = form.elements['formato'].value === 'online';
+    unidade.hidden = online;
+    form.elements['unidade'].disabled = online; // campo desativado não é enviado
+  }
+  mostrarUnidade();
+
   form.addEventListener('change', function (e) {
+    if (e.target.name === 'formato') mostrarUnidade();
     if (e.target.name === 'risco') {
       apoio.classList.toggle('visivel', e.target.value === 'sim');
     }
