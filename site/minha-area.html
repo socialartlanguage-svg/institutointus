@@ -47,6 +47,11 @@
 .dia { padding: 16px 0; border-top: 1px solid var(--linha); display: flex; gap: 20px; align-items: baseline; flex-wrap: wrap; }
 .dia > span { min-width: 170px; font-size: 14px; color: var(--mark-dark); }
 .horas { display: flex; gap: 8px; flex-wrap: wrap; }
+.filtros { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.filtro { font: inherit; font-size: 13px; padding: 8px 16px; border-radius: 999px; cursor: pointer; border: 1px solid var(--linha); background: transparent; color: var(--mark-dark); }
+.filtro.ativo { background: var(--mark); border-color: var(--mark); color: var(--creme); }
+.hora-btn small { display: block; font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.7; font-weight: 400; }
+.local { font-size: 13px; color: var(--muted); max-width: 420px; }
 
 form.campos { display: flex; flex-direction: column; gap: 18px; max-width: 560px; }
 form.campos label { font-size: 13px; color: var(--mark-dark); margin-bottom: 6px; display: block; }
@@ -222,10 +227,13 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     var h = '<div class="secao"><h2>Próximas sessões</h2>';
     if (!lista.length) return h + '<p class="vazio">Nenhuma sessão marcada.</p></div>';
     lista.forEach(function (s) {
-      var link = s.link_meet
-        ? '<a class="mini cheio" href="' + esc(s.link_meet) + '" target="_blank" rel="noopener">Entrar na videochamada</a>'
-        : '<span class="nota" style="margin:0">Link da videochamada em breve</span>';
-      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · 60 minutos</small></div>' +
+      var presencial = s.modalidade && s.modalidade !== 'online';
+      var link = presencial
+        ? '<span class="local">' + esc(s.local || 'Presencial') + '</span>'
+        : s.link_meet
+          ? '<a class="mini cheio" href="' + esc(s.link_meet) + '" target="_blank" rel="noopener">Entrar na videochamada</a>'
+          : '<span class="nota" style="margin:0">Link da videochamada em breve</span>';
+      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · 60 minutos · ' + esc(s.modalidade_nome || 'Online') + '</small></div>' +
         '<div class="acoes">' + link +
         '<button class="mini" data-reagendar="' + s.id + '">Reagendar</button>' +
         '<button class="mini" data-cancelar="' + s.id + '">Cancelar</button></div></div>';
@@ -252,19 +260,28 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
   function htmlPicker() {
     if (picker.carregando) return '<p class="vazio">Buscando horários…</p>';
     if (!picker.horarios.length) return '<p class="vazio">Não há horários abertos no momento. A Renata libera novos horários toda semana — volte em breve ou fale com ela pelo WhatsApp.</p><button class="mini" id="fechar-agenda">Fechar</button>';
+    var filtro = picker.filtro || 'todos';
+    var lista = picker.horarios.filter(function (x) { return filtro === 'todos' || x.modalidade === filtro; });
+    var rotulos = { todos: 'Todos', online: 'Online', itaipu: 'Itaipu (Niterói)', barra: 'Barra da Tijuca (Rio)' };
+    var presentes = { todos: true };
+    picker.horarios.forEach(function (x) { presentes[x.modalidade] = true; });
+    var filtros = '<div class="filtros">' + Object.keys(rotulos).filter(function (k) { return presentes[k]; }).map(function (k) {
+      return '<button class="filtro' + (filtro === k ? ' ativo' : '') + '" data-filtro="' + k + '">' + rotulos[k] + '</button>';
+    }).join('') + '</div>';
+    if (!lista.length) return filtros + '<p class="vazio">Não há horários neste tipo de atendimento agora. Experimente outro filtro.</p><button class="mini" id="fechar-agenda">Fechar</button>';
     var semanas = {};
-    picker.horarios.forEach(function (iso) {
-      var dia = Intus.chaveDia(iso), sem = segundaDe(dia);
-      (semanas[sem] = semanas[sem] || {})[dia] = (semanas[sem][dia] || []).concat(iso);
+    lista.forEach(function (x) {
+      var dia = Intus.chaveDia(x.inicio), sem = segundaDe(dia);
+      (semanas[sem] = semanas[sem] || {})[dia] = (semanas[sem][dia] || []).concat(x);
     });
     var chaves = Object.keys(semanas).sort();
     picker.semana = Math.min(Math.max(picker.semana || 0, 0), chaves.length - 1);
     var sem = chaves[picker.semana], dias = semanas[sem];
     var p = sem.split('-'), rotulo = 'Semana de ' + p[2] + '/' + p[1];
-    var h = '<div class="escolha"><div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
+    var h = '<div class="escolha">' + filtros + '<div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
     Object.keys(dias).sort().forEach(function (dia) {
-      h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0])) + '</span><div class="horas">';
-      dias[dia].forEach(function (iso) { h += '<button class="mini" data-slot="' + iso + '">' + esc(Intus.hora(iso)) + '</button>'; });
+      h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0].inicio)) + '</span><div class="horas">';
+      dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : x.modalidade === 'itaipu' ? 'Itaipu' : 'Barra') + '</small></button>'; });
       h += '</div></div>';
     });
     return h + '</div><div style="margin-top:20px"><button class="mini" id="fechar-agenda">Fechar</button></div>';
@@ -284,7 +301,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
         extra = '<div class="acoes"><button class="mini" data-contestar="' + s.id + '">Contestar</button></div>';
       } else if (s.status === 'cancelada' && s.contestacao_resolvida === 'aceita') situacao = 'Cancelada · contestação aceita, sem custo';
       else if (s.status === 'cancelada') situacao = 'Cancelada sem custo';
-      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · ' + esc(situacao) + '</small></div>' + extra + '<div class="contestar" id="contestar-' + s.id + '" hidden></div></div>';
+      h += '<div class="sessao"><div class="quando">' + esc(Intus.dia(s.horario)) + '<small>às ' + esc(Intus.hora(s.horario)) + ' · ' + esc(s.modalidade_nome || 'Online') + ' · ' + esc(situacao) + '</small></div>' + extra + '<div class="contestar" id="contestar-' + s.id + '" hidden></div></div>';
     });
     return h + '</div>';
   }
@@ -322,6 +339,9 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     if (abrir) abrir.addEventListener('click', function () { abrirPicker('agendar'); });
     var fechar = document.getElementById('fechar-agenda');
     if (fechar) fechar.addEventListener('click', function () { picker = null; render(); });
+    Array.prototype.forEach.call(q('[data-filtro]'), function (b) {
+      b.addEventListener('click', function () { picker.filtro = b.getAttribute('data-filtro'); picker.semana = 0; render(); });
+    });
     var ant = document.getElementById('sem-ant'), prox = document.getElementById('sem-prox');
     if (ant) ant.addEventListener('click', function () { picker.semana--; render(); });
     if (prox) prox.addEventListener('click', function () { picker.semana++; render(); });
@@ -368,11 +388,13 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
   }
 
   function escolherHorario(iso) {
-    var quando = Intus.dia(iso) + ' às ' + Intus.hora(iso);
+    var escolhido = picker.horarios.filter(function (x) { return x.inicio === iso; })[0];
+    var tipo = escolhido ? (escolhido.modalidade === 'online' ? 'online' : escolhido.modalidade === 'itaipu' ? 'presencial em Itaipu (Niterói)' : 'presencial na Barra da Tijuca (Rio)') : '';
+    var quando = Intus.dia(iso) + ' às ' + Intus.hora(iso) + (tipo ? ' (' + tipo + ')' : '');
     var reagendar = picker.modo === 'reagendar';
     if (!window.confirm((reagendar ? 'Reagendar para ' : 'Confirmar sessão em ') + quando + '?')) return;
     var req = reagendar ? Intus.api('reagendar', { sessao_id: picker.sessaoId, inicio: iso }) : Intus.api('agendar', { inicio: iso });
-    req.then(function () { picker = null; aviso(reagendar ? 'Sessão reagendada. O convite com o link foi atualizado no seu e-mail.' : 'Sessão agendada! O convite com o link da videochamada chega no seu e-mail.'); return carregar(); })
+    req.then(function () { picker = null; aviso(reagendar ? 'Sessão reagendada. O convite foi atualizado no seu e-mail.' : 'Sessão agendada! O convite com os detalhes chega no seu e-mail.'); return carregar(); })
       .catch(function (e) { tratar(e); if (/reservado/.test(e.message)) abrirPicker(picker ? picker.modo : 'agendar', picker && picker.sessaoId); });
   }
 

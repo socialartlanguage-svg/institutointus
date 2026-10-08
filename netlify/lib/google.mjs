@@ -6,6 +6,8 @@
 // Se a variável não existir ou o Google falhar, as funções devolvem null e a
 // sessão é gravada mesmo assim (sem link do Meet) — o painel da Renata avisa.
 
+import { ePresencial, localDaSessao } from './unidades.mjs';
+
 const RENATA_EMAIL = process.env.RENATA_EMAIL || 'renata.institutointus@gmail.com';
 const TZ = 'America/Sao_Paulo';
 let cache = null;
@@ -56,11 +58,15 @@ async function chamar(metodo, caminho, corpo) {
 
 const fimDe = (inicio) => new Date(inicio.getTime() + 60 * 60_000);
 
-export async function criarEvento({ inicio, emailPaciente }) {
+export async function criarEvento({ inicio, emailPaciente, modalidade = 'online' }) {
   try {
+    const presencial = ePresencial(modalidade);
     const ev = await chamar('POST', '?conferenceDataVersion=1&sendUpdates=all', {
       summary: 'Sessão — Instituto Intus',
-      description: 'Sessão de acompanhamento psicológico com Renata Soares. O link da videochamada está neste convite.',
+      description: presencial
+        ? 'Sessão presencial de acompanhamento psicológico com Renata Soares.'
+        : 'Sessão de acompanhamento psicológico com Renata Soares. O link da videochamada está neste convite.',
+      ...(presencial ? { location: localDaSessao(modalidade) } : {}),
       start: { dateTime: inicio.toISOString(), timeZone: TZ },
       end: { dateTime: fimDe(inicio).toISOString(), timeZone: TZ },
       attendees: [{ email: emailPaciente }, { email: RENATA_EMAIL }],
@@ -68,9 +74,11 @@ export async function criarEvento({ inicio, emailPaciente }) {
       // para ela não ser avisada de cada sessão. A Renata é lembrada pelas
       // notificações padrão da agenda dela (configuradas por ela no Google Agenda).
       reminders: { useDefault: false, overrides: [] },
-      conferenceData: {
-        createRequest: { requestId: crypto.randomUUID(), conferenceSolutionKey: { type: 'hangoutsMeet' } },
-      },
+      ...(presencial ? {} : {
+        conferenceData: {
+          createRequest: { requestId: crypto.randomUUID(), conferenceSolutionKey: { type: 'hangoutsMeet' } },
+        },
+      }),
     });
     if (!ev) return null;
     return { id: ev.id, link: ev.hangoutLink || null };

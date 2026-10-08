@@ -6,6 +6,7 @@ import {
   db, json, erro, senhaAdminOk, slotValido, contaComoUsada, pacoteAtivo, usoDoPacote,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
+import { MODALIDADES, modalidadeValida } from '../lib/unidades.mjs';
 import { TERMO } from '../lib/termo.mjs';
 
 const ALFABETO = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sem 0/O/1/l/I
@@ -92,20 +93,21 @@ const acoes = {
     const ini = inicioDaSemana(c.semana);
     if (!ini) return erro('Semana inválida.');
     const fim = new Date(ini.getTime() + 7 * 86400e3);
-    const { data: slots } = await db().from('slots_abertos').select('inicio')
+    const { data: slots } = await db().from('slots_abertos').select('inicio, modalidade')
       .gte('inicio', ini.toISOString()).lt('inicio', fim.toISOString());
     const { data: sessoes } = await db().from('sessoes')
-      .select('id, horario, status, link_meet, google_event_id, pacotes(pacientes(nome))')
+      .select('id, horario, status, link_meet, modalidade, google_event_id, pacotes(pacientes(nome))')
       .eq('status', 'agendada')
       .gte('horario', ini.toISOString()).lt('horario', fim.toISOString())
       .order('horario');
     return json({
-      slots: (slots || []).map((s) => new Date(s.inicio).toISOString()),
+      slots: (slots || []).map((s) => ({ inicio: new Date(s.inicio).toISOString(), modalidade: s.modalidade })),
       sessoes: (sessoes || []).map((s) => ({
         id: s.id,
         horario: new Date(s.horario).toISOString(),
         paciente: s.pacotes?.pacientes?.nome || '—',
         link_meet: s.link_meet,
+        modalidade: s.modalidade,
       })),
       meet_configurado: Boolean(process.env.GOOGLE_OAUTH_JSON),
       meet: await google.testarConexao(),
@@ -114,12 +116,25 @@ const acoes = {
 
   async slots(c) {
     const validos = (lista) => (Array.isArray(lista) ? lista : []).slice(0, 300).map(slotValido).filter(Boolean);
-    const abrir = validos(c.abrir);
+    // abrir: [{ inicio, modalidade }]  (texto puro = online). Reabrir muda a modalidade.
+    const abrir = (Array.isArray(c.abrir) ? c.abrir : []).slice(0, 300).map((x) => {
+      const iso = typeof x === 'string' ? x : x?.inicio;
+      const modalidade = typeof x === 'string' ? 'online' : x?.modalidade || 'online';
+      const d = slotValido(iso);
+      return d && modalidadeValida(modalidade) ? { d, modalidade } : null;
+    }).filter(Boolean);
     const fechar = validos(c.fechar);
     if (abrir.length) {
-      const { error } = await db().from('slots_abertos')
-        .upsert(abrir.map((d) => ({ inicio: d.toISOString() })), { onConflict: 'inicio' });
-      if (error) throw error;
+      // Horário já ocupado por uma sessão não muda de modalidade.
+      const { data: ocupados } = await db().from('sessoes').select('horario')
+        .eq('status', 'agendada').in('horario', abrir.map((x) => x.d.toISOString()));
+      const tomados = new Set((ocupados || []).map((o) => new Date(o.horario).getTime()));
+      const livres = abrir.filter((x) => !tomados.has(x.d.getTime()));
+      if (livres.length) {
+        const { error } = await db().from('slots_abertos')
+          .upsert(livres.map((x) => ({ inicio: x.d.toISOString(), modalidade: x.modalidade })), { onConflict: 'inicio' });
+        if (error) throw error;
+      }
     }
     if (fechar.length) {
       const { error } = await db().from('slots_abertos').delete().in('inicio', fechar.map((d) => d.toISOString()));
@@ -153,7 +168,7 @@ const acoes = {
     if (!paciente) return erro('Paciente não encontrada.', 404);
     const { data: observacoes } = await db().from('observacoes_saude').select('*').eq('paciente_id', c.id).maybeSingle();
     const { data: sessoes } = await db().from('sessoes')
-      .select('id, horario, status, cancelamento_tardio, contestacao_resolvida, motivo_contestacao, link_meet, pacotes!inner(paciente_id)')
+      .select('id, horario, status, modalidade, cancelamento_tardio, contestacao_resolvida, motivo_contestacao, link_meet, pacotes!inner(paciente_id)')
       .eq('pacotes.paciente_id', c.id).order('horario', { ascending: false });
     const { data: aceites } = await db().from('aceites_termo')
       .select('versao, nome_digitado, aceito_em, ip, texto_hash').eq('paciente_id', c.id).order('aceito_em', { ascending: false });

@@ -212,3 +212,13 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Observação de privacidade: o CPF fica visível publicamente no site (decisão do cliente). Se houver CNPJ, é preferível usá-lo no lugar.
 
 **Out/2026 — botão flutuante do WhatsApp:** criado por `js/site.js` (estilo em `css/intus.css`, classe `.whats-flutuante`) em todas as páginas, com mensagem pré-escrita para o (21) 99505-3169. Para ocultar numa página: `<body data-sem-whatsapp>` (usado no `admin.html`).
+
+
+**Out/2026 — modalidade por horário (online / Itaipu / Barra) e FAQ**
+- Decisões do cliente: a Renata abre horários **por unidade** (cada horário tem UMA modalidade: online, Itaipu ou Barra); a paciente é **livre para alternar** entre modalidades de uma sessão para a outra; nas sessões presenciais o convite do Google leva o **endereço da unidade no lugar do Meet**.
+- Schema `scripts/supabase_schema_v4.sql`: `slots_abertos.modalidade` e `sessoes.modalidade` (padrão `online`). Código em `netlify/lib/unidades.mjs`. Endereços ficam em variáveis do Netlify (`ENDERECO_ITAIPU`, `ENDERECO_BARRA`) porque o repositório é público; sem elas o convite traz só o nome da unidade.
+- Painel: seletor "Abrir como" (Online / Itaipu / Barra), células coloridas por modalidade, copiar semana preserva a modalidade. Paciente: filtro por modalidade, etiqueta em cada horário, sessão presencial mostra o local em vez do botão do Meet. Reagendar de online para presencial (ou o contrário) recria o evento do Google.
+- Termo **v3**: cita sessões online ou presenciais, alternância e endereço no convite; v2 já tinha frequência semanal só recomendada, acúmulo de sessões e menor de 18 anos assinado pelo responsável.
+- **Acúmulo de sessões:** ao renovar, as sessões que sobraram do pacote anterior (não perdidas por falta ou cancelamento tardio) somam ao novo (4 + sobra). Liberar de novo em menos de 10 dias pede confirmação (evita clique duplo). Sem limite de acúmulo definido pelo cliente.
+- `site/faq.html`: 25 perguntas com respostas do cliente (acordeão + JSON-LD FAQPage), no menu e no rodapé. Preço NÃO aparece (decisão do cliente).
+- **Pendente:** pacote de 3 meses / 12 sessões com escolha na página de pagamento (precisa dos links do InfinitePay e das regras); endereços das unidades; atendimento de menores com autorização do responsável já está no termo, mas a ficha não pergunta idade.

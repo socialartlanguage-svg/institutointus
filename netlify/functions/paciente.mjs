@@ -7,6 +7,7 @@ import {
   usoDoPacote, horariosLivres, ANTECEDENCIA_AGENDAR_H, ANTECEDENCIA_CANCELAR_H, SEMANAS_VISIVEIS,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
+import { MODALIDADES, ePresencial, localDaSessao } from '../lib/unidades.mjs';
 import { TERMO, textoDoTermo, hashDoTermo } from '../lib/termo.mjs';
 
 const MAX_TEXTO = 2000;
@@ -17,6 +18,9 @@ const sessaoPublica = (s) => ({
   horario: new Date(s.horario).toISOString(),
   status: s.status,
   link_meet: s.link_meet,
+  modalidade: s.modalidade,
+  modalidade_nome: MODALIDADES[s.modalidade]?.nome || 'Online',
+  local: localDaSessao(s.modalidade),
   cancelamento_tardio: s.cancelamento_tardio,
   contestacao_resolvida: s.contestacao_resolvida,
   motivo_contestacao: s.motivo_contestacao,
@@ -52,9 +56,9 @@ async function validarNovoHorario(pacote, iso) {
   if (d > fimDoCiclo(pacote.inicio_ciclo_atual)) {
     return { erro: 'Esse horário está fora do período do seu pacote atual.' };
   }
-  const { data: aberto } = await db().from('slots_abertos').select('inicio').eq('inicio', d.toISOString()).maybeSingle();
+  const { data: aberto } = await db().from('slots_abertos').select('inicio, modalidade').eq('inicio', d.toISOString()).maybeSingle();
   if (!aberto) return { erro: 'Esse horário não está disponível.' };
-  return { d };
+  return { d, modalidade: aberto.modalidade };
 }
 
 const acoes = {
@@ -152,18 +156,18 @@ const acoes = {
     // Reserva primeiro (o índice único impede duas pessoas no mesmo horário).
     const { data: sessao, error } = await db()
       .from('sessoes')
-      .insert({ pacote_id: pacote.id, horario: v.d.toISOString(), status: 'agendada' })
+      .insert({ pacote_id: pacote.id, horario: v.d.toISOString(), status: 'agendada', modalidade: v.modalidade })
       .select()
       .single();
     if (error) {
       if (error.code === '23505') return erro('Esse horário acabou de ser reservado. Escolha outro.', 409);
       throw error;
     }
-    const ev = await google.criarEvento({ inicio: v.d, emailPaciente: paciente.email });
+    const ev = await google.criarEvento({ inicio: v.d, emailPaciente: paciente.email, modalidade: v.modalidade });
     if (ev) {
       await db().from('sessoes').update({ google_event_id: ev.id, link_meet: ev.link }).eq('id', sessao.id);
     }
-    return json({ ok: true, link_meet: ev?.link || null });
+    return json({ ok: true, link_meet: ev?.link || null, modalidade: v.modalidade, local: localDaSessao(v.modalidade) });
   },
 
   async cancelar(paciente, c) {
@@ -189,12 +193,19 @@ const acoes = {
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
     const v = await validarNovoHorario(pacote, c.inicio);
     if (v.erro) return erro(v.erro);
-    const { error } = await db().from('sessoes').update({ horario: v.d.toISOString() }).eq('id', s.id);
+    const { error } = await db().from('sessoes').update({ horario: v.d.toISOString(), modalidade: v.modalidade }).eq('id', s.id);
     if (error) {
       if (error.code === '23505') return erro('Esse horário acabou de ser reservado. Escolha outro.', 409);
       throw error;
     }
-    await google.moverEvento(s.google_event_id, v.d);
+    if (v.modalidade === s.modalidade) {
+      await google.moverEvento(s.google_event_id, v.d);
+    } else {
+      // Online <-> presencial muda o convite (Meet x endereço): recria o evento.
+      await google.apagarEvento(s.google_event_id);
+      const ev = await google.criarEvento({ inicio: v.d, emailPaciente: paciente.email, modalidade: v.modalidade });
+      await db().from('sessoes').update({ google_event_id: ev?.id || null, link_meet: ev?.link || null }).eq('id', s.id);
+    }
     return json({ ok: true });
   },
 

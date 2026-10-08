@@ -37,6 +37,14 @@
 .cel { height: 38px; border: 1px solid rgba(100,86,70,0.18); border-radius: 2px; background: rgba(100,86,70,0.06); color: transparent; font-size: 11px; cursor: pointer; transition: all 0.15s; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 0 4px; }
 .cel:hover { border-color: var(--mark); }
 .cel.aberto { background: #cfdcc4; border-color: #9fb48d; color: #3d5230; }
+.cel.aberto.m-itaipu { background: #cddbea; border-color: #8fa6c4; color: #2f4663; }
+.cel.aberto.m-barra { background: #efd5c2; border-color: #cf9d7d; color: #6b3d22; }
+.modos { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; font-size: 13px; color: var(--mark-dark); }
+.modo { font: inherit; font-size: 13px; font-weight: 500; padding: 8px 16px; border-radius: 999px; cursor: pointer; border: 1px solid var(--linha); background: transparent; color: var(--mark-dark); }
+.modo.ativo { border-color: transparent; color: var(--escuro); }
+.modo[data-modo="online"].ativo { background: #cfdcc4; }
+.modo[data-modo="itaipu"].ativo { background: #cddbea; }
+.modo[data-modo="barra"].ativo { background: #efd5c2; }
 .cel.ocupado { background: var(--mark-dark); border-color: var(--mark-dark); color: var(--creme); cursor: default; }
 .cel.passado { opacity: 0.4; cursor: default; }
 .legenda { display: flex; gap: 18px; font-size: 12px; color: var(--muted); margin-top: 14px; flex-wrap: wrap; }
@@ -102,7 +110,8 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
   var TZ = 'America/Sao_Paulo', HORAS = [], i;
   for (i = 7; i <= 19; i++) HORAS.push(i);
   var DIAS = ['seg', 'ter', 'qua', 'qui', 'sex'];
-  var senha = null, aba = 'agenda', semana = null, agenda = null;
+  var senha = null, aba = 'agenda', semana = null, agenda = null, modo = 'online';
+  var NOME_MODO = { online: 'Online', itaipu: 'Itaipu', barra: 'Barra' };
   var elVista = document.getElementById('vista'), elMsg = document.getElementById('msg');
 
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -183,14 +192,15 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
 
   function desenharAgenda() {
     var abertos = {}, ocupados = {};
-    agenda.slots.forEach(function (s) { abertos[s] = true; });
+    agenda.slots.forEach(function (s) { abertos[s.inicio] = s.modalidade; });
     agenda.sessoes.forEach(function (s) { ocupados[s.horario] = s; });
     var p = semana.split('-'), fim = somarDias(semana, 4).split('-');
     var agora = Date.now();
 
-    var h = '<p class="nota">Clique nos horários para <strong>abrir</strong> (verde) ou fechar. Só horários abertos aparecem para as pacientes. Cada sessão tem 60 minutos.</p>' +
+    var h = '<p class="nota">Escolha abaixo o tipo de atendimento e clique nos horários para <strong>abrir</strong> com ele (clicar de novo fecha). Só horários abertos aparecem para as pacientes, que podem escolher qualquer um. Cada sessão tem 60 minutos.</p>' +
       (agenda.meet && agenda.meet.ok ? '' : '<div class="msg ruim" style="display:block">O Google Meet não está conectado: as sessões marcadas ficam sem link de videochamada.' + (agenda.meet && agenda.meet.erro ? ' (' + esc(agenda.meet.erro) + ')' : '') + '</div>') +
       '<div class="semana-nav"><button class="mini" id="ant">‹ Anterior</button><strong>' + p[2] + '/' + p[1] + ' a ' + fim[2] + '/' + fim[1] + '</strong><button class="mini" id="prox">Próxima ›</button><button class="mini" id="hoje">Hoje</button></div>' +
+      '<div class="modos"><span>Abrir como:</span>' + ['online', 'itaipu', 'barra'].map(function (m) { return '<button class="modo' + (modo === m ? ' ativo' : '') + '" data-modo="' + m + '">' + (m === 'online' ? 'Online' : m === 'itaipu' ? 'Itaipu (Niterói)' : 'Barra da Tijuca (Rio)') + '</button>'; }).join('') + '</div>' +
       '<div class="atalhos"><button class="mini" id="abrir-tudo">Abrir semana toda (7h–20h)</button><button class="mini" id="fechar-tudo">Fechar semana toda</button><button class="mini" id="copiar">Copiar da semana anterior</button></div>' +
       '<div class="grade"><div></div>';
     DIAS.forEach(function (nome, d) {
@@ -201,18 +211,18 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       h += '<div class="h">' + hora + 'h</div>';
       DIAS.forEach(function (_, d) {
         var iso = slotIso(semana, d, hora), passado = new Date(iso).getTime() < agora;
-        var cls = 'cel' + (ocupados[iso] ? ' ocupado' : abertos[iso] ? ' aberto' : '') + (passado ? ' passado' : '');
-        var rotulo = ocupados[iso] ? esc(ocupados[iso].paciente.split(' ')[0]) : abertos[iso] ? 'aberto' : '';
+        var cls = 'cel' + (ocupados[iso] ? ' ocupado' : abertos[iso] ? ' aberto m-' + abertos[iso] : '') + (passado ? ' passado' : '');
+        var rotulo = ocupados[iso] ? esc(ocupados[iso].paciente.split(' ')[0]) + (ocupados[iso].modalidade !== 'online' ? ' · ' + NOME_MODO[ocupados[iso].modalidade] : '') : abertos[iso] ? NOME_MODO[abertos[iso]] : '';
         h += '<button class="' + cls + '" data-slot="' + iso + '"' + (ocupados[iso] || passado ? ' disabled' : '') + '>' + rotulo + '</button>';
       });
     });
-    h += '</div><div class="legenda"><span><i style="background:rgba(100,86,70,0.15)"></i>fechado</span><span><i style="background:#cfdcc4"></i>aberto</span><span><i style="background:var(--mark-dark)"></i>sessão marcada</span></div>';
+    h += '</div><div class="legenda"><span><i style="background:rgba(100,86,70,0.15)"></i>fechado</span><span><i style="background:#cfdcc4"></i>online</span><span><i style="background:#cddbea"></i>Itaipu</span><span><i style="background:#efd5c2"></i>Barra</span><span><i style="background:var(--mark-dark)"></i>sessão marcada</span></div>';
 
     h += '<div class="sessoes-semana"><h2 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin-bottom:12px">Sessões da semana</h2>';
     if (!agenda.sessoes.length) h += '<p class="nota">Nenhuma sessão marcada nesta semana.</p>';
     agenda.sessoes.forEach(function (s) {
       h += '<div class="linha"><div>' + esc(s.paciente) + '<small>' + esc(fmt(s.horario, { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })) + '</small></div><div>' +
-        (s.link_meet ? '<a class="mini" href="' + esc(s.link_meet) + '" target="_blank" rel="noopener" style="text-decoration:none">Meet</a> ' : '<small>sem link</small> ') +
+        (s.modalidade !== 'online' ? '<small style="display:inline;margin-right:10px">presencial · ' + esc(NOME_MODO[s.modalidade]) + '</small>' : (s.link_meet ? '<a class="mini" href="' + esc(s.link_meet) + '" target="_blank" rel="noopener" style="text-decoration:none">Meet</a> ' : '<small>sem link</small> ')) +
         '<button class="mini" data-cancelar="' + s.id + '">Cancelar</button></div></div>';
     });
     elVista.innerHTML = h + '</div>';
@@ -220,19 +230,20 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     document.getElementById('ant').onclick = function () { semana = somarDias(semana, -7); vistaAgenda(); };
     document.getElementById('prox').onclick = function () { semana = somarDias(semana, 7); vistaAgenda(); };
     document.getElementById('hoje').onclick = function () { semana = segundaDe(hojeLocal()); vistaAgenda(); };
-    document.getElementById('abrir-tudo').onclick = function () { alterarVarios(todos(function () { return true; }), []); };
+    document.getElementById('abrir-tudo').onclick = function () { alterarVarios(todos(function () { return true; }).map(comModo), []); };
+    Array.prototype.forEach.call(elVista.querySelectorAll('[data-modo]'), function (b) { b.onclick = function () { modo = b.getAttribute('data-modo'); desenharAgenda(); }; });
     document.getElementById('fechar-tudo').onclick = function () { alterarVarios([], todos(function (iso) { return abertos[iso]; })); };
     document.getElementById('copiar').onclick = copiarSemanaAnterior;
     Array.prototype.forEach.call(elVista.querySelectorAll('[data-slot]'), function (b) {
       b.onclick = function () {
         var iso = b.getAttribute('data-slot');
-        if (abertos[iso]) alterarVarios([], [iso]); else alterarVarios([iso], []);
+        if (abertos[iso] === modo) alterarVarios([], [iso]); else alterarVarios([comModo(iso)], []);
       };
     });
     Array.prototype.forEach.call(elVista.querySelectorAll('[data-dia]'), function (b) {
       b.onclick = function () {
         var d = Number(b.getAttribute('data-dia')), lista = todos(function () { return true; }, d);
-        if (b.getAttribute('data-op') === 'abrir') alterarVarios(lista, []);
+        if (b.getAttribute('data-op') === 'abrir') alterarVarios(lista.map(comModo), []);
         else alterarVarios([], lista.filter(function (iso) { return abertos[iso]; }));
       };
     });
@@ -243,6 +254,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       };
     });
 
+    function comModo(iso) { return { inicio: iso, modalidade: modo }; }
     function todos(filtro, soDia) {
       var lista = [];
       DIAS.forEach(function (_, d) {
@@ -266,7 +278,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
   function copiarSemanaAnterior() {
     var anterior = somarDias(semana, -7);
     api('agenda', { semana: anterior }).then(function (r) {
-      var abrir = r.slots.map(function (iso) { return new Date(new Date(iso).getTime() + 7 * 86400000).toISOString(); });
+      var abrir = r.slots.map(function (x) { return { inicio: new Date(new Date(x.inicio).getTime() + 7 * 86400000).toISOString(), modalidade: x.modalidade }; });
       if (!abrir.length) return msg('A semana anterior não tinha horários abertos.', true);
       return api('slots', { abrir: abrir }).then(function () { msg('Horários copiados da semana anterior.'); vistaAgendaSemRecarregarMsg(); });
     }).catch(function (e) { msg(e.message, true); });
@@ -325,6 +337,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       r.sessoes.forEach(function (s) {
         var t = (s.status === 'agendada' && new Date(s.horario) < new Date()) ? 'Realizada' : (ROT[s.status] || s.status);
         if (s.status === 'cancelada' && s.cancelamento_tardio) t += ' (menos de 24h)';
+        if (s.modalidade && s.modalidade !== 'online') t += ' · ' + NOME_MODO[s.modalidade];
         h += '<p>' + esc(fmt(s.horario, { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })) + ' — ' + esc(t) + (s.motivo_contestacao ? '<br><span class="rot">Motivo: ' + esc(s.motivo_contestacao) + '</span>' : '') + '</p>';
       });
       document.getElementById('detalhe').innerHTML = h + '</div>';

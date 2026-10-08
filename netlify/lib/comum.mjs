@@ -121,7 +121,7 @@ export async function usoDoPacote(pacote) {
 export async function horariosLivres(de, ate) {
   const { data: abertos, error } = await db()
     .from('slots_abertos')
-    .select('inicio')
+    .select('inicio, modalidade')
     .gte('inicio', de.toISOString())
     .lte('inicio', ate.toISOString())
     .order('inicio');
@@ -134,7 +134,7 @@ export async function horariosLivres(de, ate) {
     .lte('horario', ate.toISOString());
   const tomados = new Set((ocupados || []).map((o) => new Date(o.horario).getTime()));
   return (abertos || [])
-    .map((a) => new Date(a.inicio))
-    .filter((d) => !tomados.has(d.getTime()))
-    .map((d) => d.toISOString());
+    .map((a) => ({ d: new Date(a.inicio), modalidade: a.modalidade }))
+    .filter((a) => !tomados.has(a.d.getTime()))
+    .map((a) => ({ inicio: a.d.toISOString(), modalidade: a.modalidade }));
 }
