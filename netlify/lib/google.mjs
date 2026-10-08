@@ -64,6 +64,10 @@ export async function criarEvento({ inicio, emailPaciente }) {
       start: { dateTime: inicio.toISOString(), timeZone: TZ },
       end: { dateTime: fimDe(inicio).toISOString(), timeZone: TZ },
       attendees: [{ email: emailPaciente }, { email: RENATA_EMAIL }],
+      // Lembretes valem por pessoa. Aqui desligamos só os da conta técnica (a agência),
+      // para ela não ser avisada de cada sessão. A Renata é lembrada pelas
+      // notificações padrão da agenda dela (configuradas por ela no Google Agenda).
+      reminders: { useDefault: false, overrides: [] },
       conferenceData: {
         createRequest: { requestId: crypto.randomUUID(), conferenceSolutionKey: { type: 'hangoutsMeet' } },
       },
