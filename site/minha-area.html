@@ -167,7 +167,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
       var b = f.querySelector('button'); b.disabled = true;
       Intus.trocarSenha(f.s1.value)
         .then(function () { return Intus.api('trocou_senha'); })
-        .then(function () { aviso('Senha salva. Bem-vinda!'); return carregar(); })
+        .then(function () { aviso('Senha salva. Boas-vindas à sua área!'); return carregar(); })
         .catch(function (err) { b.disabled = false; tratar(err); });
     });
   }
@@ -278,7 +278,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     picker.semana = Math.min(Math.max(picker.semana || 0, 0), chaves.length - 1);
     var sem = chaves[picker.semana], dias = semanas[sem];
     var p = sem.split('-'), rotulo = 'Semana de ' + p[2] + '/' + p[1];
-    var h = '<div class="escolha">' + filtros + '<div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
+    var h = '<div class="escolha">' + filtros + '<p class="nota" style="margin-bottom:14px">Todos os horários seguem o horário de Brasília (GMT-3).</p><div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
     Object.keys(dias).sort().forEach(function (dia) {
       h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0].inicio)) + '</span><div class="horas">';
       dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : 'Itaipu') + '</small></button>'; });

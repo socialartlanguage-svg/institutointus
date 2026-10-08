@@ -69,7 +69,7 @@ export const TERMO = {
       titulo: '7. Situações de risco',
       paragrafos: [
         'Se você estiver em risco, procure ajuda imediata: CVV, ligando 188 (24 horas, gratuito), ou SAMU, ligando 192. O Intus não funciona como serviço de emergência.',
-        'Se a sua ficha ou o acompanhamento indicarem risco à sua vida, a psicóloga poderá entrar em contato diretamente com você, fora da rotina normal de agendamento, para acolhê-la.',
+        'Se a sua ficha ou o acompanhamento indicarem risco à sua vida, a psicóloga poderá entrar em contato diretamente com você, fora da rotina normal de agendamento, para acolher você.',
       ],
     },
     {
