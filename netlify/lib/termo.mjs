@@ -9,13 +9,13 @@
 import { createHash } from 'node:crypto';
 
 export const TERMO = {
-  versao: '2026-10-v1',
+  versao: '2026-10-v2',
   titulo: 'Termo de compromisso do acompanhamento psicológico',
   secoes: [
     {
       titulo: '1. Quem presta o serviço',
       paragrafos: [
-        'O acompanhamento é prestado por Renata Soares, psicóloga (CRP 05/87188), sob a marca Instituto Intus ("Intus"). Este termo é firmado entre o Intus e você, que contrata o acompanhamento ("paciente").',
+        'O acompanhamento é prestado por Renata Soares, psicóloga (CRP 05/87188), sob a marca Instituto Intus ("Intus"). Este termo é firmado entre o Intus e você, que contrata o acompanhamento ("paciente"). No caso de pessoa menor de 18 anos, o termo é firmado pelo responsável legal.',
       ],
     },
     {
@@ -29,7 +29,8 @@ export const TERMO = {
     {
       titulo: '3. Pacote mensal e pagamento',
       paragrafos: [
-        'O acompanhamento é contratado em pacotes mensais de 4 sessões, de 60 minutos cada, com frequência semanal.',
+        'O acompanhamento é contratado em pacotes mensais de 4 sessões, de 60 minutos cada. A frequência recomendada é semanal, mas você pode espaçar as sessões dentro do período do pacote.',
+        'As sessões que sobrarem no mês, desde que não tenham sido perdidas por falta ou por cancelamento com menos de 24 horas, acumulam para o mês seguinte.',
         'O pagamento é antecipado e cobrado de forma recorrente a cada ciclo, por meio do InfinitePay. O valor e a forma de pagamento são informados na tela de pagamento, antes da confirmação. Seus dados de cartão são tratados pelo InfinitePay e não passam pelo Intus.',
         'Em caso de cancelamento do pacote no primeiro ciclo, há devolução de 75% do valor pago.',
         'Se, depois de ler a sua ficha, a psicóloga entender que este acompanhamento não é adequado ao seu momento, ela entrará em contato com você e tratará com você de eventual reembolso.',

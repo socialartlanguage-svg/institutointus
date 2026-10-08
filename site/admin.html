@@ -118,7 +118,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     }).then(function (r) {
       return r.json().then(function (d) {
         if (r.status === 401) { sessionStorage.removeItem('intus_admin'); window.location.reload(); throw new Error('Senha incorreta'); }
-        if (!r.ok) throw new Error(d.erro || 'Erro');
+        if (!r.ok) { var e = new Error(d.erro || 'Erro'); e.codigo = d.codigo; throw e; }
         return d;
       });
     });
@@ -362,11 +362,18 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     document.getElementById('form-liberar').addEventListener('submit', function (e) {
       e.preventDefault(); limpar();
       var f = e.target, b = f.querySelector('button'); b.disabled = true;
-      api('liberar_pacote', { nome: f.nome.value, email: f.email.value, whatsapp: f.whatsapp.value }).then(function (r) {
-        var h = r.senha_provisoria
-          ? '<div class="resultado">Pacote liberado! Envie estes dados para a paciente pelo WhatsApp:<br><br>Acesso: <strong>institutointus.netlify.app/area-do-paciente.html</strong><br>E-mail: <strong>' + esc(r.email) + '</strong><br>Senha provisória: <code>' + esc(r.senha_provisoria) + '</code><br><br><small>Ela troca a senha no primeiro acesso. Essa senha só aparece agora — se perder, use "Nova senha" em Pacientes.</small></div>'
-          : '<div class="resultado">Novo pacote liberado para <strong>' + esc(r.email) + '</strong>. Ela já tem acesso — é só avisar que o pacote foi renovado.</div>';
-        document.getElementById('resultado').innerHTML = h; f.reset();
+      function enviar(confirmar) {
+        return api('liberar_pacote', { nome: f.nome.value, email: f.email.value, whatsapp: f.whatsapp.value, confirmar: confirmar }).then(function (r) {
+          var sobra = r.acumuladas ? '<br><br>Ela tinha <strong>' + r.acumuladas + (r.acumuladas === 1 ? ' sessão' : ' sessões') + '</strong> sobrando do pacote anterior, que ' + (r.acumuladas === 1 ? 'foi acumulada' : 'foram acumuladas') + ': o novo pacote tem <strong>' + r.total + ' sessões</strong>.' : '';
+          var h = r.senha_provisoria
+            ? '<div class="resultado">Pacote liberado! Envie estes dados para a paciente pelo WhatsApp:<br><br>Acesso: <strong>institutointus.netlify.app/area-do-paciente.html</strong><br>E-mail: <strong>' + esc(r.email) + '</strong><br>Senha provisória: <code>' + esc(r.senha_provisoria) + '</code><br><br><small>Ela troca a senha no primeiro acesso. Essa senha só aparece agora — se perder, use "Nova senha" em Pacientes.</small></div>'
+            : '<div class="resultado">Novo pacote liberado para <strong>' + esc(r.email) + '</strong>. Ela já tem acesso — é só avisar que o pacote foi renovado.' + sobra + '</div>';
+          document.getElementById('resultado').innerHTML = h; f.reset();
+        });
+      }
+      enviar(false).catch(function (err) {
+        if (err.codigo === 'recente' && window.confirm(err.message + '\n\nLiberar mesmo assim?')) return enviar(true);
+        throw err;
       }).catch(function (err) { msg(err.message, true); }).then(function () { b.disabled = false; });
     });
   }

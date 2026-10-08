@@ -3,7 +3,7 @@
 
 import { randomInt } from 'node:crypto';
 import {
-  db, json, erro, senhaAdminOk, slotValido, contaComoUsada,
+  db, json, erro, senhaAdminOk, slotValido, contaComoUsada, pacoteAtivo, usoDoPacote,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
 import { TERMO } from '../lib/termo.mjs';
@@ -59,14 +59,26 @@ const acoes = {
     let senha = null;
     if (!paciente.auth_user_id) senha = await definirSenhaProvisoria(paciente);
 
+    // Renovação: as sessões que sobraram do pacote anterior (e que a paciente não perdeu
+    // por falta ou cancelamento tardio) acumulam para o novo pacote.
+    const anterior = await pacoteAtivo(paciente.id);
+    let acumuladas = 0;
+    if (anterior) {
+      const dias = (Date.now() - new Date(anterior.criado_em).getTime()) / 86400e3;
+      if (dias < 10 && c.confirmar !== true) {
+        return json({ erro: 'Esta paciente já teve um pacote liberado há menos de 10 dias. Se for mesmo uma renovação, confirme para continuar.', codigo: 'recente' }, 409);
+      }
+      acumuladas = (await usoDoPacote(anterior)).restantes;
+    }
+
     const { data: pacote, error: erroPacote } = await db()
       .from('pacotes')
-      .insert({ paciente_id: paciente.id, status: 'ativo' })
+      .insert({ paciente_id: paciente.id, status: 'ativo', sessoes_por_ciclo: 4 + acumuladas })
       .select('id')
       .single();
     if (erroPacote) throw erroPacote;
 
-    return json({ ok: true, paciente_id: paciente.id, pacote_id: pacote.id, email, senha_provisoria: senha });
+    return json({ ok: true, paciente_id: paciente.id, pacote_id: pacote.id, email, senha_provisoria: senha, acumuladas, total: 4 + acumuladas });
   },
 
   async redefinir_senha(c) {
