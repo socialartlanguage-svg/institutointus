@@ -81,7 +81,7 @@ const acoes = {
     let senha = null;
     if (!paciente.auth_user_id) senha = await definirSenhaProvisoria(paciente);
 
-    // Tipo de pacote: mensal (4 sessões, 1 mês) ou completo (12 sessões, 3 meses, pagamento único).
+    // Tipo de pacote: mensal (4 sessões, até 2 meses) ou completo (12 sessões, até 5 meses, pagamento único).
     const trimestral = c.tipo === 'trimestral';
     let base = trimestral ? 12 : 4;
     // Pacientes que já estavam em atendimento: a Renata informa quantas sessões ainda restam.
@@ -105,7 +105,7 @@ const acoes = {
 
     const { data: pacote, error: erroPacote } = await db()
       .from('pacotes')
-      .insert({ paciente_id: paciente.id, status: 'ativo', sessoes_por_ciclo: base + acumuladas, ...(trimestral ? { duracao_meses: 3 } : {}) })
+      .insert({ paciente_id: paciente.id, status: 'ativo', sessoes_por_ciclo: base + acumuladas, duracao_meses: trimestral ? 5 : 2 })
       .select('id')
       .single();
     if (erroPacote) throw erroPacote;

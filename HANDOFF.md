@@ -263,3 +263,8 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - **Quem se cadastra entra SEM pacote**: aceita o termo e preenche as observações, mas só agenda depois que a Renata libera o pacote. Assim o link nunca dá sessão de graça e a Renata controla quem está ativa.
 - Painel → aba **Pacientes**: cartão "Link de cadastro" (copiar / gerar novo, o anterior deixa de valer); botão **Liberar pacote** nas pacientes sem pacote (abre o formulário já preenchido); o formulário ganhou **"Sessões que ela tem direito"** (opcional, 1–40) para quem já estava em atendimento com sessões restantes.
 - Observação: o histórico de sessões antigas não é importado; só o saldo informado pela Renata.
+
+## Validade dos pacotes (14/10/2026)
+- Pacote de 4 sessões: uso em até **2 meses** (`duracao_meses = 2`). Pacote completo de 12 sessões: até **5 meses** (`duracao_meses = 5`). Folga de 7 dias mantida em `fimDoCiclo`.
+- Textos atualizados: pagamento, como-funciona, termos, FAQ (+JSON-LD), admin. Termo passou para `2026-10-v6` (todas as pacientes reaceitam no próximo acesso).
+- Pacotes já existentes no banco mantêm o `duracao_meses` antigo (1 ou 3); só os liberados daqui em diante usam 2/5.

@@ -9,7 +9,7 @@
 import { createHash } from 'node:crypto';
 
 export const TERMO = {
-  versao: '2026-10-v5',
+  versao: '2026-10-v6',
   titulo: 'Termo de compromisso do acompanhamento psicológico',
   secoes: [
     {
@@ -29,12 +29,12 @@ export const TERMO = {
     {
       titulo: '3. Pacote mensal e pagamento',
       paragrafos: [
-        'O acompanhamento é contratado em pacotes mensais de 4 sessões, de 60 minutos cada. A frequência recomendada é semanal, mas você pode espaçar as sessões dentro do período do pacote.',
-        'As sessões que sobrarem no mês, desde que não tenham sido perdidas por falta ou por cancelamento com menos de 24 horas, acumulam para o mês seguinte.',
+        'O acompanhamento é contratado em pacotes de 4 sessões, de 60 minutos cada, que podem ser utilizadas em até 2 meses a partir da liberação do pacote. A frequência recomendada é semanal, mas você pode espaçar as sessões dentro do período do pacote.',
+        'As sessões que sobrarem no pacote, desde que não tenham sido perdidas por falta ou por cancelamento com menos de 24 horas, acumulam para o pacote seguinte.',
         'O pagamento é antecipado e cobrado de forma recorrente a cada ciclo, por meio do InfinitePay. O valor e a forma de pagamento são informados na tela de pagamento, antes da confirmação. Seus dados de cartão são tratados pelo InfinitePay e não passam pelo Intus.',
         'Você tem até o término da sua primeira sessão para decidir pelo cancelamento do pacote e receber o reembolso de 75% do valor pago.',
         'Em caso de desistência do processo terapêutico, não haverá devolução do pacote.',
-        'Há também o pacote completo de 3 meses, com 12 sessões e pagamento único, que pode ser utilizado ao longo dos 3 meses. O pacote completo não tem reembolso.',
+        'Há também o pacote completo, com 12 sessões e pagamento único, que pode ser utilizado em até 5 meses a partir da liberação do pacote. O pacote completo não tem reembolso.',
         'Se, depois de ler a sua ficha, a psicóloga entender que este acompanhamento não é adequado ao seu momento, ela entrará em contato com você e tratará com você de eventual reembolso.',
       ],
     },

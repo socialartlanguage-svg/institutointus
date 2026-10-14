@@ -390,7 +390,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       '<div><label for="email">E-mail</label><input type="email" id="email" required></div>' +
       '<div><label for="whatsapp">WhatsApp</label><input type="tel" id="whatsapp" required></div>' +
       '<div><label for="sessoes">Sessões que ela tem direito (opcional — deixe em branco para o padrão do pacote; use para quem já estava em atendimento)</label><input type="number" id="sessoes" min="1" max="40" placeholder="ex.: 3"></div>' +
-      '<div><label for="tipo">Pacote que ela contratou</label><select id="tipo" style="width:100%;padding:13px 16px;border:1px solid rgba(100,86,70,0.3);background:rgba(255,255,255,0.4);font:inherit;font-size:15px;border-radius:2px"><option value="mensal">Mensal — 4 sessões (renova a cada mês)</option><option value="trimestral">Completo — 12 sessões em 3 meses (pagamento único)</option></select></div>' +
+      '<div><label for="tipo">Pacote que ela contratou</label><select id="tipo" style="width:100%;padding:13px 16px;border:1px solid rgba(100,86,70,0.3);background:rgba(255,255,255,0.4);font:inherit;font-size:15px;border-radius:2px"><option value="mensal">Mensal — 4 sessões, uso em até 2 meses</option><option value="trimestral">Completo — 12 sessões em até 5 meses (pagamento único)</option></select></div>' +
       '<button class="mini cheio" type="submit" style="align-self:flex-start">Confirmar pacote</button></form><div id="resultado"></div>';
     if (prefillLiberar) {
       var fl = document.getElementById('form-liberar');
@@ -405,7 +405,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
           var sobra = r.acumuladas ? '<br><br>Ela tinha <strong>' + r.acumuladas + (r.acumuladas === 1 ? ' sessão' : ' sessões') + '</strong> sobrando do pacote anterior, que ' + (r.acumuladas === 1 ? 'foi acumulada' : 'foram acumuladas') + ': o novo pacote tem <strong>' + r.total + ' sessões</strong>.' : '';
           var h = r.senha_provisoria
             ? '<div class="resultado">Pacote liberado! Envie estes dados para a paciente pelo WhatsApp:<br><br>Acesso: <strong>institutointus.netlify.app/area-do-paciente.html</strong><br>E-mail: <strong>' + esc(r.email) + '</strong><br>Senha provisória: <code>' + esc(r.senha_provisoria) + '</code><br><br><small>Ela troca a senha no primeiro acesso. Essa senha só aparece agora — se perder, use "Nova senha" em Pacientes.</small></div>'
-            : '<div class="resultado">Novo pacote liberado para <strong>' + esc(r.email) + '</strong>. Ela já tem acesso — é só avisar que o pacote está liberado.' + sobra + (r.tipo === 'trimestral' ? '<br><br>Pacote completo: <strong>' + r.total + ' sessões em 3 meses</strong>.' : '') + '</div>';
+            : '<div class="resultado">Novo pacote liberado para <strong>' + esc(r.email) + '</strong>. Ela já tem acesso — é só avisar que o pacote está liberado.' + sobra + (r.tipo === 'trimestral' ? '<br><br>Pacote completo: <strong>' + r.total + ' sessões em até 5 meses</strong>.' : '') + '</div>';
           document.getElementById('resultado').innerHTML = h; f.reset();
         });
       }
