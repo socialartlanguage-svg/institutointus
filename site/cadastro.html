@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro — Intus Instituto de Psicologia</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/intus.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+
+.wrap {
+  max-width: 720px; margin: 0 auto;
+  padding: 140px 32px 160px;
+  text-align: center;
+}
+.icon-line { width: 46px; height: 66px; border: 1px solid var(--ouro); border-bottom: none; border-radius: 999px 999px 0 0; margin: 0 auto 36px; }
+.wrap .eyebrow { justify-content: center; font-size: 16px; color: var(--mark); margin-bottom: 20px; max-width: none; }
+.wrap h1 { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(32px, 5vw, 46px); line-height: 1.2; color: var(--escuro); margin-bottom: 24px; }
+.wrap p { font-size: 17px; color: var(--muted); max-width: 480px; margin: 0 auto 40px; }
+.box {
+  background: var(--bege); border-radius: 2px;
+  padding: 36px 40px; text-align: left; margin: 0 auto 40px; max-width: 520px;
+}
+.box p { font-size: 15px; color: var(--mark-dark); margin: 0 0 12px; }
+.box p:last-child { margin-bottom: 0; }
+
+.login { max-width: 420px; margin: 0 auto 40px; text-align: left; display: flex; flex-direction: column; gap: 18px; }
+.login label { font-size: 13px; color: var(--mark-dark); margin-bottom: 6px; display: block; }
+.login input {
+  width: 100%; padding: 14px 16px; border: 1px solid rgba(100,86,70,0.3);
+  background: rgba(255,255,255,0.4); font-family: 'Inter', sans-serif; font-size: 15px;
+  color: var(--texto); border-radius: 2px;
+}
+.login input:focus { outline: none; border-color: var(--mark); }
+.login .btn { align-self: stretch; justify-content: center; border: none; }
+.login .btn:disabled { opacity: 0.6; cursor: wait; }
+.login-erro { display: none; font-size: 14px; color: #8A3B2E; margin: 0; max-width: none; }
+.login-erro.visivel { display: block; }
+
+@media (max-width: 820px) {
+  .wrap { padding: 90px 24px 100px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo"><span class="logo-arco" aria-hidden="true"></span>Intus</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="faq.html">Perguntas</a></li>
+        <li><a href="area-do-paciente.html" class="active">Área do paciente</a></li>
+        <li><a href="https://wa.me/5521995053169?text=Ol%C3%A1%2C%20Renata%21%20Vi%20o%20site%20do%20Intus%20e%20gostaria%20de%20te%20conhecer%20e%20saber%20mais%20sobre%20o%20acompanhamento." target="_blank" rel="noopener" class="nav-cta">Falar com a Renata</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <div class="icon-line entra-arco" aria-hidden="true"></div>
+  <p class="eyebrow">Cadastro</p>
+  <h1>Crie o seu acesso.</h1>
+  <p>Este cadastro é para quem já faz acompanhamento com a Renata. Com ele você agenda e remarca sessões, acessa o link de cada consulta e acompanha o seu pacote.</p>
+
+  <form class="login" id="form-cadastro" novalidate>
+    <div><label for="nome">Nome completo</label><input type="text" id="nome" autocomplete="name" required></div>
+    <div><label for="email">E-mail</label><input type="email" id="email" autocomplete="email" required></div>
+    <div><label for="whatsapp">WhatsApp</label><input type="tel" id="whatsapp" autocomplete="tel" placeholder="(21) 99999-9999" required></div>
+    <div><label for="senha">Escolha uma senha (mínimo de 8 caracteres)</label><input type="password" id="senha" autocomplete="new-password" minlength="8" required></div>
+    <div><label for="senha2">Repita a senha</label><input type="password" id="senha2" autocomplete="new-password" minlength="8" required></div>
+    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+    <p style="font-size:13px;color:var(--muted);margin:0">Ao se cadastrar, você concorda com a <a href="privacidade.html" target="_blank" style="text-decoration:underline">Política de Privacidade</a>. No primeiro acesso você também lê e aceita o termo de compromisso.</p>
+    <p class="login-erro" id="cad-erro" role="alert"></p>
+    <button type="submit" class="btn">Criar meu acesso</button>
+  </form>
+
+  <div class="box" id="cad-ok" hidden>
+    <p><strong>Cadastro feito!</strong></p>
+    <p>Agora é só entrar com o seu e-mail e a senha que você escolheu. Para agendar, a Renata ainda precisa liberar o seu pacote. Ela faz isso por aqui, é só avisar.</p>
+    <p style="margin-top:14px"><a class="btn seta" href="area-do-paciente.html">Entrar na minha área</a></p>
+  </div>
+
+  <div class="box" id="cad-invalido" hidden>
+    <p><strong>Este link não está valendo.</strong></p>
+    <p>Peça um novo link à Renata pelo <a href="https://wa.me/5521995053169" target="_blank" rel="noopener" style="color: var(--mark-dark); text-decoration: underline;">WhatsApp</a>.</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  var token = new URLSearchParams(window.location.search).get('c') || '';
+  var form = document.getElementById('form-cadastro');
+  var erro = document.getElementById('cad-erro');
+  if (!token) { form.style.display = 'none'; document.getElementById('cad-invalido').hidden = false; return; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erro.classList.remove('visivel');
+    function falha(msg) { erro.textContent = msg; erro.classList.add('visivel'); }
+    var v = function (id) { return document.getElementById(id).value; };
+    if (v('senha') !== v('senha2')) return falha('As duas senhas não são iguais.');
+    if (v('senha').length < 8) return falha('A senha precisa ter pelo menos 8 caracteres.');
+    var botao = form.querySelector('button[type="submit"]');
+    botao.disabled = true; botao.textContent = 'Criando…';
+    fetch('/.netlify/functions/cadastro', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, nome: v('nome'), email: v('email'), whatsapp: v('whatsapp'), senha: v('senha'), website: v('website') })
+    }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, status: r.status, d: d }; }); })
+      .then(function (r) {
+        if (r.status === 403) { form.style.display = 'none'; document.getElementById('cad-invalido').hidden = false; return; }
+        if (!r.ok) throw new Error(r.d.erro || 'Não foi possível concluir o cadastro.');
+        form.style.display = 'none'; document.getElementById('cad-ok').hidden = false;
+      })
+      .catch(function (err) { falha(err.message); botao.disabled = false; botao.textContent = 'Criar meu acesso'; });
+  });
+})();
+</script>
+
+<footer>
+  <div class="footer-topo">
+    <div>
+      <p class="lema">Um espaço para olhar para dentro.<small>Intus · do latim, "dentro"</small></p>
+      <p class="unidades">Atendimento presencial em Niterói (Itaipu) e online, no Brasil e no exterior.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegar</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="faq.html">Perguntas</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Conversar</h4>
+      <ul>
+        <li><a href="https://wa.me/5521995053169" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://www.instagram.com/institutointus/" target="_blank" rel="noopener">@institutointus</a></li>
+        <li><a href="https://www.instagram.com/renatasoares.ts/" target="_blank" rel="noopener">@renatasoares.ts</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Instituto Intus · Psicologia · <a href="privacidade.html">Privacidade</a> · <a href="termos.html">Termos</a></span>
+    <span>Renata Soares · Psicóloga · CRP 05/87188</span>
+  </div>
+  <div class="footer-marca" aria-hidden="true">Intus</div>
+</footer>
+
+<script src="js/site.js"></script>
+</body>
+</html>

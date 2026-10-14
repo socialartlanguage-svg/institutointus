@@ -1,7 +1,7 @@
 // API do painel interno (site/admin.html). POST { acao, ... } com o header
 // "x-admin-secret" = ADMIN_SECRET. Usada pela Renata/agência, nunca pelas pacientes.
 
-import { randomInt } from 'node:crypto';
+import { randomInt, randomBytes } from 'node:crypto';
 import {
   db, json, erro, senhaAdminOk, slotValido, contaComoUsada, pacoteAtivo, usoDoPacote,
 } from '../lib/comum.mjs';
@@ -43,7 +43,28 @@ const inicioDaSemana = (iso) => {
   return isNaN(d) ? null : d;
 };
 
+// Link de cadastro das pacientes já ativas: um token secreto; trocar invalida o anterior.
+async function conviteAtivo() {
+  const { data } = await db().from('convites_cadastro').select('token').eq('ativo', true).order('criado_em', { ascending: false }).limit(1).maybeSingle();
+  return data?.token || null;
+}
+async function criarConvite() {
+  await db().from('convites_cadastro').update({ ativo: false }).eq('ativo', true);
+  const token = randomBytes(18).toString('base64url');
+  const { error } = await db().from('convites_cadastro').insert({ token });
+  if (error) throw error;
+  return token;
+}
+
 const acoes = {
+  async convite_cadastro() {
+    return json({ token: (await conviteAtivo()) || (await criarConvite()) });
+  },
+
+  async novo_convite_cadastro() {
+    return json({ token: await criarConvite() });
+  },
+
   async liberar_pacote(c) {
     const nome = (c.nome || '').trim();
     const email = (c.email || '').trim().toLowerCase();
@@ -62,7 +83,13 @@ const acoes = {
 
     // Tipo de pacote: mensal (4 sessões, 1 mês) ou completo (12 sessões, 3 meses, pagamento único).
     const trimestral = c.tipo === 'trimestral';
-    const base = trimestral ? 12 : 4;
+    let base = trimestral ? 12 : 4;
+    // Pacientes que já estavam em atendimento: a Renata informa quantas sessões ainda restam.
+    if (c.sessoes !== undefined && c.sessoes !== null && c.sessoes !== '') {
+      const n = Number(c.sessoes);
+      if (!Number.isInteger(n) || n < 1 || n > 40) return erro('Informe um número de sessões entre 1 e 40.');
+      base = n;
+    }
 
     // Renovação: as sessões que sobraram do pacote anterior (e que a paciente não perdeu
     // por falta ou cancelamento tardio) acumulam para o novo pacote.
