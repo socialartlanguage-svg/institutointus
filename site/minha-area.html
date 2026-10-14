@@ -261,10 +261,10 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     if (picker.carregando) return '<p class="vazio">Buscando horários…</p>';
     if (!picker.horarios.length) return '<p class="vazio">Não há horários abertos no momento. A Renata libera novos horários toda semana — volte em breve ou fale com ela pelo WhatsApp.</p><button class="mini" id="fechar-agenda">Fechar</button>';
     var filtro = picker.filtro || 'todos';
-    var lista = picker.horarios.filter(function (x) { return filtro === 'todos' || x.modalidade === filtro; });
+    var lista = picker.horarios.filter(function (x) { return filtro === 'todos' || x.modalidade === filtro || x.modalidade === 'ambos'; });
     var rotulos = { todos: 'Todos', online: 'Online', itaipu: 'Presencial · Itaipu (Niterói)' };
     var presentes = { todos: true };
-    picker.horarios.forEach(function (x) { presentes[x.modalidade] = true; });
+    picker.horarios.forEach(function (x) { if (x.modalidade === 'ambos') { presentes.online = true; presentes.itaipu = true; } else presentes[x.modalidade] = true; });
     var filtros = '<div class="filtros">' + Object.keys(rotulos).filter(function (k) { return presentes[k]; }).map(function (k) {
       return '<button class="filtro' + (filtro === k ? ' ativo' : '') + '" data-filtro="' + k + '">' + rotulos[k] + '</button>';
     }).join('') + '</div>';
@@ -281,7 +281,7 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
     var h = '<div class="escolha">' + filtros + '<p class="nota" style="margin-bottom:14px">Todos os horários seguem o horário de Brasília (GMT-3).</p><div class="semana-nav"><button class="mini" id="sem-ant"' + (picker.semana === 0 ? ' disabled' : '') + '>‹</button><strong>' + rotulo + '</strong><button class="mini" id="sem-prox"' + (picker.semana >= chaves.length - 1 ? ' disabled' : '') + '>›</button></div>';
     Object.keys(dias).sort().forEach(function (dia) {
       h += '<div class="dia"><span>' + esc(Intus.dia(dias[dia][0].inicio)) + '</span><div class="horas">';
-      dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : 'Itaipu') + '</small></button>'; });
+      dias[dia].forEach(function (x) { h += '<button class="mini hora-btn" data-slot="' + x.inicio + '">' + esc(Intus.hora(x.inicio)) + '<small>' + esc(x.modalidade === 'online' ? 'online' : x.modalidade === 'ambos' ? 'online ou Itaipu' : 'Itaipu') + '</small></button>'; });
       h += '</div></div>';
     });
     return h + '</div><div style="margin-top:20px"><button class="mini" id="fechar-agenda">Fechar</button></div>';
@@ -387,13 +387,20 @@ form.campos input:focus, form.campos textarea:focus { outline: none; border-colo
       .catch(function (e) { picker = null; render(); tratar(e); });
   }
 
-  function escolherHorario(iso) {
+  function escolherHorario(iso, escolha) {
     var escolhido = picker.horarios.filter(function (x) { return x.inicio === iso; })[0];
-    var tipo = escolhido ? (escolhido.modalidade === 'online' ? 'online' : 'presencial em Itaipu (Niterói)') : '';
+    var modal = escolhido && escolhido.modalidade === 'ambos' ? escolha : (escolhido && escolhido.modalidade);
+    if (escolhido && escolhido.modalidade === 'ambos' && !escolha) {
+      var online = window.confirm('Esse horário pode ser online ou presencial em Itaipu (Niterói).\n\nOK = ONLINE (videochamada)\nCancelar = escolher presencial');
+      if (online) return escolherHorario(iso, 'online');
+      if (!window.confirm('Marcar PRESENCIAL em Itaipu (Niterói) para ' + Intus.dia(iso) + ' às ' + Intus.hora(iso) + '?')) return;
+      return escolherHorario(iso, 'itaipu');
+    }
+    var tipo = modal ? (modal === 'online' ? 'online' : 'presencial em Itaipu (Niterói)') : '';
     var quando = Intus.dia(iso) + ' às ' + Intus.hora(iso) + (tipo ? ' (' + tipo + ')' : '');
     var reagendar = picker.modo === 'reagendar';
     if (!window.confirm((reagendar ? 'Reagendar para ' : 'Confirmar sessão em ') + quando + '?')) return;
-    var req = reagendar ? Intus.api('reagendar', { sessao_id: picker.sessaoId, inicio: iso }) : Intus.api('agendar', { inicio: iso });
+    var req = reagendar ? Intus.api('reagendar', { sessao_id: picker.sessaoId, inicio: iso, modalidade: modal }) : Intus.api('agendar', { inicio: iso, modalidade: modal });
     req.then(function () { picker = null; aviso(reagendar ? 'Sessão reagendada. O convite foi atualizado no seu e-mail.' : 'Sessão agendada! O convite com os detalhes chega no seu e-mail.'); return carregar(); })
       .catch(function (e) { tratar(e); if (/reservado/.test(e.message)) abrirPicker(picker ? picker.modo : 'agendar', picker && picker.sessaoId); });
   }

@@ -47,7 +47,7 @@ async function aceiteAtual(paciente) {
 }
 const exigeTermo = () => json({ erro: 'Antes de agendar, leia e aceite o termo de compromisso.', codigo: 'termo' }, 403);
 
-async function validarNovoHorario(pacote, iso) {
+async function validarNovoHorario(pacote, iso, escolha) {
   const d = slotValido(iso);
   if (!d) return { erro: 'Horário inválido.' };
   if (horasAte(d) < ANTECEDENCIA_AGENDAR_H) {
@@ -58,6 +58,10 @@ async function validarNovoHorario(pacote, iso) {
   }
   const { data: aberto } = await db().from('slots_abertos').select('inicio, modalidade').eq('inicio', d.toISOString()).maybeSingle();
   if (!aberto) return { erro: 'Esse horário não está disponível.' };
+  if (aberto.modalidade === 'ambos') {
+    if (!['online', 'itaipu'].includes(escolha)) return { erro: 'Escolha se a sessão será online ou presencial.' };
+    return { d, modalidade: escolha };
+  }
   return { d, modalidade: aberto.modalidade };
 }
 
@@ -150,7 +154,7 @@ const acoes = {
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
     const uso = await usoDoPacote(pacote);
     if (uso.restantes <= 0) return erro('Você já usou todas as sessões deste pacote.');
-    const v = await validarNovoHorario(pacote, c.inicio);
+    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade);
     if (v.erro) return erro(v.erro);
 
     // Reserva primeiro (o índice único impede duas pessoas no mesmo horário).
@@ -191,7 +195,7 @@ const acoes = {
     }
     const pacote = await pacoteAtivo(paciente.id);
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
-    const v = await validarNovoHorario(pacote, c.inicio);
+    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade);
     if (v.erro) return erro(v.erro);
     const { error } = await db().from('sessoes').update({ horario: v.d.toISOString(), modalidade: v.modalidade }).eq('id', s.id);
     if (error) {

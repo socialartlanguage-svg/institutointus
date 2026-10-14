@@ -8,6 +8,8 @@ export const MODALIDADES = {
   itaipu: { nome: 'Itaipu (Niterói)', presencial: true, env: 'ENDERECO_ITAIPU' },
 };
 
+// Um horário aberto pode ser 'ambos': a paciente escolhe online ou presencial ao marcar.
+export const slotModoValido = (m) => m === 'ambos' || modalidadeValida(m);
 export const modalidadeValida = (m) => typeof m === 'string' && Object.prototype.hasOwnProperty.call(MODALIDADES, m);
 export const ePresencial = (m) => Boolean(MODALIDADES[m]?.presencial);
 

@@ -6,7 +6,7 @@ import {
   db, json, erro, senhaAdminOk, slotValido, contaComoUsada, pacoteAtivo, usoDoPacote,
 } from '../lib/comum.mjs';
 import * as google from '../lib/google.mjs';
-import { MODALIDADES, modalidadeValida } from '../lib/unidades.mjs';
+import { MODALIDADES, slotModoValido } from '../lib/unidades.mjs';
 import { TERMO } from '../lib/termo.mjs';
 
 const ALFABETO = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sem 0/O/1/l/I
@@ -152,7 +152,7 @@ const acoes = {
       const iso = typeof x === 'string' ? x : x?.inicio;
       const modalidade = typeof x === 'string' ? 'online' : x?.modalidade || 'online';
       const d = slotValido(iso);
-      return d && modalidadeValida(modalidade) ? { d, modalidade } : null;
+      return d && slotModoValido(modalidade) ? { d, modalidade } : null;
     }).filter(Boolean);
     const fechar = validos(c.fechar);
     if (abrir.length) {

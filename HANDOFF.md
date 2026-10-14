@@ -268,3 +268,8 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - Pacote de 4 sessões: uso em até **2 meses** (`duracao_meses = 2`). Pacote completo de 12 sessões: até **5 meses** (`duracao_meses = 5`). Folga de 7 dias mantida em `fimDoCiclo`.
 - Textos atualizados: pagamento, como-funciona, termos, FAQ (+JSON-LD), admin. Termo passou para `2026-10-v6` (todas as pacientes reaceitam no próximo acesso).
 - Pacotes já existentes no banco mantêm o `duracao_meses` antigo (1 ou 3); só os liberados daqui em diante usam 2/5.
+
+## Horário "Online ou presencial" (14/10/2026)
+- `slots_abertos.modalidade` aceita também `'ambos'` (SQL `scripts/supabase_schema_v7.sql`, **rodar no Supabase antes do deploy**). A sessão marcada continua `online` ou `itaipu`: a paciente escolhe ao agendar/reagendar (`modalidade` no corpo; sem ela a função responde erro).
+- Admin: terceiro botão "Online ou presencial" em "Abrir como". Paciente: horário aparece nos filtros Online e Itaipu, com a etiqueta "online ou Itaipu".
+- Lição repetida: o erro "Erro interno: TypeError: fetch failed" no admin = Supabase pausado (sem DNS). Reativar em supabase.com/dashboard → Resume project.
