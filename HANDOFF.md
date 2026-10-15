@@ -278,3 +278,6 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - **Presencial só com autorização:** `pacientes.presencial_autorizado` (SQL `scripts/supabase_schema_v8.sql`, padrão `false`). Sem autorização a paciente vê só horários online (horário "ambos" vira online; "itaipu" some) e o backend recusa. Botão "Presencial: liberado/bloqueado" em Admin → Pacientes (ação `presencial`). Pacientes que já faziam presencial precisam ser liberadas uma a uma.
 - **Sessões não usadas no período são consideradas realizadas:** acabou o acúmulo automático em `liberar_pacote` (`acumuladas` = 0). Para dar sessões a mais/migrar paciente, usar o campo "sessões".
 - Termo/FAQ/termos/como-funciona: crianças sempre acompanhadas da família; online exige boa internet e imprevisto de conexão é "acordado"; texto do presencial.
+
+## Grupo VIP (15/10/2026)
+- Seção "Grupo VIP" na home (antes do CTA final) + link "Grupo VIP" no rodapé de todas as páginas públicas. Link do grupo: https://chat.whatsapp.com/LbKMCmoQZ3H469NSrBq66U (se a Renata trocar o link, substituir em `site/*.html`).
