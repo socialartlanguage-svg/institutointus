@@ -281,3 +281,6 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 
 ## Grupo VIP (15/10/2026)
 - Seção "Grupo VIP" na home (antes do CTA final) + link "Grupo VIP" no rodapé de todas as páginas públicas. Link do grupo: https://chat.whatsapp.com/LbKMCmoQZ3H469NSrBq66U (se a Renata trocar o link, substituir em `site/*.html`).
+
+## Agenda de eventos (15/10/2026)
+- Página pública `site/agenda.html` (link "Agenda" no menu e no rodapé) lê `/.netlify/functions/eventos` (público, só leitura). Tabela `eventos` (SQL `scripts/supabase_schema_v9.sql`). A Renata cadastra/exclui em Admin → aba **Eventos** (título, data, hora de Brasília, local, descrição, link https opcional). Evento some da lista 3h depois do início.

@@ -118,6 +118,32 @@ const acoes = {
     return json({ ok: true, autorizado: c.autorizado === true });
   },
 
+  async eventos() {
+    const { data, error } = await db().from('eventos').select('*').order('data_hora', { ascending: false }).limit(100);
+    if (error) throw error;
+    return json({ eventos: data || [] });
+  },
+
+  async evento_salvar(c) {
+    const texto = (v, max) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : null);
+    const titulo = texto(c.titulo, 140);
+    const d = new Date(c.data_hora);
+    if (!titulo || isNaN(d)) return erro('Informe o título, a data e a hora do evento.');
+    let link = texto(c.link, 500);
+    if (link && !/^https:\/\//i.test(link)) return erro('O link precisa começar com https://');
+    const { error } = await db().from('eventos').insert({
+      titulo, data_hora: d.toISOString(), local: texto(c.local, 200), descricao: texto(c.descricao, 800), link,
+    });
+    if (error) throw error;
+    return json({ ok: true });
+  },
+
+  async evento_excluir(c) {
+    const { error } = await db().from('eventos').delete().eq('id', c.id);
+    if (error) throw error;
+    return json({ ok: true });
+  },
+
   async redefinir_senha(c) {
     const { data: paciente } = await db().from('pacientes').select('*').eq('id', c.paciente_id).maybeSingle();
     if (!paciente) return erro('Paciente não encontrada.', 404);

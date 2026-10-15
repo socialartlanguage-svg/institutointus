@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda — Intus Instituto de Psicologia</title>
+<meta name="description" content="Próximas palestras, cursos e eventos da psicóloga Renata Soares, do Instituto Intus.">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/intus.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+.conv { max-width: 760px; margin: 0 auto; padding: 100px 32px 120px; }
+.conv h1 { font-family: 'Fraunces', serif; font-weight: 300; font-size: clamp(38px, 5.4vw, 64px); line-height: 1.08; letter-spacing: -1px; color: var(--escuro); margin-bottom: 26px; }
+.conv h1 em { font-style: italic; font-weight: 400; color: var(--mark); }
+.conv .lead { font-size: 18px; color: var(--muted); max-width: 540px; margin-bottom: 40px; }
+.conv .acao { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 64px; }
+.conv .acao small { font-size: 13px; color: var(--muted); }
+.info-item { padding: 20px 0; border-top: 1px solid var(--linha); }
+.info-item:last-child { border-bottom: 1px solid var(--linha); }
+.info-item .label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--ouro); margin-bottom: 6px; }
+.info-item .val { font-family: 'Fraunces', serif; font-size: 20px; color: var(--escuro); }
+.info-item .val a { text-decoration: underline; text-decoration-color: var(--ouro); text-underline-offset: 4px; }
+.info-item p.pe { font-size: 14px; color: var(--muted); margin: 4px 0 0; }
+@media (max-width: 820px) { .conv { padding: 64px 24px 80px; } }
+.ev { padding: 28px 0; border-top: 1px solid var(--linha); display: grid; grid-template-columns: 120px 1fr; gap: 28px; }
+.ev:last-child { border-bottom: 1px solid var(--linha); }
+.ev .data { font-family: 'Fraunces', serif; color: var(--escuro); line-height: 1.1; }
+.ev .data strong { display: block; font-size: 42px; font-weight: 300; }
+.ev .data span { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--ouro); }
+.ev h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 24px; color: var(--escuro); margin-bottom: 6px; }
+.ev .quando { font-size: 14px; color: var(--mark-dark); margin-bottom: 10px; }
+.ev p { font-size: 15px; color: var(--muted); max-width: 520px; margin-bottom: 14px; }
+.vazio-ag { font-size: 16px; color: var(--muted); max-width: 520px; }
+@media (max-width: 640px) { .ev { grid-template-columns: 1fr; gap: 8px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <a href="index.html" class="logo"><span class="logo-arco" aria-hidden="true"></span>Intus</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav id="menu">
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="faq.html">Perguntas</a></li>
+        <li><a href="agenda.html" class="active">Agenda</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+        <li><a href="https://wa.me/5521995053169?text=Ol%C3%A1%2C%20Renata%21%20Vi%20o%20site%20do%20Intus%20e%20gostaria%20de%20te%20conhecer%20e%20saber%20mais%20sobre%20o%20acompanhamento." target="_blank" rel="noopener" class="nav-cta">Falar com a Renata</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="conv">
+  <p class="eyebrow entra">Agenda</p>
+  <h1 class="entra d1">Palestras e <em>eventos</em>.</h1>
+  <p class="lead entra d2">Onde a Renata vai estar: palestras, cursos e outros encontros. Para receber os avisos primeiro, entre no grupo VIP.</p>
+  <div class="acao entra d3">
+    <a href="https://chat.whatsapp.com/LbKMCmoQZ3H469NSrBq66U" target="_blank" rel="noopener" class="btn seta">Entrar no grupo VIP</a>
+  </div>
+  <div id="lista-eventos" aria-live="polite"><p class="vazio-ag">Carregando a agenda…</p></div>
+</section>
+
+
+<footer>
+  <div class="footer-topo">
+    <div>
+      <p class="lema">Um espaço para olhar para dentro.<small>Intus · do latim, "dentro"</small></p>
+      <p class="unidades">Atendimento presencial em Niterói (Itaipu) e online, no Brasil e no exterior.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegar</h4>
+      <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="como-funciona.html">Como funciona</a></li>
+        <li><a href="faq.html">Perguntas</a></li>
+        <li><a href="agenda.html">Agenda</a></li>
+        <li><a href="contato.html">Contato</a></li>
+        <li><a href="area-do-paciente.html">Área do paciente</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Conversar</h4>
+      <ul>
+        <li><a href="https://wa.me/5521995053169" target="_blank" rel="noopener">WhatsApp</a></li>
+        <li><a href="https://chat.whatsapp.com/LbKMCmoQZ3H469NSrBq66U" target="_blank" rel="noopener">Grupo VIP</a></li>
+        <li><a href="https://www.instagram.com/institutointus/" target="_blank" rel="noopener">@institutointus</a></li>
+        <li><a href="https://www.instagram.com/renatasoares.ts/" target="_blank" rel="noopener">@renatasoares.ts</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-meta">
+    <span>Instituto Intus · Psicologia · <a href="privacidade.html">Privacidade</a> · <a href="termos.html">Termos</a></span>
+    <span>Renata Soares · Psicóloga · CRP 05/87188</span>
+  </div>
+  <div class="footer-marca" aria-hidden="true">Intus</div>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+(function () {
+  var el = document.getElementById('lista-eventos');
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function f(iso, o) { return new Date(iso).toLocaleString('pt-BR', Object.assign({ timeZone: 'America/Sao_Paulo' }, o)); }
+  fetch('/.netlify/functions/eventos').then(function (r) { if (!r.ok) throw new Error(); return r.json(); }).then(function (r) {
+    if (!r.eventos.length) { el.innerHTML = '<p class="vazio-ag">Ainda não há eventos marcados. Novidades chegam primeiro no grupo VIP da Renata.</p>'; return; }
+    el.innerHTML = r.eventos.map(function (e) {
+      return '<div class="ev"><div class="data"><strong>' + esc(f(e.data_hora, { day: '2-digit' })) + '</strong><span>' + esc(f(e.data_hora, { month: 'short' }).replace('.', '')) + '</span></div><div>' +
+        '<h2>' + esc(e.titulo) + '</h2><p class="quando">' + esc(f(e.data_hora, { weekday: 'long', hour: '2-digit', minute: '2-digit' })) + ' (Brasília)' + (e.local ? ' · ' + esc(e.local) : '') + '</p>' +
+        (e.descricao ? '<p>' + esc(e.descricao) + '</p>' : '') +
+        (e.link ? '<a href="' + esc(e.link) + '" target="_blank" rel="noopener" class="btn-outline seta">Saiba mais</a>' : '') + '</div></div>';
+    }).join('');
+  }).catch(function () { el.innerHTML = '<p class="vazio-ag">Não foi possível carregar a agenda agora. Tente de novo em instantes.</p>'; });
+})();
+</script>
+
+</body>
+</html>

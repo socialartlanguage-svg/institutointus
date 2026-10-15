@@ -57,6 +57,7 @@
 /* forms */
 form.campos { display: flex; flex-direction: column; gap: 18px; max-width: 520px; }
 form.campos label { font-size: 13px; color: var(--mark-dark); margin-bottom: 6px; display: block; }
+form.campos textarea { width: 100%; padding: 13px 16px; border: 1px solid rgba(100,86,70,0.3); background: rgba(255,255,255,0.4); font: inherit; font-size: 15px; color: var(--texto); border-radius: 2px; resize: vertical; }
 form.campos input { width: 100%; padding: 13px 16px; border: 1px solid rgba(100,86,70,0.3); background: rgba(255,255,255,0.4); font: inherit; font-size: 15px; color: var(--texto); border-radius: 2px; }
 form.campos input:focus { outline: none; border-color: var(--mark); }
 .resultado { margin-top: 24px; padding: 20px 22px; background: var(--bege); border-left: 2px solid var(--ouro); border-radius: 2px; font-size: 15px; max-width: 520px; }
@@ -99,6 +100,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
     <button data-aba="pacientes">Pacientes</button>
     <button data-aba="contestacoes">Contestações <span class="contador" id="contador" hidden></span></button>
     <button data-aba="liberar">Liberar pacote</button>
+    <button data-aba="eventos">Eventos</button>
   </div>
   <div class="msg" id="msg" role="status"></div>
   <div id="vista"></div>
@@ -159,7 +161,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
   function abrirAba(nome) {
     aba = nome; limpar();
     Array.prototype.forEach.call(document.querySelectorAll('#abas button'), function (b) { b.classList.toggle('ativa', b.getAttribute('data-aba') === nome); });
-    ({ agenda: vistaAgenda, pacientes: vistaPacientes, contestacoes: vistaContestacoes, liberar: vistaLiberar })[nome]();
+    ({ agenda: vistaAgenda, pacientes: vistaPacientes, contestacoes: vistaContestacoes, liberar: vistaLiberar, eventos: vistaEventos })[nome]();
   }
   function contarContestacoes() {
     api('contestacoes').then(function (r) {
@@ -393,6 +395,41 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
   }
 
   // ---------- liberar pacote ----------
+  function vistaEventos() {
+    elVista.innerHTML = '<p class="vazio">Carregando…</p>';
+    api('eventos').then(function (r) {
+      var agora = Date.now();
+      var h = '<p class="nota">Palestras, cursos e outros eventos que aparecem na página pública <strong>Agenda</strong> do site. O evento some da lista sozinho depois que acontece.</p>' +
+        '<form class="campos" id="form-evento"><div><label for="ev-titulo">Título</label><input type="text" id="ev-titulo" maxlength="140" required></div>' +
+        '<div><label for="ev-data">Data</label><input type="date" id="ev-data" required></div>' +
+        '<div><label for="ev-hora">Hora (horário de Brasília)</label><input type="time" id="ev-hora" required></div>' +
+        '<div><label for="ev-local">Local ou formato (ex.: Online, ou o endereço)</label><input type="text" id="ev-local" maxlength="200"></div>' +
+        '<div><label for="ev-desc">Descrição (opcional)</label><textarea id="ev-desc" maxlength="800" rows="3"></textarea></div>' +
+        '<div><label for="ev-link">Link para inscrição ou mais informações (opcional, começa com https://)</label><input type="url" id="ev-link" maxlength="500"></div>' +
+        '<button class="mini cheio" type="submit" style="align-self:flex-start">Adicionar evento</button></form>' +
+        '<h2 style="font-family:Fraunces,serif;font-weight:400;font-size:22px;margin:32px 0 12px">Eventos cadastrados</h2>';
+      if (!r.eventos.length) h += '<p class="nota">Nenhum evento cadastrado ainda.</p>';
+      r.eventos.forEach(function (e) {
+        var passou = new Date(e.data_hora).getTime() < agora;
+        h += '<div class="linha"><div>' + esc(e.titulo) + '<small>' + esc(fmt(e.data_hora, { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })) + (e.local ? ' · ' + esc(e.local) : '') + (passou ? ' · já aconteceu' : '') + '</small></div><div><button class="mini" data-ev-excluir="' + e.id + '">Excluir</button></div></div>';
+      });
+      elVista.innerHTML = h;
+      document.getElementById('form-evento').addEventListener('submit', function (ev) {
+        ev.preventDefault(); limpar();
+        var b = ev.target.querySelector('button'); b.disabled = true;
+        api('evento_salvar', { titulo: document.getElementById('ev-titulo').value, data_hora: document.getElementById('ev-data').value + 'T' + document.getElementById('ev-hora').value + ':00-03:00', local: document.getElementById('ev-local').value, descricao: document.getElementById('ev-desc').value, link: document.getElementById('ev-link').value })
+          .then(function () { msg('Evento adicionado. Já aparece na página Agenda do site.'); vistaEventos(); })
+          .catch(function (err) { msg(err.message, true); b.disabled = false; });
+      });
+      Array.prototype.forEach.call(elVista.querySelectorAll('[data-ev-excluir]'), function (b) {
+        b.onclick = function () {
+          if (!window.confirm('Excluir este evento da agenda do site?')) return;
+          api('evento_excluir', { id: b.getAttribute('data-ev-excluir') }).then(function () { msg('Evento excluído.'); vistaEventos(); }).catch(function (e) { msg(e.message, true); });
+        };
+      });
+    }).catch(function (e) { msg(e.message, true); });
+  }
+
   function vistaLiberar() {
     elVista.innerHTML = '<p class="nota">Use depois de ver o pagamento confirmado no painel do InfinitePay. Isso cria o acesso da paciente (ou renova o pacote, se ela já tiver conta).</p>' +
       '<form class="campos" id="form-liberar"><div><label for="nome">Nome da paciente</label><input type="text" id="nome" required></div>' +
