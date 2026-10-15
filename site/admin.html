@@ -294,7 +294,7 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
       r.pacientes.forEach(function (p) {
         h += '<div class="linha"><div>' + esc(p.nome) + '<small>' + esc(p.email) + ' · ' + esc(p.whatsapp) + '</small></div><div>' +
           '<small style="display:inline;margin-right:12px">' + (p.termo_aceito ? 'termo ✓' : 'termo pendente') + ' · ' + (p.pacote_ativo ? p.usadas + ' de ' + p.total + ' sessões' : 'sem pacote ativo') + '</small>' +
-          (p.pacote_ativo ? '' : '<button class="mini cheio" data-liberar="' + p.id + '" data-nome="' + esc(p.nome) + '" data-email="' + esc(p.email) + '" data-whats="' + esc(p.whatsapp) + '">Liberar pacote</button> ') + '<button class="mini" data-ver="' + p.id + '">Ver</button> <button class="mini" data-senha="' + p.id + '">Nova senha</button> <button class="mini" data-excluir="' + p.id + '" data-nome="' + esc(p.nome) + '">Excluir</button></div></div>';
+          (p.pacote_ativo ? '' : '<button class="mini cheio" data-liberar="' + p.id + '" data-nome="' + esc(p.nome) + '" data-email="' + esc(p.email) + '" data-whats="' + esc(p.whatsapp) + '">Liberar pacote</button> ') + '<button class="mini' + (p.presencial_autorizado ? ' cheio' : '') + '" data-presencial="' + p.id + '" data-ativo="' + (p.presencial_autorizado ? '1' : '0') + '" title="Libera ou bloqueia os horários presenciais para esta paciente">' + (p.presencial_autorizado ? 'Presencial: liberado' : 'Presencial: bloqueado') + '</button> <button class="mini" data-ver="' + p.id + '">Ver</button> <button class="mini" data-senha="' + p.id + '">Nova senha</button> <button class="mini" data-excluir="' + p.id + '" data-nome="' + esc(p.nome) + '">Excluir</button></div></div>';
       });
       elVista.innerHTML = h + '<div id="detalhe"></div>';
       carregarConvite();
@@ -309,6 +309,13 @@ form.campos input:focus { outline: none; border-color: var(--mark); }
           if (window.prompt('Para confirmar, digite EXCLUIR') !== 'EXCLUIR') return;
           api('excluir_paciente', { paciente_id: b.getAttribute('data-excluir') })
             .then(function () { msg('Paciente excluída.'); vistaPacientes(); }).catch(function (e) { msg(e.message, true); });
+        };
+      });
+      Array.prototype.forEach.call(elVista.querySelectorAll('[data-presencial]'), function (b) {
+        b.onclick = function () {
+          var liberar = b.getAttribute('data-ativo') !== '1';
+          if (!window.confirm(liberar ? 'Liberar o atendimento presencial para esta paciente? Ela passa a ver e marcar horários presenciais.' : 'Bloquear o atendimento presencial para esta paciente? Ela volta a ver só horários online (sessões presenciais já marcadas continuam).')) return;
+          api('presencial', { paciente_id: b.getAttribute('data-presencial'), autorizado: liberar }).then(function () { msg(liberar ? 'Presencial liberado.' : 'Presencial bloqueado.'); vistaPacientes(); }).catch(function (e) { msg(e.message, true); });
         };
       });
       Array.prototype.forEach.call(elVista.querySelectorAll('[data-senha]'), function (b) {

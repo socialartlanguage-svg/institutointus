@@ -91,8 +91,8 @@ const acoes = {
       base = n;
     }
 
-    // Renovação: as sessões que sobraram do pacote anterior (e que a paciente não perdeu
-    // por falta ou cancelamento tardio) acumulam para o novo pacote.
+    // Renovação: sessões não utilizadas no período do pacote anterior são consideradas realizadas
+    // (regra do termo v7), então NÃO acumulam. Para dar sessões a mais, use o campo `sessoes`.
     const anterior = await pacoteAtivo(paciente.id);
     let acumuladas = 0;
     if (anterior) {
@@ -100,7 +100,6 @@ const acoes = {
       if (dias < 10 && c.confirmar !== true) {
         return json({ erro: 'Esta paciente já teve um pacote liberado há menos de 10 dias. Se for mesmo uma renovação, confirme para continuar.', codigo: 'recente' }, 409);
       }
-      acumuladas = (await usoDoPacote(anterior)).restantes;
     }
 
     const { data: pacote, error: erroPacote } = await db()
@@ -111,6 +110,12 @@ const acoes = {
     if (erroPacote) throw erroPacote;
 
     return json({ ok: true, paciente_id: paciente.id, pacote_id: pacote.id, email, senha_provisoria: senha, acumuladas, total: base + acumuladas, tipo: trimestral ? 'trimestral' : 'mensal' });
+  },
+
+  async presencial(c) {
+    const { error } = await db().from('pacientes').update({ presencial_autorizado: c.autorizado === true }).eq('id', c.paciente_id);
+    if (error) throw error;
+    return json({ ok: true, autorizado: c.autorizado === true });
   },
 
   async redefinir_senha(c) {
@@ -188,7 +193,7 @@ const acoes = {
         return {
           id: p.id, nome: p.nome, email: p.email, whatsapp: p.whatsapp,
           pacote_ativo: Boolean(pacote), usadas, total: pacote?.sessoes_por_ciclo ?? 0,
-          termo_aceito: aceitaram.has(p.id),
+          termo_aceito: aceitaram.has(p.id), presencial_autorizado: Boolean(p.presencial_autorizado),
         };
       }),
     });

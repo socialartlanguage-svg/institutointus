@@ -273,3 +273,8 @@ Para quem for continuar: a Renata também tem um produto de curso digital chamad
 - `slots_abertos.modalidade` aceita também `'ambos'` (SQL `scripts/supabase_schema_v7.sql`, **rodar no Supabase antes do deploy**). A sessão marcada continua `online` ou `itaipu`: a paciente escolhe ao agendar/reagendar (`modalidade` no corpo; sem ela a função responde erro).
 - Admin: terceiro botão "Online ou presencial" em "Abrir como". Paciente: horário aparece nos filtros Online e Itaipu, com a etiqueta "online ou Itaipu".
 - Lição repetida: o erro "Erro interno: TypeError: fetch failed" no admin = Supabase pausado (sem DNS). Reativar em supabase.com/dashboard → Resume project.
+
+## Regras da Renata (15/10/2026) — termo v7
+- **Presencial só com autorização:** `pacientes.presencial_autorizado` (SQL `scripts/supabase_schema_v8.sql`, padrão `false`). Sem autorização a paciente vê só horários online (horário "ambos" vira online; "itaipu" some) e o backend recusa. Botão "Presencial: liberado/bloqueado" em Admin → Pacientes (ação `presencial`). Pacientes que já faziam presencial precisam ser liberadas uma a uma.
+- **Sessões não usadas no período são consideradas realizadas:** acabou o acúmulo automático em `liberar_pacote` (`acumuladas` = 0). Para dar sessões a mais/migrar paciente, usar o campo "sessões".
+- Termo/FAQ/termos/como-funciona: crianças sempre acompanhadas da família; online exige boa internet e imprevisto de conexão é "acordado"; texto do presencial.

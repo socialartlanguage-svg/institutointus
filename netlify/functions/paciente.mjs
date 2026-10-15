@@ -47,7 +47,7 @@ async function aceiteAtual(paciente) {
 }
 const exigeTermo = () => json({ erro: 'Antes de agendar, leia e aceite o termo de compromisso.', codigo: 'termo' }, 403);
 
-async function validarNovoHorario(pacote, iso, escolha) {
+async function validarNovoHorario(pacote, iso, escolha, presencialOk) {
   const d = slotValido(iso);
   if (!d) return { erro: 'Horário inválido.' };
   if (horasAte(d) < ANTECEDENCIA_AGENDAR_H) {
@@ -58,10 +58,13 @@ async function validarNovoHorario(pacote, iso, escolha) {
   }
   const { data: aberto } = await db().from('slots_abertos').select('inicio, modalidade').eq('inicio', d.toISOString()).maybeSingle();
   if (!aberto) return { erro: 'Esse horário não está disponível.' };
+  const SEM_PRESENCIAL = 'O atendimento presencial é liberado pela Renata para cada paciente. Fale com ela pelo WhatsApp se quiser atendimento presencial.';
   if (aberto.modalidade === 'ambos') {
+    if (!presencialOk) return { d, modalidade: 'online' };
     if (!['online', 'itaipu'].includes(escolha)) return { erro: 'Escolha se a sessão será online ou presencial.' };
     return { d, modalidade: escolha };
   }
+  if (aberto.modalidade === 'itaipu' && !presencialOk) return { erro: SEM_PRESENCIAL };
   return { d, modalidade: aberto.modalidade };
 }
 
@@ -78,7 +81,7 @@ const acoes = {
     const { data: observacoes } = await db().from('observacoes_saude').select('*').eq('paciente_id', paciente.id).maybeSingle();
     return json({
       paciente: {
-        nome: paciente.nome, email: paciente.email, whatsapp: paciente.whatsapp,
+        nome: paciente.nome, email: paciente.email, whatsapp: paciente.whatsapp, presencial_autorizado: Boolean(paciente.presencial_autorizado),
         trocou_senha: paciente.trocou_senha, consentimento_saude_em: paciente.consentimento_saude_em,
       },
       pacote: pacote ? { ...(await usoDoPacote(pacote)), ate: fimDoCiclo(pacote.inicio_ciclo_atual, pacote.duracao_meses).toISOString() } : null,
@@ -145,7 +148,12 @@ const acoes = {
     const de = new Date(Date.now() + ANTECEDENCIA_AGENDAR_H * 3600e3);
     const limite = new Date(Date.now() + SEMANAS_VISIVEIS * 7 * 86400e3);
     const ate = new Date(Math.min(limite.getTime(), fimDoCiclo(pacote.inicio_ciclo_atual, pacote.duracao_meses).getTime()));
-    return json({ horarios: await horariosLivres(de, ate) });
+    // Sem autorização da Renata, a paciente só vê o que é online (horário "ambos" vira online).
+    let horarios = await horariosLivres(de, ate);
+    if (!paciente.presencial_autorizado) {
+      horarios = horarios.filter((h) => h.modalidade !== 'itaipu').map((h) => ({ ...h, modalidade: 'online' }));
+    }
+    return json({ horarios });
   },
 
   async agendar(paciente, c) {
@@ -154,7 +162,7 @@ const acoes = {
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
     const uso = await usoDoPacote(pacote);
     if (uso.restantes <= 0) return erro('Você já usou todas as sessões deste pacote.');
-    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade);
+    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade, paciente.presencial_autorizado);
     if (v.erro) return erro(v.erro);
 
     // Reserva primeiro (o índice único impede duas pessoas no mesmo horário).
@@ -195,7 +203,7 @@ const acoes = {
     }
     const pacote = await pacoteAtivo(paciente.id);
     if (!pacote) return erro('Você não tem um pacote ativo.', 403);
-    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade);
+    const v = await validarNovoHorario(pacote, c.inicio, c.modalidade, paciente.presencial_autorizado);
     if (v.erro) return erro(v.erro);
     const { error } = await db().from('sessoes').update({ horario: v.d.toISOString(), modalidade: v.modalidade }).eq('id', s.id);
     if (error) {

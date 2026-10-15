@@ -9,7 +9,7 @@
 import { createHash } from 'node:crypto';
 
 export const TERMO = {
-  versao: '2026-10-v6',
+  versao: '2026-10-v7',
   titulo: 'Termo de compromisso do acompanhamento psicológico',
   secoes: [
     {
@@ -23,6 +23,7 @@ export const TERMO = {
       paragrafos: [
         'O acompanhamento é de psicologia clínica, com abordagem sistêmica familiar, nas modalidades: terapia individual, de casal ou de família, conforme o que você contratou.',
         'Ele não é atendimento de emergência e não substitui o acompanhamento psiquiátrico nem o uso de medicamentos prescritos. A psicóloga pode, quando entender necessário, sugerir que você procure outros profissionais ou serviços.',
+        'O tratamento de crianças é acompanhado sempre da família.',
         'Não há garantia de resultado: o processo depende também do seu envolvimento e da regularidade dos encontros.',
       ],
     },
@@ -30,7 +31,7 @@ export const TERMO = {
       titulo: '3. Pacote mensal e pagamento',
       paragrafos: [
         'O acompanhamento é contratado em pacotes de 4 sessões, de 60 minutos cada, que podem ser utilizadas em até 2 meses a partir da liberação do pacote. A frequência recomendada é semanal, mas você pode espaçar as sessões dentro do período do pacote.',
-        'As sessões que sobrarem no pacote, desde que não tenham sido perdidas por falta ou por cancelamento com menos de 24 horas, acumulam para o pacote seguinte.',
+        'As sessões que não forem utilizadas no período do pacote serão consideradas realizadas, sem devolução nem acúmulo para o pacote seguinte.',
         'O pagamento é antecipado e cobrado de forma recorrente a cada ciclo, por meio do InfinitePay. O valor e a forma de pagamento são informados na tela de pagamento, antes da confirmação. Seus dados de cartão são tratados pelo InfinitePay e não passam pelo Intus.',
         'Você tem até o término da sua primeira sessão para decidir pelo cancelamento do pacote e receber o reembolso de 75% do valor pago.',
         'Em caso de desistência do processo terapêutico, não haverá devolução do pacote.',
@@ -51,9 +52,9 @@ export const TERMO = {
     {
       titulo: '5. Atendimento online e presencial',
       paragrafos: [
-        'As sessões podem ser online ou presenciais, conforme os horários que a psicóloga disponibiliza, e você pode alternar entre uma modalidade e outra de uma sessão para a outra. As sessões presenciais acontecem no consultório do Intus em Niterói (Itaipu), e o endereço vai no convite da sessão.',
-        'As sessões online acontecem por videochamada (Google Meet), com o link enviado no convite de cada sessão. Você se compromete a participar de um local reservado, em que possa falar com privacidade e com conexão adequada.',
-        'Se a conexão falhar, a psicóloga e você tentarão restabelecê-la e, se não for possível, combinarão como seguir. O atendimento online segue as normas do Conselho Federal de Psicologia.',
+        'As sessões são online e, quando a psicóloga autorizar o atendimento presencial para você, também podem ser presenciais, e você poderá alternar entre uma modalidade e outra de uma sessão para a outra. A autorização do atendimento presencial é feita pela psicóloga, paciente a paciente. As sessões presenciais acontecem no consultório do Intus em Niterói (Itaipu), e o endereço vai no convite da sessão.',
+        'As sessões online acontecem por videochamada (Google Meet), com o link enviado no convite de cada sessão. É importante que você esteja em um lugar com boa internet e reservado, em que possa falar com privacidade. Caso ocorra um imprevisto com a conexão, será acordada uma possível solução.',
+        'O atendimento online segue as normas do Conselho Federal de Psicologia.',
         'Não é permitido gravar (áudio, vídeo ou imagem) nem transmitir as sessões, por nenhuma das partes, sem autorização expressa e por escrito.',
       ],
     },
