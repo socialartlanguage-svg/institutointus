@@ -215,3 +215,13 @@ footer { background: var(--escuro); color: var(--bege); overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .whats-flutuante, .whats-flutuante span { transition: none; } }
 @media print { .whats-flutuante { display: none; } }
+
+/* Ajustes de celular: evitam o zoom automático do iPhone ao tocar em um campo (precisa de 16px)
+   e deixam áreas de toque com tamanho confortável (~44px). */
+@media (max-width: 820px) {
+  input, select, textarea { font-size: 16px !important; }
+  .nav-toggle { padding: 12px 6px; margin-right: -6px; }
+  .link-seta { padding: 12px 0 8px; }
+  .pilar-tag { font-size: 12px; }
+  .btn, .btn-outline { min-height: 44px; }
+}
